@@ -225,4 +225,4 @@ class Product(DateMixin):
         return f"{self.film.title} [Blu-ray]"
 
     class Meta:
-        ordering = ["-film__oscar_awards", ]
+        ordering = ["film__title", ]
