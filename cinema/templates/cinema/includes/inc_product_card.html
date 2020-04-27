@@ -27,9 +27,22 @@
     </div>
   </div>
   <div class="card-footer p-0 my-0">
+
+    {% if product.in_stock %}
+
     <button type="button"
             class="btn btn-primary btn-sm btn-block active btn-success"
-            aria-pressed="true" title="Add to Cart">Buy Now
+            aria-pressed="true" title="Add to Cart">Add to Cart
     </button>
+
+    {% else %}
+
+    <button type="button"
+            class="btn btn-primary btn-sm btn-block active btn-success"
+            aria-pressed="true" title="Pre-order Now">Pre-order Now
+    </button>
+
+    {% endif %}
+
   </div>
 </div>

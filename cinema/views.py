@@ -81,7 +81,7 @@ class ProductListView(ListView):
 
     def get_queryset(self):
         return Product.objects.select_related("film").only(
-            "pk", "price", "film"
+            "pk", "price", "film", "in_stock"
         )
 
     def get_context_data(self, **kwargs):
@@ -118,7 +118,7 @@ class IndexListView(ListView):
     context_object_name = 'new_releases_list'
 
     queryset = Product.objects.select_related("film").only(
-        "pk", "price", "film"
+        "pk", "price", "film", "in_stock"
     ).order_by("-film__imdb_rating__value")
 
     def get_queryset(self):
