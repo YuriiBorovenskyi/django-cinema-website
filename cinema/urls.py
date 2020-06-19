@@ -18,7 +18,7 @@ urlpatterns = [
     path('blu-ray/', ProductListView.as_view(), name='product-list'),
     path('film/', FilmListView.as_view(), name='film-list'),
     path('news/', NewsListView.as_view(), name='news-list'),
-    path('search/', SearchResultsView.as_view(), name='search_results'),
+    path('search/', SearchResultsView.as_view(), name='search-results'),
     path('blu-ray/top-rated/', TopRatedProductListView.as_view(),
          name='top-rated-product-list'),
     path('blu-ray/new-releases/', NewReleasesProductListView.as_view(),

@@ -1,0 +1,67 @@
+{% extends 'cinema/base.html' %}
+
+{% block description %}Sign-In{% endblock %}
+
+
+{% block title %}Sign-In{% endblock %}
+
+
+{% block main_content %}
+
+<div class="row justify-content-md-center my-3">
+  <div class="col-md-auto">
+    <h2>Sign-In</h2>
+  </div>
+</div>
+<div class="row justify-content-md-center mb-3">
+  <div class="col-md-auto">
+
+    {% if form.errors %}
+
+    <h5 style="color:#c40000">There was a problem!</h5>
+    <p>Your username and password didn't match. Please try again.</p>
+
+    {% endif %}
+
+    {% if next %}
+
+    {% if user.is_authenticated %}
+
+    <h5 style="color:#c40000">There was a problem!</h5>
+    <p>Your account doesn't have access to this page. To proceed, please login with an
+      account that has access.</p>
+
+    {% else %}
+
+    <p>Please login to see this page</p>
+
+    {% endif %}
+
+    {% endif %}
+
+    <form method="post" action="{% url 'login' %}">
+
+      {% csrf_token %}
+
+      <table class="mb-4">
+        <tr>
+          <td>{{ form.username.label_tag }}</td>
+          <td>{{ form.username }}</td>
+        </tr>
+        <tr>
+          <td>{{ form.password.label_tag }}</td>
+          <td>{{ form.password }}</td>
+        </tr>
+      </table>
+      <div class="row justify-content-center">
+        <input type="submit" value="login" class="btn btn-primary btn-lg"/>
+        <input type="hidden" name="next" value="{{ next }}"/>
+      </div>
+    </form>
+
+    <!--Assumes you setup the password_reset view in your URLconf-->
+    <p align="center"><a href="{% url 'password_reset' %}">Lost password?</a></p>
+  </div>
+</div>
+
+{% endblock main_content %}

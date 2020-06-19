@@ -1,0 +1,22 @@
+{% extends 'cinema/base.html' %}
+
+{% block description %}Sign-Out{% endblock %}
+
+
+{% block title %}Sign-Out{% endblock %}
+
+
+{% block main_content %}
+
+<div class="row justify-content-md-center my-3">
+  <div class="col-md-auto">
+    <h2>Logged out!</h2>
+  </div>
+</div>
+<div class="row justify-content-md-center mb-3">
+  <div class="col-md-auto">
+    <a href="{% url 'login' %}">Click here to login again</a>
+  </div>
+</div>
+
+{% endblock main_content %}

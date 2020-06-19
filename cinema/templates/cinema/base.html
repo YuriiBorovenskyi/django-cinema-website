@@ -35,20 +35,15 @@
 </head>
 
 <body>
-<nav class="navbar navbar-expand-md navbar-dark fixed-top content">
+<nav class="navbar navbar-expand-md navbar-dark fixed-top content"
+     style="padding-left: 190px; padding-right: 190px">
   <a class="navbar-brand py-0" href="{% url 'cinema:index-list' %}">
     <img style="width: auto !important; height: 40px !important;"
          src="{% static 'cinema/img/cinema_logo_gold.png' %}"
          alt="Cinema logo picture">
   </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse"
-          data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
-          aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-    <ul class="navbar-nav mr-auto">
+  <div class="collapse navbar-collapse ml-3" id="navbarsExampleDefault">
+    <ul class="navbar-nav mr-5">
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle font-weight-bold"
            href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true"
@@ -104,7 +99,7 @@
       </li>
     </ul>
     <form class="form-inline my-2 my-lg-0"
-          action="{% url 'cinema:search_results' %}"
+          action="{% url 'cinema:search-results' %}"
           method="get">
       <input class="form-control mr-sm-2" name="q" type="text" placeholder="Search"
              aria-label="Search">
@@ -112,6 +107,34 @@
         Search
       </button>
     </form>
+    <ul class="navbar-nav ml-auto my-2 my-lg-0">
+      <li class="nav-item dropdown">
+
+        {% if user.is_authenticated %}
+
+        <a class="nav-link"
+           href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true"
+           aria-expanded="false">
+          <img src="{% static 'cinema/img/user.png' %}" alt="User picture"
+               style="width: auto; height: 25px" class="d-inline">
+          <p class="d-inline text-white">{{ user.get_username }}</p>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="dropdown04">
+          <a class="dropdown-item"
+             href="{% url 'logout'%}?next={{request.path}}">Logout
+          </a>
+
+          {% else %}
+
+          <a class="nav-link text-white"
+             href="{% url 'login' %}?next={{request.path}}">Login
+          </a>
+
+          {% endif %}
+
+        </div>
+      </li>
+    </ul>
   </div>
 </nav>
 
@@ -161,7 +184,8 @@
 <footer class="container-fluid content">
   <div class="row p-2 justify-content-center align-items-center">
     <div class="col-md-auto text-center h3"
-         style="color: #ec0505;">18+</div>
+         style="color: #ec0505;">18+
+    </div>
     <div class="col-md-auto text-white text-center">
       Copyright © 2020 CINEMA. All rights reserved
     </div>

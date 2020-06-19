@@ -1,6 +1,7 @@
 from django.db.models import Q
 from django.views.generic import ListView, DetailView, TemplateView
 from .models import Product, News, Film, CinemaPerson, MpaaRating
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 all_films = Film.objects.prefetch_related(
     "staff__cinemafilmpersonprofession_set__profession", "staff__user",
@@ -153,12 +154,12 @@ class IndexListView(ListView):
         return context
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(LoginRequiredMixin, DetailView):
 
     def get_queryset(self):
         return Product.objects.select_related(
             "film__imdb_rating", "film__mpaa_rating"
-        ).filter(pk=self.kwargs.get('pk'))
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -326,9 +327,7 @@ class MpaaFilmListView(FilmListView):
 class FilmDetailView(DetailView):
 
     def get_queryset(self):
-        return Film.objects.select_related(
-            "imdb_rating", "mpaa_rating"
-        ).filter(pk=self.kwargs.get('pk'))
+        return Film.objects.select_related("imdb_rating", "mpaa_rating")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -374,9 +373,7 @@ class CinemaPersonDetailView(DetailView):
                     person.news__pk] = person.news__title
 
     def get_queryset(self):
-        return CinemaPerson.objects.select_related("user", "country").filter(
-            pk=self.kwargs.get('pk')
-        )
+        return CinemaPerson.objects.select_related("user", "country")
 
     def get_context_data(self, **kwargs):
         person_extra_info = self.info_by_persons[self.kwargs.get('pk')]
