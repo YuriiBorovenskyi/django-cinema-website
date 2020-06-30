@@ -1,5 +1,6 @@
 from datetime import date, timedelta
 from django.contrib.auth import get_user_model
+from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
 
 User = get_user_model()
@@ -30,9 +31,7 @@ def upload_photo_to_news_detail(instance, filename):
 
 class ExtendedProfileMixin(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default="M")
-    country = models.ForeignKey(
-        "Country", on_delete=models.SET_NULL, blank=True, null=True
-    )
+    country = models.ForeignKey("Country", on_delete=models.PROTECT, default=1)
     birthday = models.DateField(null=True, blank=True)
 
     class Meta:
@@ -40,7 +39,7 @@ class ExtendedProfileMixin(models.Model):
 
 
 class DateMixin(models.Model):
-    created_at = models.DateTimeField(auto_created=True)
+    created_at = models.DateTimeField(auto_now=True, db_index=True)
 
     class Meta:
         abstract = True
@@ -58,7 +57,15 @@ class Country(models.Model):
 
 
 class Genre(models.Model):
-    name = models.CharField(max_length=16, unique=True)
+    name = models.CharField(
+        max_length=16, unique=True, validators=[
+            RegexValidator(
+                regex="^[A-Z][a-z]+[-]?[a-z]+$",
+                message="Invalid genre name format.",
+                code="invalid"
+            )
+        ]
+    )
 
     def __str__(self):
         return self.name
@@ -89,7 +96,15 @@ class MpaaRating(models.Model):
 
 
 class Language(models.Model):
-    name = models.CharField(max_length=16, unique=True)
+    name = models.CharField(
+        max_length=16, unique=True, validators=[
+            RegexValidator(
+                regex="^[A-Z][a-z]+$",
+                message="Invalid language name format.",
+                code="invalid"
+            )
+        ]
+    )
 
     def __str__(self):
         return self.name
@@ -109,7 +124,7 @@ class Distributor(models.Model):
 
 
 class CinemaPerson(ExtendedProfileMixin):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.PROTECT)
     bio = models.TextField(unique=True)
     oscar_awards = models.PositiveSmallIntegerField(default=0)
     avatar = models.ImageField(upload_to=upload_to_cinema_person, blank=True,
@@ -133,24 +148,22 @@ class CinemaPerson(ExtendedProfileMixin):
 
 
 class Film(models.Model):
-    title = models.CharField(max_length=64)
+    title = models.CharField(max_length=64, db_index=True)
     country = models.ManyToManyField(Country)
     genre = models.ManyToManyField(Genre)
     staff = models.ManyToManyField(CinemaPerson,
                                    through="CinemaFilmPersonProfession")
     budget = models.PositiveIntegerField(null=True, blank=True)
-    usa_gross = models.BigIntegerField(default=0)
-    world_gross = models.BigIntegerField(default=0)
+    usa_gross = models.PositiveIntegerField(default=0)
+    world_gross = models.PositiveIntegerField(default=0)
     run_time = models.DurationField()
     description = models.TextField(unique=True)
     release_data = models.DateField()
     language = models.ManyToManyField(Language)
     distributor = models.ManyToManyField(Distributor)
-    imdb_rating = models.ForeignKey(
-        ImdbRating, on_delete=models.SET_NULL, blank=True, null=True
-    )
+    imdb_rating = models.ForeignKey(ImdbRating, on_delete=models.PROTECT)
     mpaa_rating = models.ForeignKey(
-        MpaaRating, on_delete=models.SET_NULL, blank=True, null=True
+        MpaaRating, on_delete=models.PROTECT, default=1
     )
     oscar_awards = models.PositiveSmallIntegerField(default=0)
     poster = models.ImageField(upload_to=upload_to_film, blank=True, null=True)
@@ -177,9 +190,11 @@ class CinemaProfession(models.Model):
 
 
 class CinemaFilmPersonProfession(models.Model):
-    cinema_person = models.ForeignKey(CinemaPerson, on_delete=models.CASCADE)
-    film = models.ForeignKey(Film, on_delete=models.CASCADE)
-    profession = models.ForeignKey(CinemaProfession, on_delete=models.CASCADE)
+    cinema_person = models.ForeignKey(CinemaPerson, on_delete=models.PROTECT)
+    film = models.ForeignKey(Film, on_delete=models.PROTECT)
+    profession = models.ForeignKey(
+        CinemaProfession, on_delete=models.PROTECT, default=2
+    )
 
     def __str__(self):
         return (
@@ -198,7 +213,7 @@ class News(DateMixin):
     title = models.CharField(max_length=128, unique=True)
     description = models.TextField(unique=True)
     news_source = models.CharField(max_length=32)
-    news_author = models.CharField(max_length=64, default="", blank=True)
+    news_author = models.CharField(max_length=64)
     film = models.ManyToManyField(Film, blank=True)
     cinema_person = models.ManyToManyField(CinemaPerson, blank=True)
     news_feed_photo = models.ImageField(
@@ -217,7 +232,12 @@ class News(DateMixin):
 
 
 class Product(DateMixin):
-    price = models.DecimalField(max_digits=5, decimal_places=2)
+    price = models.DecimalField(
+        max_digits=5, decimal_places=2,
+        validators=[MinValueValidator(0.99)], error_messages={
+            "min_value": "Product price cannot be less than 0.99."
+        }
+    )
     in_stock = models.PositiveSmallIntegerField(default=0)
     film = models.OneToOneField(Film, on_delete=models.CASCADE)
 

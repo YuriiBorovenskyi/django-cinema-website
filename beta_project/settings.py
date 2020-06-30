@@ -24,7 +24,6 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
 
     # Students` applications
-    'insane_app',
     'cinema.apps.CinemaConfig',
 ]
 

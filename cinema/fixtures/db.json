@@ -1008,19 +1008,27 @@
     }
   },
   {
+    "model": "auth.group",
+    "pk": 1,
+    "fields": {
+      "name": "Cinema Members",
+      "permissions": []
+    }
+  },
+  {
     "model": "auth.user",
     "pk": 1,
     "fields": {
       "password": "pbkdf2_sha256$180000$QOHVq6zsszzB$NNiL1IwkVAEOTL6wqe8hAeYjFlmLZ8PtRmSe9JV7nIU=",
-      "last_login": "2020-04-04T19:46:30.706Z",
+      "last_login": "2020-06-26T11:48:13.294Z",
       "is_superuser": true,
       "username": "admin",
-      "first_name": "",
-      "last_name": "",
-      "email": "admin@example.com",
+      "first_name": "Yurii",
+      "last_name": "Borovenskyi",
+      "email": "yurij.borovenskij@gmail.com",
       "is_staff": true,
       "is_active": true,
-      "date_joined": "2020-03-21T11:48:30.020Z",
+      "date_joined": "2020-03-21T11:48:30Z",
       "groups": [],
       "user_permissions": []
     }
@@ -2246,6 +2254,26 @@
       "is_active": true,
       "date_joined": "2020-04-01T21:33:00Z",
       "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 70,
+    "fields": {
+      "password": "pbkdf2_sha256$180000$jSewyq2bjCEB$X8ECfHn39Tn+v/tK6twBDTYhePiGOKv4PBMIkqFKDm0=",
+      "last_login": "2020-04-29T16:59:51.178Z",
+      "is_superuser": false,
+      "username": "test_user_name",
+      "first_name": "Ivan",
+      "last_name": "Ivanov",
+      "email": "yurij.borovenskij@gmail.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2020-04-25T12:47:10Z",
+      "groups": [
+        1
+      ],
       "user_permissions": []
     }
   },
@@ -6298,7 +6326,7 @@
     "model": "cinema.news",
     "pk": 1,
     "fields": {
-      "created_at": "2020-03-22T11:24:50Z",
+      "created_at": "2020-03-28T11:24:50Z",
       "title": "Oscars: Wins by Film",
       "description": "'Parasite' was tops with four wins, including best picture and director.\r\nParasite came out on top at the 92nd annual Academy Awards on Sunday night. \r\n\r\nThe film, written and directed by Bong Joon Ho, took home four honors: best picture, best director, best original screenplay and best international feature. Heading into the night, the title was up in six categories. \r\n\r\nBong's film also nabbed the best original screenplay award, besting fellow nominees Once Upon a Time in Hollywood, Knives Out, 1917 and Marriage Story.\r\n\r\nParasite also made Oscars history by being the first foreign-language film to take home the ceremony's top prize. \r\n\r\nTrailing behind with three wins was 1917. The World War I film from Sam Mendes received prizes for cinematography, visual effects and sound mixing. \r\n\r\nHere's the evening's wins by film.\r\n\r\nWins by film:\r\n\r\nParasite - 4\r\n\r\n1917 - 3\r\n\r\nOnce Upon a Time in Hollywood - 2\r\n\r\nJoker - 2\r\n\r\nFord v Ferrari - 2\r\n\r\nJudy - 1\r\n\r\nJojo Rabbit - 1\r\n\r\nMarriage Story - 1\r\n\r\nLittle Women - 1\r\n\r\nBombshell - 1",
       "news_source": "The Hollywood Reporter",
@@ -6315,7 +6343,7 @@
     "model": "cinema.news",
     "pk": 2,
     "fields": {
-      "created_at": "2020-03-22T11:33:03Z",
+      "created_at": "2020-03-20T11:33:03Z",
       "title": "Brad Pitt Wins Best Supporting Actor Oscar",
       "description": "Brad Pitt Wins Best Supporting Actor Oscar\r\nIt's Pitt's first Academy Award in an acting category. He previously won as producer of \"12 Years a Slave.\"\r\n\r\nBrad Pitt has won the Best Supporting Actor Academy Award for his performance as stunt double Cliff Booth in Quentin Tarantino\u2019s \u201cOnce Upon a Time in Hollywood.\u201d\r\n\r\nIn a fairly competitive category, Pitt beat out fellow nominees Tom Hanks (Fred Rogers in \u201cA Beautiful Day in the Neighborhood\u201d), Anthony Hopkins (Pope Benedict XVI in \u201cThe Two Popes\u201d), Al Pacino (Jimmy Hoffa in \u201cThe Irishman\u201d), and Joe Pesci (Russell Bufalino in \u201cThe Irishman\u201d).\r\n\r\nThis is Pitt\u2019s fourth nomination as an actor, and his first acting Oscar win. Previously, he was nominated for Best Supporting Actor in 1996 for \u201c12 Monkeys,\u201d for Best Actor in 2009 for \u201cThe Curious Case of Benjamin Button,\u201d for Best Actor in 2012 for \u201cMoneyball.\u201d\r\n\r\nAs a producer, he has three Best Picture nominations: \u201cMoneyball\u201d (2012), \u201c12 Years a Slave\u201d (2014), and \u201cThe Big Short\u201d (2016). He won for \u201c12 Years a Slave,\u201d which was his first ever Oscar win.\r\n\r\nPitt already won both the Golden Globe and the SAG award in the Best Supporting Actor category, and was fully expected to win the Oscar as well.\r\n\r\nIndieWire awards editor Anne Thompson predicted that Pitt would win the category, with Anthony Hopkins (\u201cThe Two Popes\u201d) potentially playing spoiler. Her bottom line: \u201cNobody can possibly catch up with Pitt\u2019s performance as moccasin-wearing zen stuntman Cliff Booth, nor his awards circuit charm offensive (including witty, self-deprecating speeches \u2014 his ghost writer earned their fee \u2014 and hand-holding with his ex, Jennifer Aniston). While \u2018The Two Popes\u2019 is an unsung actor-fest that many voters love, Oscar voters want this key win for \u2018Once Upon a Time in Hollywood\u2019.\u201d\r\n\r\n\u201cOnce Upon a Time in Hollywood\u201d received a total of 10 nominations. It premiered at the Cannes Film Festival on May 21, 2019, and was theatrically released in the U.S. on July 26, 2019.\r\n\r\nThe film has grossed $374 million worldwide and received universal praise from critics for Tarantino\u2019s screenplay and direction, acting, cinematography, costume design, production values, and soundtrack.\r\n\r\nSet in 1969 Los Angeles, during the final moments of Hollywood\u2019s golden age, \u201cOnce Upon a Time in Hollywood\u201d follows Rick Dalton (Leonardo DiCaprio), former star of a 1950s western TV series, and his longtime stunt double and easygoing best friend Cliff Booth (Brad Pitt). Both are struggling to make it in a Hollywood they don\u2019t recognize anymore. But Rick has very famous next-door neighbors: Roman Polanski (Rafa\u0142 Zawierucha) and Sharon Tate (Margot Robbie) \u2014 the filmmaker and budding actress whose futures will forever be altered by members of the Manson Family.\r\n\r\nAs with any Tarantino film, the reception for \u201cOnce Upon a Time in Hollywood\u201d wasn\u2019t without controversy. Although its context is a possibly-skewed memory of Cliff Booth\u2019s, and not a \u201creal\u201d event in the narrative, the film\u2019s portrayal of Bruce Lee drew much criticism from fans, contemporaries and Lee\u2019s family.\r\n\r\nSpecifically, a key fight sequence involving Pitt\u2019s character and Lee was the subject of much contention. In the scene, Lee challenges Cliff to a three-round fight on the set of \u201cThe Green Hornet\u201d after Cliff insults him. Lee wins the first round by knocking Cliff off his feet. Cliff wins round two by launching Lee into the side of a car. But just as the final round is to begin, a \u201cGreen Hornet\u201d stunt coordinator, played by Zo\u00eb Bell, arrives on set to puts an end to the contest, effectively calling the match a tie.\r\n\r\nAlthough, according to stunt coordinator Robert Alonzo, the sequence was supposed to be much longer, with Cliff definitely beating Lee. But Pitt wasn\u2019t comfortable with the idea of Lee losing the fight, and (along with Alonzo, who considers Lee a personal hero) petitioned Tarantino to alter the script, which he of course did.\r\n\r\nBut of Lee\u2019s general portrayal, daughter, Shannon, said this: \u201c[Bruce Lee] was continuously marginalized and treated like kind of a nuisance of a human being by white Hollywood, which is how he\u2019s treated in the film.\u201d\r\n\r\nTarantino responded to the criticism, saying Lee was \u201ckind of an arrogant guy\u201d, and that Lee\u2019s widow, Linda Lee Cadwell, wrote in her 1975 book \u201cBruce Lee: The Man Only I Knew,\u201d that he could beat Muhammad Ali. But Cadwell was actually quoting a TV critic. In 1972, Lee himself said: \u201cEverybody says I must fight Ali someday \u2026 Look at my hand. That\u2019s a little Chinese hand. He\u2019d kill me.\u201d\r\n\r\n\u201cOnce Upon a Time in Hollywood\u201d features a large ensemble cast led by DiCaprio, Pitt, Robbie, Emile Hirsch, Margaret Qualley, Timothy Olyphant, Austin Butler, Dakota Fanning, Bruce Dern, and Al Pacino.\r\n\r\nIt is the last film to feature Luke Perry, who died in March 2019.\r\n\r\nProduced by Lynette Howell Taylor and Stephanie Allain \u2014 their first involvement with the Oscars \u2014 the 92nd Academy Awards were held on Sunday, February 9, 2020, at the Dolby Theatre at Hollywood & Highland Center, in Hollywood, and was televised live on ABC. The Oscars are also televised live in more than 225 countries and territories worldwide.",
       "news_source": "Indiewire",
@@ -6407,7 +6435,7 @@
     "model": "cinema.news",
     "pk": 6,
     "fields": {
-      "created_at": "2020-04-01T18:57:26Z",
+      "created_at": "2020-03-29T18:57:26Z",
       "title": "Quentin Tarantino Talks About the Luke Cage Movie He Almost Made",
       "description": "Once upon a time in Hollywood, Quentin Tarantino toyed with bringing Marvel Comics superhero Luke Cage to the screen. This was admittedly early in his career\u2014after he\u2019d directed Reservoir Dogs to critical and commercial acclaim but before he\u2019d even shot the \u201890s-defining Pulp Fiction\u2014and well before our current Marvel Studios glut. Nevertheless, he still gets nostalgic about the project. For instance, while it\u2019s been known he considered Laurence Fishburne to play the unbreakable man, he just revealed that he also thought about Wesley Snipes in the role.\r\n\r\nThis and more came up during Tarantino\u2019s fascinating conversation on Amy Schumer\u2019s podcast, 3 Girls, 1 Keith. Tarantino came on to discuss his career and his recent Oscar winning work, Once Upon a Time\u2026 in Hollywood, but the conversation eventually turned to one of the most popular genres on screen at the moment: superheroes. This occurred when co-host Keith Robinson brought up Martin Scorsese\u2019s recent comments about Marvel Studios movies being more like theme parks than cinema.\r\n\r\n\u201cGenerationally does anyone think he is going to be a big fan of Captain Marvel or Doctor Strange and Ant-Man vs. the Wasp?\u201d Tarantino laughed while amusingly renaming one of Marvel\u2019s lesser efforts. \u201cYou could\u2019ve guessed THAT would\u2019ve been his reaction.\u201d\r\n\r\nHowever, Tarantino then thought back to his own love for Marvel Comics growing up and how he toyed with adapting Luke Cage back in an era where future Tarantino co-star George Clooney was still building up to his Batman moment.\r\n\r\n\u201cThere was a time before all this Marvel shit was coming out,\u201d Tarantino said. \u201cIt was after Reservoir Dogs, it was before Pulp Fiction, and I had thought about doing Luke Cage. Growing up I was a big comic book collector, and my two favorite [comic books] were Luke Cage: Hero for Hire, later Luke Cage: Power Man, and Shang-Chi: Master of Kung Fu. I also liked Werewolf by Night, that was a great one, and Tomb of Dracula was great, but my absolute hero was Luke Cage.\u201d\r\n\r\nAfter going on to stress that he was the only white guy he knew who collected Luke Cage comics over all other superheroes, Tarantino noted that this would not have replaced Pulp Fiction as his second film. Rather it could\u2019ve been his third movie instead of Jackie Brown. He just couldn\u2019t settle on casting.\r\n\r\n\u201cWhat actually dissuaded me from doing it\u2026 was my comic geek friends talked me out of it,\u201d Tarantino explained. \u201cBecause I had an idea that Larry Fishburne would\u2019ve been the perfect guy to play Luke Cage. And I\u2019m talking King of New York era Larry Fishburne. \u2018My name is Jimmy Jump.\u2019 \u2026 But All my friends were like, \u2018No, no, listen, it\u2019s got to be Wesley Snipes.\u2019 And I go, \u2018Look, I like Wesley Snipes, but Larry Fishburne is practically Marlon Brando. I think Fish is the man.\u2019 And they\u2019re like, \u2018Yeah, but he\u2019d have to get in shape in a big way. Snipes is that way already!\u2019 And I go, \u2018Fuck that! That\u2019s not that important! Fuck you, you ruined the whole damn thing!\u2019\u201d\r\n\r\nThat might be true, although we also wonder if the fact Pulp Fiction went on to be a cultural phenomenon, winning the Palme d\u2019Or at its Cannes premiere and going on to earn $214 million at the box office while racking up Tarantino\u2019s first screenplay Oscar, also had a little something to do with him stepping away from comic book movies. Then again, he did follow up Jackie Brown with an unapologetic paean to Kung Fu films, Samurai epics, and Spaghetti Westerns with the Kill Bill saga, and then pivoted to straight grindhouse exploitation via Death Proof.\r\n\r\nIt is interesting though to wonder how the superhero genre might\u2019ve been affected if Tarantino did a Kill Bill styled epic decades before the likes of Christopher Nolan or then the Marvel assembly line defined it in the 21st century. Then again, we\u2019re very happy to have Jackie Brown in this world, one of Tarantino\u2019s best (and most underrated) films. Snipes, meanwhile, got to star as a Marvel Comics superhero after all when he played Blade, a character spun off from the Tomb of Dracula comics!\r\n\r\nNo matter what, it\u2019s good to know that even in the \u201890s, comic book fan casting would still miss the mark by focusing purely on physical aesthetics instead of talent\u2026",
       "news_source": "Den of Geek",
@@ -6429,7 +6457,7 @@
     "model": "cinema.news",
     "pk": 7,
     "fields": {
-      "created_at": "2020-04-01T19:08:42Z",
+      "created_at": "2020-03-30T19:08:42Z",
       "title": "Martin Scorsese's 10 Most Suspenseful Sequences",
       "description": "Martin Scorsese may not make a lot of thrillers, but the acclaimed director knows how to keep tension high in movies like Goodfellas and The Departed.\r\n\r\nAs one of the most gifted and prolific directors working today, Martin Scorsese can balance a wide range of cinematic tones. He\u2019s worked across a variety of different genres and, by extension, a variety of different emotions. His films have given viewers scenes that are heartbreaking, hilarious, harrowing, and scenes that keep us on the edge of our seats.\r\n\r\nScorsese has only directed a couple of thrillers and tends to go for more cerebral subject matter, but he\u2019s delivered his fair share of anxiety-fueled set pieces. So, here are the 10 most suspenseful scenes from Scorsese\u2019s filmography.\r\n\r\n10\r\nThe XF-11 Crash (The Aviator)\r\n\r\nOne of Scorsese\u2019s most overlooked gems is The Aviator, his spectacularly made biopic of Howard Hughes. In one of the film\u2019s most breathtaking sequences, Hughes takes the prototype XF-11 airplane for a spin.\r\n\r\nSomething goes horribly wrong, and the plane begins plummeting towards the Earth, eventually crashing on a suburban street in Beverly Hills. In this scene, Scorsese perfectly captures the panic of being in a plane that\u2019s going down.\r\n\r\n9\r\n\u201cFunny How?\u201d (Goodfellas)\r\n\r\nThe suspense in this scene is not a result of well-paced editing or in-camera trickery; it\u2019s entirely down to the power of Joe Pesci\u2019s performance. Pesci\u2019s character Tommy DeVito tells his friends an anecdote at the bar and Ray Liotta\u2019s Henry Hill tells him he\u2019s a funny guy. Suddenly, the atmosphere sours as Tommy is offended and asks Henry what he means by \u201cfunny.\u201d\r\n\r\nAfter a furious tirade followed by a few tense moments of silence, Henry says, \u201cGet the f*ck outta here, Tommy!,\u201d and everyone at the table starts laughing as the whole thing is revealed to be a prank.\r\n\r\n8\r\nJordan Belfort Takes Quaaludes (The Wolf Of Wall Street)\r\n\r\nScorsese\u2019s riotous pitch-black comedy The Wolf of Wall Street has been accused of glorifying the lifestyle of scam-happy stockbroker Jordan Belfort, but Belfort\u2019s desperate struggle to get home while tripping on Quaaludes doesn\u2019t look too fun. Assuming the drugs weren\u2019t working, he took a bunch of them, and then drove to the country club to take a call, learning that his phones have been tapped by the feds.\r\n\r\nAnd then, the drugs hit. As the \u2018ludes take effect, the audience, like Belfort, doesn\u2019t know what\u2019s real and what\u2019s not, and as funny as the on-screen events may be, that uncertainty keeps us on the edge of our seats.\r\n\r\n7\r\nDaniels Breaks Into Ward C (Shutter Island)\r\n\r\nWhenever a character in a movie is prohibited from going somewhere, there\u2019s inevitably a scene in which they go to that place. In Shutter Island, Teddy Daniels breaks into the restricted Ward C to find some answers. It\u2019s a terrifying scene as it\u2019s unclear what Daniels will find in there.\r\n\r\nIn the ward, he meets George Noyce, a patient in solitary confinement who desperately tries to convince Daniels that he\u2019s being tricked and he\u2019s part of a huge conspiracy. At the time, Noyce sounds like the craziest character of all, but he later turns out to be the only one telling the truth.\r\n\r\n6\r\nCostigan Chases Sullivan Through Chinatown (The Departed)\r\n\r\nThe Departed is a special kind of cat-and-mouse thriller because it\u2019s not just about one cat chasing one mouse; the mouse is also chasing the cat. Colin Sullivan is a corrupt cop on mob boss Frank Costello\u2019s payroll, and Billy Costigan is an undercover cop who\u2019s infiltrated Costello\u2019s crew, and they\u2019re each trying to figure out the other\u2019s identity.\r\n\r\nAt the movie\u2019s midpoint, they come very close to a confrontation as Costigan chases Sullivan through the crowded streets of Chinatown. Although neither of them sees the other\u2019s face, it\u2019s an incredibly suspenseful sequence.\r\n\r\n5\r\nFrank Flies Out To Kill Jimmy (The Irishman)\r\n\r\nOne of Scorsese\u2019s directorial hallmarks is choosing the perfect track from his record collection to play over a given scene. But in The Irishman, when Frank Sheeran is sent to fly out to his close friend and associate Jimmy Hoffa\u2019s house to kill him, Scorsese lets the entire 20-minute sequence play out in near-silence. Without music to distract us, we\u2019re left with all the thoughts that are going through Frank\u2019s head as he\u2019s sent to perform this grisly deed.\r\n\r\nThe whole time, we know the outcome is inevitable, but there\u2019s a hope that maybe Frank will change his mind at the last second. And then, of course, he doesn\u2019t, and the killing is depicted very bluntly.\r\n\r\n4\r\nThe Thumb-Sucking Scene (Cape Fear)\r\nJuliette Lewis in Cape Fear\r\nAfter the sadistic Max Cady is released from prison, he\u2019s determined to exact revenge on Sam Bowden, the public defender who got him locked away, and his family. In one of Cape Fear\u2019s creepiest scenes, Cady approaches Bowden\u2019s teenage daughter Danielle at school under the guise of her new drama teacher. He kisses her and puts his thumb in her mouth.\r\n\r\nSince we know who Cady is, and Danielle doesn\u2019t \u2014 not to mention that the actual content of the scene is disturbing \u2014 we\u2019re fraught with anxiety throughout the whole sequence.\r\n\r\n3\r\nTravis Bickle Attempts To Assassinate Senator Palantine (Taxi Driver)\r\n\r\nAfter being dumped by one of Senator Palantine\u2019s employees, condescended to in his cab by Palatine himself, and generally disappointed by Palantine\u2019s management of his city, New York\u2019s self-appointed savior Travis Bickle heads down to one of his campaign rallies to assassinate him.\r\n\r\nTo Palantine, Travis is just a face in the crowd, but we know his intentions. Before the Vietnam vet can pull the trigger, he\u2019s spotted by some Secret Service agents and flees the scene.\r\n\r\n2\r\nThe Lighthouse Scene (Shutter Island)\r\n\r\nWhen Shutter Island, the closest thing Scorsese has made to a horror movie, comes to a head in its final act, Teddy Daniels arrives at the lighthouse where patients get lobotomized; the place that holds the answers to his questions.\r\n\r\nThose answers could provide some much-needed relief, or they could provide an outcome more shocking and horrifying than Daniels \u2014 or the audience \u2014 ever imagined. Of course, the latter turns out to be the case.\r\n\r\n1\r\nHenry Is Followed By A Helicopter (Goodfellas)\r\n\r\nIn the climactic sequence of Goodfellas, arguably Scorsese\u2019s masterpiece, Henry Hill is organizing a huge drug deal, racing all over town to put it together. Mentally, he\u2019s all over the place as he\u2019s descended into cocaine addiction from getting high on his own supply. And then, he spots a helicopter in the sky, and fears he\u2019s being followed by the feds.\r\n\r\nScorsese does a fantastic job of reflecting Henry\u2019s headspace with the cinematography, editing, and music. As the camera deliberately hides the helicopter, and the soundtrack goes through five abrupt song changes, it\u2019s unclear whether or not the helicopter is a delusional result of Henry\u2019s drug-addled paranoia \u2014 until there\u2019s a gun pointed at his head.",
       "news_source": "Screen Rant",
@@ -6452,7 +6480,7 @@
     "model": "cinema.news",
     "pk": 8,
     "fields": {
-      "created_at": "2020-04-01T19:29:57Z",
+      "created_at": "2020-03-31T19:29:57Z",
       "title": "Trailer Lands For WWII Epic \u2018Greyhound\u2019 With Tom Hanks",
       "description": "Greyhound movie trailer\r\nSony Pictures has dropped the first-look trailer for the upcoming WWII movie Greyhound starring Tom Hanks and Stephen Graham. The film looks absolutely amazing and will land on our cinema screens later in 2020. Tom Hanks actually wrote the screenplay for the movie. It is directed by Aaron Schneider, an Oscar-winner for his short movie \u2018Two Soldier\u2019 back in 2004. Watch the Greyhound movie trailer in the player below.\r\n\r\nHere\u2019s the official synopsis:\r\n\r\nIn the early days of WWII, an international convoy of 37 Allied ships, led by captain Ernest Krause (Tom Hanks) in his first command of a U.S. destroyer, crosses the treacherous North Atlantic while hotly pursued by wolf packs of Nazi U-boats.\r\n\r\nShooting on Greyhound commenced two years ago at the beginning of 2018. It was originally set for release last March but finds its way onto the silver screen from 12th June this year. There are tons of special visual effects in this and it sure does look impressive from its debut trailer.\r\n\r\nAlso amongst the cast of Greyhound are Elisabeth Shue, Rob Morgan, Karl Glusman, and Manuel Garcia-Rulfo. The movie is an adaptation of the book \u2018The Good Shepherd\u2019 by C. S. Forester.\r\n\r\nHanks was most recently seen in the superb A Beautiful Day In The Neighborhood. He has a few other projects lined up, including an English language remake of A Man Called Ove, a Paul Greengrass-directed movie titled News Of The World, and Baz Luhrmann\u2019s untitled Elvis Presley movie in which he plays Elvis\u2019 manager Colonel Tom Parker.\r\n\r\nThe impressive Stephen Graham was in Martin Scorsese\u2019s applauded The Irishman and is currently shooting a one-shot kitchen/restaurant-set drama titled Boiling Point.\r\n\r\nYou can check out the superb Greyhound movie trailer below. We\u2019ll bring you more as it comes our way in the months leading up until the film\u2019s release date this summer.",
       "news_source": "The Hollywood News",
@@ -6472,7 +6500,7 @@
     "model": "cinema.news",
     "pk": 9,
     "fields": {
-      "created_at": "2020-04-01T19:43:17Z",
+      "created_at": "2020-03-20T19:43:17Z",
       "title": "Rumor: Martin Scorsese Wants to Move \u2018Killers of the Flower Moon\u2019 to Netflix as the Budget Skyrockets to $225 Million",
       "description": "It looks like Martin Scorsese is missing his pals at Netflix. The streaming giant essentially gave Scorsese a blank check to make The Irishman, and now that the legendary filmmaker is back working with a regular studio, he\u2019s reportedly getting nostalgic for that Netflix freedom. Scorsese is currently working on Killers of the Flower Moon, which stars both Leonardo DiCaprio and Robert De Niro. The movie already has a budget over $220 million dollars, which is rumored to be giving studio Paramount more than a few sleepless nights.\r\n\r\n\r\nRichard Rushfield broke this story in his Ankler newsletter, stating that there are rumors swirling that Netflix could swoop in and grab Martin Scorsese\u2019s Killers of the Flower Moon. Rushfield states these are nothing but rumors for now, but does add that even if Netflix doesn\u2019t come to the rescue, Scorsese would sure like them to. As the story goes, Paramount is nervous about Flower Moon\u2018s current $225 million budget \u2013 and not even the presence of box office draw Leonardo DiCaprio is soothing these worries.\r\n\r\nScorsese had money to burn and a wealth of freedom on the Netflix-released The Irishman, and Paramount\u2019s worry over the budget seems to have him pining for that sweet, sweet Netflix support system. Again: None of this means Netflix is going to ride in on a white horse and take Killers of the Flower Moon away. Still, it\u2019s interesting to learn how fond of Netflix Scorsese has become \u2013 and who can blame him? He\u2019s been making movies the old fashioned way for decades, and then Netflix went ahead and gave him tons of money and freedom to do whatever the heck he wanted. Who wouldn\u2019t want to return to that?\r\n\r\nBased on a true story, and the book of the same name by David Gran, Killers of the Flower Moon tells the story of the Osage murders of the 1920s. At the time, the Osage Nation in Oklahoma had become extremely wealthy due to oil being discovered beneath their land. Then, as the book jacket explains \u201cone by one, the Osage began to be killed off. The family of an Osage woman, Mollie Burkhart, became a prime target. One of her relatives was shot. Another was poisoned. And it was just the beginning, as more and more Osage were dying under mysterious circumstances, and many of those who dared to investigate the killings were themselves murdered.\u201d The FBI, still in its infancy at the time, began investigating, and sent in a former Texas Ranger, Tom White, to try to find the killer (or killers). White put together an undercover team to get to the bottom of things, and ended up exposing a conspiracy in the process.\r\n\r\nAs a lifelong Scorsese fan, I\u2019m of the opinion that studios and producers should give him as much damn money and freedom as he wants to get his films made, but hey, that\u2019s me. Scorsese is set to start shooting Killers of the Flower Moon next month.",
       "news_source": "Screen Rant",
@@ -6480,7 +6508,8 @@
       "news_feed_photo": "cinema_news_feed/Rumor_Martin_Scorsese_Wants_to_Move_Killers_of_the_Flower_Moon_to_Netfl_clygoWY.jpg",
       "news_detail_photo": "cinema_news_detail/Rumor_Martin_Scorsese_Wants_to_Move_Killers_of_the_Flower_Moon_to_Net_OluM4te.jpg",
       "film": [
-        21
+        21,
+        22
       ],
       "cinema_person": [
         2,
@@ -6493,7 +6522,7 @@
     "model": "cinema.news",
     "pk": 10,
     "fields": {
-      "created_at": "2020-04-01T19:46:02Z",
+      "created_at": "2020-03-15T19:46:02Z",
       "title": "What Al Pacino Brought to Hunters",
       "description": "Legendary actor Al Pacino took Hunters -- his first regular TV series -- to a whole new level.\r\n\r\nIf you\u2019re wondering why you haven\u2019t seen Al Pacino on TV much over the years, the answer is simple: the iconic star of films like The Godfather, Dog Day Afternoon, and Scarface hasn\u2019t done much work on the small screen during his more than five decades as an actor.\r\n\r\nFollowing a guest shot on a long-forgotten 1968 series called N.Y.P.D., Pacino did not show up on TV again until 2003, when he played the evil real-life lawyer Roy Cohn on HBO\u2019s six-part adaptation of Angels in America. Since then, he\u2019s done the TV/cable movies You Don\u2019t Know Jack (2010), Phil Spector (2013) and Paterno (2018). But he\u2019s never had a regular role on an episodic series \u2014 until now.\r\n\r\nOn the new Amazon Prime show Hunters, Pacino plays Meyer Offerman, a Holocaust survivor who leads a diverse group of Nazi hunters tracking down escaped Third Reich monsters in 1977 America. The series is a provocative, combustive mix of Tarantino-esque violence, comic book sensibility and somber reflection \u2014 the latter taking up more and more of the show as Offerman and his band of assassins begin to feel the effects of the violence and bloodshed they are immersing themselves in.\r\n\r\n\u201cAl\u2019s agent read the script and thought that there was something in this character that Al would really spark too,\u201d says series creator and co-executive producer David Weil. \u201cAnd Al did. It took four meetings to really talk with about this character is going and where the series is going. But just from day one with Al, it became a partnership. It became the greatest collaboration.\u201d\r\n\r\nA Method actor and former student at New York\u2019s legendary Actor\u2019s Studio, the 79-year-old Pacino still back on his training from years ago while prepping for the role in Hunters. \u201cThis is a person, an artist who eats, breathes and dreams his work and his characters,\u201d continues Weil about his star. \u201cHe\u2019ll always send a note in the middle of the night: \u2018Oh, what if we did this? Or maybe we should change the line to that? Or what if I was wearing a scarf instead?\u2019 Both minute details and grand ideas.\u201d\r\n\r\n\u201cAl is a guy that asks a lot of questions about the character, about what the intention of the line is, what the intention of a scene is,\u201d says co-executive producer Nikki Toscano. \u201cSo there\u2019s this wonderful, alive workshopping that\u2019s happening at all times and you don\u2019t often get that with a TV series because of the timing. You have to be moving so fast. But he allowed it to sort of slow down and give us the opportunity to have those conversations that sometimes you\u2019re not able to have.\u201d\r\n\r\nToscano adds that having an actor of Pacino\u2019s stature \u2014 he also recently starred in Martin Scorsese\u2019s epic The Irishman \u2014 agree to play a starring role in his first TV series raises not just the show\u2019s profile but the standard of excellence for everyone involved. \u201cIt takes it to a different level,\u201d she affirms. \u201cIt was life-changing. It obviously raises the profile of any show when you have Al Pacino doing his first bout of television on your series. And Al, without even meaning to be, is a really truly inspiring man. And he takes his craft so seriously that I think that he raised the bar for all of us to bring our A game.\u201d\r\n\r\nWhile Meyer Offerman\u2019s arc in Hunters takes the character and Pacino to some rather unexpected places as the series progresses, Weil agrees that the actor\u2019s influence on the ensemble of actors as a whole is clearly evident: \u201cAl really breathed this character to life in this beautiful way,\u201d says the showrunner. \u201cAl and the actors really became this wonderful troupe, and I think we all became this company, almost putting on this play for six months, and really exploring and improvising. It was just a wonderful, magical process.\u201d",
       "news_source": "Den of Geek",
@@ -6501,7 +6530,9 @@
       "news_feed_photo": "cinema_news_feed/What_Al_Pacino_Brought_to_Hunters_10.jpg",
       "news_detail_photo": "cinema_news_detail/What_Al_Pacino_Brought_to_Hunters_10.jpg",
       "film": [
+        28,
         8,
+        9,
         21
       ],
       "cinema_person": [
@@ -6541,7 +6572,7 @@
     "model": "cinema.news",
     "pk": 12,
     "fields": {
-      "created_at": "2020-04-13T15:44:47Z",
+      "created_at": "2020-04-01T15:44:47Z",
       "title": "10 Things Everyone Completely Missed In The Lord Of The Rings Trilogy",
       "description": "The Lord Of The Rings trilogy is a beloved film series. While many dedicated their time watching them, there may be some things they have missed.\r\n\r\nPeter Jackson's The Lord Of The Rings Trilogy features three very, very long films: The Fellowship Of The Ring, The Two Towers, and The Return Of The King. It's no wonder, therefore, that there are some parts of the movies that slip past our radar without us noticing anything odd about them.\r\n\r\nWhat with several interlocking narratives, endless middle-earth derived fictional names to keep track of, and a new war seeming to break out every other scene...one can hardly keep up with all the details. Here are 10 things to keep in mind the next time you're viewing these epic movies.\r\n10 Gandalf The White's High Tops\r\n\r\nYes, you read that right. In the first scene of Gandalf's return in The Two Towers, Gandalf is seen to step out into a great field and whistle for his horse, Shadowfax. for just a second, if you look to the bottom left of the screen as the camera zooms out and Gandalf's robes hang forward from his legs a bit, you can spot what clearly appears to be a pair of white Converse-style white high-tops on his feet. Whether they are true Converse sneakers is hard to tell for certain, but what is apparent is that he is not sporting the same footwear in later scenes.\r\n9 Sauron Loses The War...But Still Has 10,000 Soldiers?\r\n\r\nThe war at Minis Tirith is the subject of much debate and grief in the third movie of the series, The Return Of The King. Most are certain that man will fall to the massive armies of Sauron. They are so desperate that Aragorn even goes so far as to take the risk of traveling deep into the caves and asking an army of the dead to aid them in the battle. Lo and behold, they all come together and defeat Sauron's army by the skin of their teeth. Why, then, do we find out a few scenes later, that Sauron has an army of 10,000 soldiers which Gandalf suggests will impede Frodo from reaching Mount Doom? They are just...hanging out there?\r\n8 If The Orcs Know Frodo Is In Mordor, So Would Sauron\r\n\r\nAragorn takes an army--where he finds this army after just barely winning a war is hard to know--and marches to the gates of Mordor in an attempt to distract Sauron from the fact that Frodo is currently making his way through Mordor to destroy the ring. A representative of Sauron's army emerges and produces Frodo's elvish armor which he lost when temporarily taken captive by the Orcs. Now, the Orcs at the time seemingly had no idea who Frodo even was. To have the head of Sauron's army know that Frodo is there means Sauron knows, making the play at a distraction a moot point.\r\n7 Frodo Doesn't Technically Destroy The Ring\r\n\r\nFrodo finally makes it to Mount Doom, but when he walks in the entrance and faces the lava, he ignores poor, exhausted Sam's plea to destroy the ring. Instead, he looks Sam in the eye, proclaims \"the ring is mine,\" and puts it on his finger, going invisible. If Golem had not seen his footprints and tackled him, causing them both to scuffle for the ring and ultimately sending Golem to his death along with the ring, Frodo was going to walk out. Of course, he was just acting under the ring's influence, but it doesn't change the fact that he didn't destroy it-despite everyone's insistence that he was the only one who could.\r\n6 Breaking The Fellowship Didn't Necessarily Help\r\n\r\nAt the end of The Fellowship Of The Ring, Frodo breaks off from the Fellowship of people who have sworn to aid him in his quest to destroy the ring. He has become convinced, partially from the remarks of people like the elvish Lady Of the Wood and Gandalf, that he is the only one who can complete the task and involving others is risking their lives and the mission.\r\n\r\nPart of this decision operates under the assumption that Frodo is the only one who will not be overtaken by the ring. But the rest of the series goes to show that if Frodo were alone, he would have died many times over...and if he had more protection, or a horse, he would have gotten there faster.\r\n5 Sam Isn't Properly Celebrated\r\n\r\nAs soon as surrounding people realize that the ring has been destroyed, everyone immediately yells Frodo's name in celebration of him. Meanwhile, Sam did much of the grunt work of the mission, soberly convincing Frodo to keep going, looking out for his best interest, getting up before him every day and rationing food, and CARRYING HIM UP MOUNT DOOOM.\r\n\r\nOnce people see that Mount Doom has erupted, they call out-you guessed it-Frodo's name in anguish. After the eagles rescue Sam and Frodo, cut to a scene of all of Sam and Frodo's friends happily reuniting with Frodo in a slow-motion, glowy moment. Sam walks in after, hardly noticed.\r\n4 Gandalf Should've Been Able To Kill The Witch-King\r\n\r\nIt is stated that \"no man\" can kill the Witch-King. It's found later this rule is to be taken literally, as the people who kill the Witch-King are Merry, the hobbit, and Eowyn, the woman. Therefore, when Gandalf tried to kill him, not much reason is given to the fact that he can't. Gandalf is not of the race of men, he is a wizard. He also managed to kill the enormously powerfully balrog as the lesser-powerful Gandalf the Grey. Therefore, Gandalf the White should surely be able to kill the Witch-King.\r\n3 Sam and Frodo Didn't Need To Walk All That Way\r\n\r\nSam and Frodo walk a long, long way on foot. There are repeated shots of their bloody, bruised feet. It's understood they must keep off of the road with the ring-but couldn't they use horses for much of their trek? Mordor is right next door to Gondor, which we see Aragorn travel to by horse in a jiffy. All characters are seen to travel immense distances by horse in several instances, all in the time that Sam and Frodo are just trying to get from one place to another. Obviously, it would shorten the film if it was made so simple-but some reason to validate their need to walk by foot would be helpful.\r\n2 There Are Only Three Female Leads\r\n\r\nThis is a very obvious fact: there are only three female leads in The Lord Of The Rings trilogy. Yet somehow, it seems immensely shocking. If you are someone who has been watching the series or reading the books since a young age, it may have become something you took for granted and hardly even thought of since returning to the texts of either. Coming back to such creations that we hold so dear can be jolting. Wait, this is pretty much all....men. All men. Thankfully, the females included are pretty fierce forces to reckon with. But we grow so used to being flooded with male characters that it is important to stop and take note of who isn't on screen, and how easy it is to miss something so obvious.\r\n1 Frodo Left The Shire For Sam\r\n\r\nIn his final note to Samwise Gamgee, which he leaves to Sam at the time he departs from the Shire for good, Frodo states that Sam cannot be \"torn in two\" forever. Although slightly ambiguously stated, there is little that this statement could refer to aside from Frodo and Sam's relationship. Sam is now married, but knowing his devotion to Frodo he will always be concerned with him. We are made aware that Frodo has not assimilated back into Shire life well, expressing his belief that after such travels one cannot always pick up the \"threads\" of an old life again. Rather than stay and allow Sam to continue caring for him forever, Frodo leaves, creating the space for Sam to focus on his family and to write a chapter that is just for him.",
       "news_source": "Screen Rant",
@@ -6693,7 +6724,7 @@
     "fields": {
       "created_at": "2020-03-22T08:35:09Z",
       "price": "14.99",
-      "in_stock": 10,
+      "in_stock": 0,
       "film": 6
     }
   },
@@ -6733,7 +6764,7 @@
     "fields": {
       "created_at": "2020-03-25T13:01:50Z",
       "price": "29.99",
-      "in_stock": 0,
+      "in_stock": 5,
       "film": 10
     }
   },
@@ -6793,7 +6824,7 @@
     "fields": {
       "created_at": "2020-03-25T18:43:01Z",
       "price": "29.99",
-      "in_stock": 0,
+      "in_stock": 5,
       "film": 16
     }
   },
@@ -6803,7 +6834,7 @@
     "fields": {
       "created_at": "2020-03-25T19:14:47Z",
       "price": "29.99",
-      "in_stock": 0,
+      "in_stock": 5,
       "film": 17
     }
   },
@@ -6853,7 +6884,7 @@
     "fields": {
       "created_at": "2020-03-25T21:41:45Z",
       "price": "19.99",
-      "in_stock": 0,
+      "in_stock": 5,
       "film": 22
     }
   },
@@ -6893,7 +6924,7 @@
     "fields": {
       "created_at": "2020-04-01T20:32:28Z",
       "price": "19.99",
-      "in_stock": 10,
+      "in_stock": 5,
       "film": 26
     }
   },
@@ -6913,7 +6944,7 @@
     "fields": {
       "created_at": "2020-04-01T21:24:38Z",
       "price": "14.99",
-      "in_stock": 5,
+      "in_stock": 0,
       "film": 28
     }
   },
@@ -6931,7 +6962,7 @@
     "model": "cinema.product",
     "pk": 30,
     "fields": {
-      "created_at": "2020-04-01T21:50:51Z",
+      "created_at": "2020-06-25T11:50:53.181Z",
       "price": "19.99",
       "in_stock": 0,
       "film": 30

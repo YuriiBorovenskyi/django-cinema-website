@@ -45,7 +45,12 @@ class FilmAdmin(admin.ModelAdmin):
         'title', 'year', 'run_time', 'budget', 'usa_gross', 'world_gross',
         'imdb_rating', 'mpaa_rating', 'oscar_awards'
     )
+    list_display_links = (
+        'title', 'year', 'run_time', 'budget', 'usa_gross', 'world_gross',
+        'imdb_rating', 'mpaa_rating', 'oscar_awards'
+    )
     list_filter = ('imdb_rating', 'mpaa_rating', 'oscar_awards')
+    search_fields = ('title', 'description')
     fieldsets = (
         ('IMDb Main', {
             'fields': ('title', 'run_time', 'release_data', 'imdb_rating')
@@ -70,7 +75,11 @@ class CinemaPersonAdmin(admin.ModelAdmin):
     list_display = (
         'fullname', 'gender', 'country', 'birthday', 'oscar_awards'
     )
+    list_display_links = (
+        'fullname', 'gender', 'country', 'birthday', 'oscar_awards'
+    )
     list_filter = ('gender', 'country', 'oscar_awards')
+    search_fields = ('bio',)
     fields = (
         'user', 'gender', 'birthday', 'country', 'bio', 'oscar_awards', 'avatar'
     )
@@ -87,17 +96,20 @@ class CinemaFilmPersonProfessionAdmin(admin.ModelAdmin):
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('film', 'price', 'in_stock', 'created_at')
+    list_display_links = ('film', 'price', 'in_stock', 'created_at')
     list_filter = ('price', 'in_stock')
-    fields = ['film', ('price', 'in_stock'), 'created_at']
+    fields = ['film', ('price', 'in_stock')]
 
 
 @admin.register(News)
 class NewsAdmin(admin.ModelAdmin):
     list_display = ('title', 'news_source', 'news_author', 'created_at')
+    list_display_links = ('title', 'news_source', 'news_author', 'created_at')
     list_filter = ('news_source', 'news_author')
+    search_fields = ('title', 'news_source', 'news_author')
     fieldsets = (
         ('Main', {
-            'fields': ('title', 'description', 'created_at')
+            'fields': ('title', 'description')
         }),
         ('Source Details', {
             'fields': ('news_source', 'news_author')
