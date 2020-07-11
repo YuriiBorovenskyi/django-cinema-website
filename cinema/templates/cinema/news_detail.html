@@ -23,7 +23,8 @@
                 </div>
                 <div class="news-image py-2" align="center">
                   <img src="{{ news.news_detail_photo.url }}"
-                       title="{{ news.title }}">
+                       title="{{ news.title }}"
+                       class="card-img-top">
                 </div>
 
                 {% include "cinema/includes/inc_news_content.html" with content=news.description|get_text_hyperlinks|safe|linebreaks %}

@@ -1,4 +1,6 @@
+import social_django
 from django.db.models import Q
+from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, TemplateView
 from .models import Product, News, Film, CinemaPerson, MpaaRating
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -78,10 +80,11 @@ all_persons = CinemaPerson.objects.prefetch_related(
 
 
 class ProductListView(ListView):
+    model = Product
     paginate_by = 8
 
     def get_queryset(self):
-        return Product.objects.select_related("film").only(
+        return super().get_queryset().select_related("film").only(
             "pk", "price", "film", "in_stock"
         )
 
@@ -93,9 +96,7 @@ class ProductListView(ListView):
 
 
 class TopRatedProductListView(ProductListView):
-
-    def get_queryset(self):
-        return super().get_queryset().order_by("-film__imdb_rating__value")
+    ordering = "-film__imdb_rating__value"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -104,9 +105,7 @@ class TopRatedProductListView(ProductListView):
 
 
 class NewReleasesProductListView(ProductListView):
-
-    def get_queryset(self):
-        return super().get_queryset().order_by("-film__release_data")
+    ordering = "-film__release_data"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -154,10 +153,11 @@ class IndexListView(ListView):
         return context
 
 
-class ProductDetailView(LoginRequiredMixin, DetailView):
+class ProductDetailView(DetailView):
+    model = Product
 
     def get_queryset(self):
-        return Product.objects.select_related(
+        return super().get_queryset().select_related(
             "film__imdb_rating", "film__mpaa_rating"
         )
 
@@ -174,10 +174,13 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
 
 
 class FilmListView(ListView):
+    model = Film
     paginate_by = 8
 
     def get_queryset(self):
-        return Film.objects.select_related("imdb_rating", "mpaa_rating")
+        return super().get_queryset().select_related(
+            "imdb_rating", "mpaa_rating"
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -188,9 +191,7 @@ class FilmListView(ListView):
 
 
 class TopRatedFilmListView(FilmListView):
-
-    def get_queryset(self):
-        return super().get_queryset().order_by("-imdb_rating__value")
+    ordering = "-imdb_rating__value"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -200,9 +201,7 @@ class TopRatedFilmListView(FilmListView):
 
 
 class BudgetFilmListView(FilmListView):
-
-    def get_queryset(self):
-        return super().get_queryset().order_by("-budget")
+    ordering = "-budget"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -212,9 +211,7 @@ class BudgetFilmListView(FilmListView):
 
 
 class UsaGrossFilmListView(FilmListView):
-
-    def get_queryset(self):
-        return super().get_queryset().order_by("-usa_gross")
+    ordering = "-usa_gross"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -224,9 +221,7 @@ class UsaGrossFilmListView(FilmListView):
 
 
 class WorldGrossFilmListView(FilmListView):
-
-    def get_queryset(self):
-        return super().get_queryset().order_by("-world_gross")
+    ordering = "-world_gross"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -236,12 +231,13 @@ class WorldGrossFilmListView(FilmListView):
 
 
 class YearFilmListView(FilmListView):
+    ordering = "-imdb_rating__value"
 
     def get_queryset(self):
         self.requested_year = self.kwargs.get('year')
         return super().get_queryset().filter(
             release_data__year=self.requested_year
-        ).order_by("-imdb_rating__value")
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -250,12 +246,13 @@ class YearFilmListView(FilmListView):
 
 
 class GenreFilmListView(FilmListView):
+    ordering = "-imdb_rating__value"
 
     def get_queryset(self):
         self.requested_genre = self.kwargs.get('genre')
         return super().get_queryset().filter(
             genre__name=self.requested_genre
-        ).order_by("-imdb_rating__value")
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -264,12 +261,13 @@ class GenreFilmListView(FilmListView):
 
 
 class CountryFilmListView(FilmListView):
+    ordering = "-imdb_rating__value"
 
     def get_queryset(self):
         self.requested_country = self.kwargs.get('country')
         return super().get_queryset().filter(
             country__name=self.requested_country
-        ).order_by("-imdb_rating__value")
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -278,12 +276,13 @@ class CountryFilmListView(FilmListView):
 
 
 class LanguageFilmListView(FilmListView):
+    ordering = "-imdb_rating__value"
 
     def get_queryset(self):
         self.requested_language = self.kwargs.get('language')
         return super().get_queryset().filter(
             language__name=self.requested_language
-        ).order_by("-imdb_rating__value")
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -293,12 +292,13 @@ class LanguageFilmListView(FilmListView):
 
 
 class DistributorFilmListView(FilmListView):
+    ordering = "-imdb_rating__value"
 
     def get_queryset(self):
         self.requested_distributor = self.kwargs.get('distributor')
         return super().get_queryset().filter(
             distributor__name=self.requested_distributor
-        ).order_by("-imdb_rating__value")
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -308,15 +308,16 @@ class DistributorFilmListView(FilmListView):
 
 
 class MpaaFilmListView(FilmListView):
+    ordering = "-imdb_rating__value"
 
     def get_queryset(self):
         self.requested_mpaa = self.kwargs.get('pk')
         return super().get_queryset().filter(
             mpaa_rating__pk=self.requested_mpaa
-        ).order_by("-imdb_rating__value")
+        )
 
     def get_context_data(self, **kwargs):
-        mpaa = MpaaRating.objects.get(pk=self.kwargs.get('pk'))
+        mpaa = MpaaRating.objects.get(pk=self.requested_mpaa)
         context = super().get_context_data(**kwargs)
         context['page_title'] = f'Most Popular Movies with MPAA Rating of ' \
                                 f'{mpaa.value}'
@@ -325,9 +326,12 @@ class MpaaFilmListView(FilmListView):
 
 
 class FilmDetailView(DetailView):
+    model = Film
 
     def get_queryset(self):
-        return Film.objects.select_related("imdb_rating", "mpaa_rating")
+        return super().get_queryset().select_related(
+            "imdb_rating", "mpaa_rating"
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -339,10 +343,29 @@ class FilmDetailView(DetailView):
         context['related_news'] = film_info['news']
         context['film_persons'] = persons_by_films[self.kwargs.get('pk')]
 
+        print(context)
+        print(f'Атрибут "object" - это фильм "{self.object.title}", т.е. запись'
+              f' модели/таблицы БД "{self.object.__class__.__name__}"')
+        print(self.get_template_names())
+        print(self.template_name_suffix)
+        print(self.get_context_object_name(self.object))
+        print(self.kwargs)
+        print(self.request)
+        print(self.http_method_names)
+        print(self.response_class)
+        print(self.model)
+        print(self.pk_url_kwarg)
+        print(self.request.user.is_authenticated)
+        print(self.request.get_host())
+        print(
+            reverse_lazy('social:begin', args=('twitter',)),
+            reverse_lazy('social:complete', args=('twitter',))
+        )
+
         return context
 
 
-class CinemaPersonDetailView(DetailView):
+class CinemaPersonDetailView(LoginRequiredMixin, DetailView):
     context_object_name = 'cinema_person'
     template_name = 'cinema/cinema_person_detail.html'
 
@@ -476,6 +499,22 @@ class SearchResultsView(TemplateView):
     def get_context_data(self, **kwargs):
         context = {}
         query = self.request.GET.get('q')
+
+        foo = {'get': self.request.GET,
+               'method': self.request.method,
+               'scheme': self.request.scheme,
+               'path': self.request.path,
+               'encoding': self.request.encoding,
+               'content_type': self.request.content_type,
+               'content_params': self.request.content_params,
+               'body': self.request.body,
+               'get_host': self.request.get_host(),
+               'get_port': self.request.get_port(),
+               'get_full_path': self.request.get_full_path(),
+               'is_secure': self.request.is_secure()}
+
+        print(foo)
+
         formatted_query = ' '.join(query.strip().split())
 
         if formatted_query:

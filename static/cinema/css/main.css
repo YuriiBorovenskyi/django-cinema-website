@@ -102,7 +102,7 @@ h1 {
   transform: scale(1.1);
 }
 
-/* blu-ray carousel sliders*/
+/* blu-ray carousel sliders */
 
 .MultiCarousel { float: left; overflow: hidden; padding: 0px; width: 100%; position:relative; }
 .MultiCarousel .MultiCarousel-inner { transition: 1s ease all; float: left; }
@@ -112,3 +112,17 @@ h1 {
 .MultiCarousel .leftLst { left:0; }
 .MultiCarousel .rightLst { right:0; }
 .MultiCarousel .leftLst.over, .MultiCarousel .rightLst.over { pointer-events: none; background:#ccc; }
+
+/* Social Django Outh */
+.card-img-top {
+  border: 3px solid #282c34;
+}
+.social-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.btn a, .btn a:hover {
+  color: white;
+  text-decoration: none ;
+}
