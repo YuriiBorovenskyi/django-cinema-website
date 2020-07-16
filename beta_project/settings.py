@@ -21,16 +21,23 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.humanize',
-    'accounts',
-    'social_django',
 
+    # custom additional apps
+    'django.contrib.humanize',
+    'social_django',
+    # 'rest_framework',
+    # 'corsheaders',
+
+    # custom main apps
     'cinema.apps.CinemaConfig',
+    'accounts',
+    # 'api.apps.ApiConfig',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -139,8 +146,17 @@ SOCIAL_AUTH_FACEBOOK_EXTRA_DATA = [
     ('picture', 'picture'),
     ('link', 'profile_url'),
 ]
+SOCIAL_AUTH_TWITTER_SCOPE = ['email', 'user']
+SOCIAL_AUTH_TWITTER_PROFILE_EXTRA_PARAMS = {
+  'fields': 'id, name, email'
+}
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+SOCIAL_AUTH_GITHUB_SCOPE = ['email', 'user']
+SOCIAL_AUTH_GITHUB_PROFILE_EXTRA_PARAMS = {
+  'fields': 'id, name, email'
+}
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_URLS_REGEX = r'^/api/.*$'
 
 # Local settings
 
