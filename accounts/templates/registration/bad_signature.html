@@ -1,0 +1,23 @@
+{% extends 'layout/base.html' %}
+
+{% block description %}Activation Error{% endblock %}
+
+
+{% block title %}Activation Error{% endblock %}
+
+
+{% block main_content %}
+
+<h2 class="text-center mt-1 mb-4" style="color: #e6010a;">
+  Activation
+</h2>
+<div class="row justify-content-md-center mb-3">
+  <div class="col-md-auto">
+    <p class="text-left">Activation of user with this name was unsuccessful.</p>
+    <p class="text-center mt-3">
+      <a href="{% url 'register' %}">Register Again</a>
+    </p>
+  </div>
+</div>
+
+{% endblock main_content %}

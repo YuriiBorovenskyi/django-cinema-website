@@ -4,3 +4,4 @@ pillow
 social-auth-app-django
 djangorestframework
 django-cors-headers
+django-bootstrap4

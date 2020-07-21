@@ -1,0 +1,9 @@
+Dear User, {{ user.username }}!
+
+You have requested password reset on our website.
+To do this, please follow the link
+
+{{ protocol}}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token %}
+
+Good by!
+With respect, website administration.

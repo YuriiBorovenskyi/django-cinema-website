@@ -1,9 +1,9 @@
-import social_django
 from django.db.models import Q
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, TemplateView
-from .models import Product, News, Film, CinemaPerson, MpaaRating
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from .models import Product, News, Film, CinemaPerson, MpaaRating
 
 all_films = Film.objects.prefetch_related(
     "staff__cinemafilmpersonprofession_set__profession", "staff__user",
@@ -169,6 +169,9 @@ class ProductDetailView(DetailView):
         context['languages'] = sorted(film_info['language__name'])
         context['distributors'] = sorted(film_info['distributor__name'])
         context['film_persons'] = persons_by_films[self.kwargs.get('pk')]
+
+        print(f'Инфо о всех фильмах: {info_by_films}')
+        print(f'Инфо о выбранном фильме: {film_info}')
 
         return context
 
@@ -351,6 +354,7 @@ class FilmDetailView(DetailView):
         print(self.get_context_object_name(self.object))
         print(self.kwargs)
         print(self.request)
+        print(self.request.user.username)
         print(self.http_method_names)
         print(self.response_class)
         print(self.model)

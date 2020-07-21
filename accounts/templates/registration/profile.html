@@ -1,0 +1,47 @@
+{% extends 'layout/base.html' %}
+
+{% block description %}My Profile{% endblock %}
+
+
+{% block title %}My Profile{% endblock %}
+
+
+{% block main_content %}
+
+<h2 class="text-center mt-1 mb-4" style="color: #e6010a;">My Profile:
+  <a href="{% url 'profile_change' %}">[Settings / Edit Profile]</a>
+</h2>
+<table class="table mb-3">
+  <tbody>
+    <tr>
+    <th scope="col" class="align-middle" align="left">Username:</th>
+    <td class="align-middle" align="left">{{ user.username }}</td>
+  </tr>
+  <tr>
+    <th scope="col" class="align-middle" align="left">Password:</th>
+    <td class="align-middle" align="left">{{ user.password }}
+      <a href="{% url 'password_change' %}">[Password Change]</a>
+    </td>
+  </tr>
+  <tr>
+    <th scope="col" class="align-middle" align="left">E-mail:</th>
+    <td class="align-middle" align="left">{{ user.email }}</td>
+  </tr>
+  <tr>
+    <th scope="col" class="align-middle" align="left">Full Name:</th>
+    <td class="align-middle text-success font-weight-bold" align="left">
+      {{ user.get_full_name }}
+    </td>
+  </tr>
+  <tr>
+    <th scope="col" class="align-middle" align="left">Registration Date:</th>
+    <td class="align-middle" align="left">{{ user.date_joined }}</td>
+  </tr>
+  <tr>
+    <th scope="col" class="align-middle" align="left">Last Visited Website:</th>
+    <td class="align-middle" align="left">{{ user.last_login }}</td>
+  </tr>
+  </tbody>
+</table>
+
+{% endblock main_content %}

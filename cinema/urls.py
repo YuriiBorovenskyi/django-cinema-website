@@ -1,4 +1,5 @@
 from django.urls import path
+
 from .apps import CinemaConfig
 from .views import (ProductListView, ProductDetailView, NewsListView,
                     NewsDetailView, FilmDetailView, CinemaPersonDetailView,

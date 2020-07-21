@@ -1,9 +1,8 @@
 from datetime import date, timedelta
-from django.contrib.auth import get_user_model
+
+from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
-
-User = get_user_model()
 
 GENDER_CHOICES = (
     ("M", "Male"),
@@ -127,8 +126,9 @@ class CinemaPerson(ExtendedProfileMixin):
     user = models.OneToOneField(User, on_delete=models.PROTECT)
     bio = models.TextField(unique=True)
     oscar_awards = models.PositiveSmallIntegerField(default=0)
-    avatar = models.ImageField(upload_to=upload_to_cinema_person, blank=True,
-                               null=True)
+    avatar = models.ImageField(
+        upload_to=upload_to_cinema_person, blank=True, null=True
+    )
 
     @property
     def age(self):
@@ -151,8 +151,9 @@ class Film(models.Model):
     title = models.CharField(max_length=64, db_index=True)
     country = models.ManyToManyField(Country)
     genre = models.ManyToManyField(Genre)
-    staff = models.ManyToManyField(CinemaPerson,
-                                   through="CinemaFilmPersonProfession")
+    staff = models.ManyToManyField(
+        CinemaPerson, through="CinemaFilmPersonProfession"
+    )
     budget = models.PositiveIntegerField(null=True, blank=True)
     usa_gross = models.PositiveIntegerField(default=0)
     world_gross = models.PositiveIntegerField(default=0)

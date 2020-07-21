@@ -1,29 +1,33 @@
 from django.urls import path
-from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView,\
-    PasswordChangeView, PasswordChangeDoneView, PasswordResetDoneView, \
-    PasswordResetConfirmView, PasswordResetCompleteView
+from django.contrib.auth.views import LoginView, LogoutView
+
+from .views import ProfileView, ChangeUserInfoView, UserPasswordChangeView, \
+    RegisterUserView, RegisterDoneView, user_activate, DeleteUserView, \
+    UserPasswordResetView, UserPasswordResetDoneView, \
+    UserPasswordResetConfirmView, UserPasswordResetCompleteView
 
 urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
-    path('password_change/', PasswordChangeView.as_view(
-        template_name='registration/change_password.html'
-    ), name='password_change'),
-    path('password_change/done/', PasswordChangeDoneView.as_view(
-        template_name='registration/password_changed.html'
-    ), name='password_change_done'),
-    path('password_reset/', PasswordResetView.as_view(
-        template_name='registration/reset_password.html',
-        subject_template_name='registration/reset_subject.txt',
-        email_template_name='registration/reset_email.html'
-    ), name='password_reset'),
-    path('password_reset/done/', PasswordResetDoneView.as_view(
-        template_name='registration/email_sent.html'
-    ), name='password_reset_done'),
-    path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(
-        template_name='registration/confirm_password.html'
-    ), name='password_reset_confirm'),
-    path('reset/done/', PasswordResetCompleteView.as_view(
-        template_name='registration/password_confirmed.html'
-    ), name='password_reset_complete'),
+    path('password/change/', UserPasswordChangeView.as_view(),
+         name='password_change'),
+    path('profile/', ProfileView.as_view(), name='profile'),
+    path('profile/change/', ChangeUserInfoView.as_view(), name='profile_change'),
+    path('profile/delete/', DeleteUserView.as_view(),
+         name='profile_delete'),
+    path('register/', RegisterUserView.as_view(), name='register'),
+    path('register/done/', RegisterDoneView.as_view(), name='register_done'),
+    path('register/activate/<str:sign>/', user_activate,
+         name='register_activate'),
+    path('password/reset/', UserPasswordResetView.as_view(),
+         name='password_reset'),
+    path('password/reset/done/', UserPasswordResetDoneView.as_view(),
+         name='password_reset_done'),
+    path(
+        'password/confirm/<uidb64>/<token>/',
+        UserPasswordResetConfirmView.as_view(),
+        name='password_reset_confirm'
+    ),
+    path('password/confirm/complete/', UserPasswordResetCompleteView.as_view(),
+         name='password_reset_complete'),
 ]

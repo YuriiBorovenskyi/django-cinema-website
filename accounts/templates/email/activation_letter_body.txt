@@ -1,0 +1,10 @@
+Dear User, {{ user.username }}!
+
+You have registered on our website.
+You need to complete the activation in order to verify your identity.
+To do this, please follow the link
+
+{{ host }}{% url 'register_activate' sign=sign %}
+
+Good by!
+With respect, website administration.
