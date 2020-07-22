@@ -1,6 +1,6 @@
 {% extends 'layout/base.html' %}
 
-{% load static humanize datetime_filter get_key_filter %}
+{% load thumbnail static humanize datetime_filter get_key_filter %}
 
 {% block description %}{{ page_title }}{% endblock %}
 
@@ -22,7 +22,7 @@
 
   </div>
 </div>
-<div class="row d-flex">
+<div class="row d-flex mb-3">
   <div class="col-md-12">
 
     {% for film in film_list %}
@@ -34,7 +34,8 @@
             <div class="row">
               <div class="col-md-3 align-self-center">
                 <a href="{% url 'cinema:film-detail' film.pk %}">
-                  <img src="{{ film.poster.url }}">
+                  <img src="{% thumbnail film.poster 'film_list' %}"
+                       class="film-img">
                 </a>
               </div>
               <div class="col-md-7 align-self-center">

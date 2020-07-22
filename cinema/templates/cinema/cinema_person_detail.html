@@ -1,6 +1,6 @@
 {% extends 'cinema/base_cinema_detail.html' %}
 
-{% load get_text_hyperlinks_filter %}
+{% load thumbnail get_text_hyperlinks_filter %}
 
 {% block description %}{{ cinema_person.fullname }}{% endblock %}
 
@@ -9,7 +9,12 @@
 
 
 {% block page_photo %}
-{% include "cinema/includes/inc_cinema_photo.html" with poster=cinema_person.avatar name=cinema_person.fullname %}
+
+<img src="{% thumbnail cinema_person.avatar 'person' %}"
+     alt="{{ cinema_person.fullname }} picture"
+     title="{{ cinema_person.fullname }}"
+     class="card-img-top mb-3">
+
 {% endblock page_photo %}
 
 

@@ -1,5 +1,7 @@
 {% extends 'layout/base.html' %}
 
+{% load thumbnail %}
+
 {% block description %}{{ page_title }}{% endblock %}
 
 
@@ -61,8 +63,8 @@
                 <!--thumbnail img-->
                 <div class="ratio_right-cover-2 image-wrapper">
                   <a href="{% url 'cinema:news-detail' news.pk %}">
-                    <img class="img-fluid"
-                         src="{{ news.news_detail_photo.url }}"
+                    <img class="img-fluid news-img"
+                         src="{% thumbnail news.news_detail_photo 'box_news' %}"
                          alt="{{ news.title }} picture"
                          title="{{ news.title }}">
                   </a>

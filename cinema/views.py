@@ -170,8 +170,8 @@ class ProductDetailView(DetailView):
         context['distributors'] = sorted(film_info['distributor__name'])
         context['film_persons'] = persons_by_films[self.kwargs.get('pk')]
 
-        print(f'Инфо о всех фильмах: {info_by_films}')
-        print(f'Инфо о выбранном фильме: {film_info}')
+        # print(f'Инфо о всех фильмах: {info_by_films}')
+        # print(f'Инфо о выбранном фильме: {film_info}')
 
         return context
 
@@ -346,25 +346,25 @@ class FilmDetailView(DetailView):
         context['related_news'] = film_info['news']
         context['film_persons'] = persons_by_films[self.kwargs.get('pk')]
 
-        print(context)
-        print(f'Атрибут "object" - это фильм "{self.object.title}", т.е. запись'
-              f' модели/таблицы БД "{self.object.__class__.__name__}"')
-        print(self.get_template_names())
-        print(self.template_name_suffix)
-        print(self.get_context_object_name(self.object))
-        print(self.kwargs)
-        print(self.request)
-        print(self.request.user.username)
-        print(self.http_method_names)
-        print(self.response_class)
-        print(self.model)
-        print(self.pk_url_kwarg)
-        print(self.request.user.is_authenticated)
-        print(self.request.get_host())
-        print(
-            reverse_lazy('social:begin', args=('twitter',)),
-            reverse_lazy('social:complete', args=('twitter',))
-        )
+        # print(context)
+        # print(f'Атрибут "object" - это фильм "{self.object.title}", т.е. запись'
+        #       f' модели/таблицы БД "{self.object.__class__.__name__}"')
+        # print(self.get_template_names())
+        # print(self.template_name_suffix)
+        # print(self.get_context_object_name(self.object))
+        # print(self.kwargs)
+        # print(self.request)
+        # print(self.request.user.username)
+        # print(self.http_method_names)
+        # print(self.response_class)
+        # print(self.model)
+        # print(self.pk_url_kwarg)
+        # print(self.request.user.is_authenticated)
+        # print(self.request.get_host())
+        # print(
+        #     reverse_lazy('social:begin', args=('twitter',)),
+        #     reverse_lazy('social:complete', args=('twitter',))
+        # )
 
         return context
 
@@ -504,20 +504,20 @@ class SearchResultsView(TemplateView):
         context = {}
         query = self.request.GET.get('q')
 
-        foo = {'get': self.request.GET,
-               'method': self.request.method,
-               'scheme': self.request.scheme,
-               'path': self.request.path,
-               'encoding': self.request.encoding,
-               'content_type': self.request.content_type,
-               'content_params': self.request.content_params,
-               'body': self.request.body,
-               'get_host': self.request.get_host(),
-               'get_port': self.request.get_port(),
-               'get_full_path': self.request.get_full_path(),
-               'is_secure': self.request.is_secure()}
-
-        print(foo)
+        # foo = {'get': self.request.GET,
+        #        'method': self.request.method,
+        #        'scheme': self.request.scheme,
+        #        'path': self.request.path,
+        #        'encoding': self.request.encoding,
+        #        'content_type': self.request.content_type,
+        #        'content_params': self.request.content_params,
+        #        'body': self.request.body,
+        #        'get_host': self.request.get_host(),
+        #        'get_port': self.request.get_port(),
+        #        'get_full_path': self.request.get_full_path(),
+        #        'is_secure': self.request.is_secure()}
+        #
+        # print(foo)
 
         formatted_query = ' '.join(query.strip().split())
 
@@ -527,13 +527,12 @@ class SearchResultsView(TemplateView):
             ).select_related('film')
             film_list = Film.objects.filter(title__icontains=formatted_query)
             query_fullname = formatted_query.split()
-            person_list = CinemaPerson.objects.filter(
-                Q(user__first_name__iexact=query_fullname[:1]) & Q(
-                    user__last_name__iexact=query_fullname[1:]
-                ) | Q(user__first_name__icontains=formatted_query) | Q(
-                    user__last_name__icontains=formatted_query
-                )
-            ).select_related('user')
+            q = Q(user__first_name__iexact=query_fullname[:1]) & Q(
+                user__last_name__iexact=query_fullname[1:]
+            ) | Q(user__first_name__icontains=formatted_query) | Q(
+                user__last_name__icontains=formatted_query
+            )
+            person_list = CinemaPerson.objects.filter(q).select_related('user')
             news_list = News.objects.filter(title__icontains=formatted_query)
             context['product_list'] = product_list
             context['film_list'] = film_list

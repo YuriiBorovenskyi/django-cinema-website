@@ -1,6 +1,6 @@
 {% extends 'layout/base.html' %}
 
-{% load get_text_hyperlinks_filter %}
+{% load thumbnail get_text_hyperlinks_filter %}
 
 {% block description %}{{ page_title }}{% endblock %}
 
@@ -15,7 +15,7 @@
     <h1>{{ page_title }}</h1>
   </div>
 </div>
-<div class="row">
+<div class="row mb-3">
   <div class="col-md-9">
 
     {% for news in news_list %}
@@ -26,10 +26,8 @@
           <div class="card-body">
             <div class="row">
               <div class="col-md-3 align-self-center">
-                <img src="{{ news.news_feed_photo.url }}"
+                <img src="{% thumbnail news.news_feed_photo 'news_list' %}"
                      title="{{ news.title }}"
-                     height="250px"
-                     width="180"
                      class="card-img-top">
               </div>
               <div class="col-md-9 align-self-center">

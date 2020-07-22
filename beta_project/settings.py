@@ -26,6 +26,9 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'bootstrap4',
     'social_django',
+    'django_cleanup',
+    'easy_thumbnails',
+    # 'captcha',
     # 'rest_framework',
     # 'corsheaders',
 
@@ -118,7 +121,59 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Media files (Images, Video)
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+THUMBNAIL_ALIASES = {
+    'cinema.Film.poster': {
+        'index': {
+            'size': (160, 200),
+            'crop': 'smart',
+            'autocrop': True,
+        },
+        'blu-ray_list': {
+            'size': (245, 308),
+            'crop': 'smart',
+            'autocrop': True,
+        },
+        'film_list': {
+            'size': (246, 317),
+            'crop': 'smart',
+            'autocrop': True,
+        },
+        'detail': {
+            'size': (341, 444),
+            'crop': 'smart',
+            'autocrop': True,
+        },
+    },
+    'cinema.News.news_detail_photo': {
+        'slider_news': {
+            'size': (557, 290),
+            'crop': 'smart',
+            'autocrop': True,
+        },
+        'box_news': {
+            'size': (275, 155),
+            'crop': 'smart',
+            'autocrop': True,
+        },
+    },
+    'cinema.News.news_feed_photo': {
+        'news_list': {
+            'size': (165, 245),
+            'crop': 'smart',
+            'autocrop': True,
+        },
+    },
+    'cinema.CinemaPerson.avatar': {
+        'person': {
+            'size': (345, 450),
+            'crop': 'smart',
+            'autocrop': True,
+        },
+    },
+}
+THUMBNAIL_BASEDIR = 'thumbnails'
 
 LOGOUT_REDIRECT_URL = 'cinema:index-list'
 

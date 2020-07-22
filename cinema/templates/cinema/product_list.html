@@ -1,5 +1,7 @@
 {% extends 'layout/base.html' %}
 
+{% load thumbnail %}
+
 {% block description %}{{ page_title }}{% endblock %}
 
 
@@ -17,10 +19,18 @@
 
   {% for product in product_list %}
 
-  <div class="col mb-4">
+  <div class="col mb-3">
+    <div class="card text-center h-100">
+      <a href="{% url 'cinema:product-detail' product.pk %}">
+        <img src="{% thumbnail product.film.poster 'blu-ray_list' %}"
+             class="card-img-top"
+             alt="{{ product.film.title }} picture"
+             title="{{ product.film.title }}">
+      </a>
 
-  {% include "cinema/includes/inc_product_card.html" with title="h5" text="100%" price="h4" %}
+{% include "cinema/includes/inc_product_card.html" with title="h5" text="100%" price="h4" %}
 
+    </div>
   </div>
 
   {% endfor %}

@@ -1,3 +1,5 @@
+{% load thumbnail %}
+
 {% for news in news_list|slice:":5" %}
 
 <!--Item slider-->
@@ -7,8 +9,8 @@
       <!--thumbnail img-->
       <div class="ratio_left-cover-1 image-wrapper">
         <a href="{% url 'cinema:news-detail' news.pk %}">
-          <img class="img-fluid w-100"
-               src="{{ news.news_detail_photo.url }}"
+          <img class="img-fluid news-img"
+               src="{% thumbnail news.news_detail_photo 'slider_news' %}"
                alt="{{ news.title }} picture"
                title="{{ news.title }}">
         </a>

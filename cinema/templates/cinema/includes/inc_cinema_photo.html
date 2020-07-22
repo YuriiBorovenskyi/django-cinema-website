@@ -1,5 +1,6 @@
-<img src="{{ poster.url }}"
+{% load thumbnail %}
+
+<img src="{% thumbnail poster 'detail' %}"
      alt="{{ name }} picture"
      title="{{ name }}"
-     class="card-img-top mb-3"
-     height="450px">
+     class="card-img-top mb-3">

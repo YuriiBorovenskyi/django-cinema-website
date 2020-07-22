@@ -114,7 +114,7 @@ h1 {
 .MultiCarousel .leftLst.over, .MultiCarousel .rightLst.over { pointer-events: none; background:#ccc; }
 
 /* Social Django Outh */
-.card-img-top {
+.card-img-top, .film-img, .news-img {
   border: 3px solid #282c34;
 }
 .social-container {
