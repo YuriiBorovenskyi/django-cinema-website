@@ -2,7 +2,8 @@ from django.contrib import admin
 
 from .models import (Country, Genre, Language, Distributor, ImdbRating,
                      MpaaRating, Film, CinemaPerson, CinemaProfession,
-                     CinemaFilmPersonProfession, Product, News)
+                     CinemaFilmPersonProfession, Product, News, CommentToPerson,
+                     CommentToFilm, CommentToNews, CommentToProduct)
 
 
 @admin.register(Country)
@@ -45,10 +46,7 @@ class FilmAdmin(admin.ModelAdmin):
         'title', 'year', 'run_time', 'budget', 'usa_gross', 'world_gross',
         'imdb_rating', 'mpaa_rating', 'oscar_awards'
     )
-    list_display_links = (
-        'title', 'year', 'run_time', 'budget', 'usa_gross', 'world_gross',
-        'imdb_rating', 'mpaa_rating', 'oscar_awards'
-    )
+    list_display_links = ('title', 'year', 'run_time',)
     list_filter = ('imdb_rating', 'mpaa_rating', 'oscar_awards')
     search_fields = ('title', 'description')
     fieldsets = (
@@ -75,15 +73,14 @@ class CinemaPersonAdmin(admin.ModelAdmin):
     list_display = (
         'fullname', 'gender', 'country', 'birthday', 'oscar_awards'
     )
-    list_display_links = (
-        'fullname', 'gender', 'country', 'birthday', 'oscar_awards'
-    )
+    list_display_links = ('fullname', 'birthday',)
     list_filter = ('gender', 'country', 'oscar_awards')
     search_fields = ('bio',)
     fields = (
         'user', 'gender', 'birthday', 'country', 'bio', 'oscar_awards', 'avatar'
     )
     inlines = [CinemaFilmPersonProfessionInline]
+    date_hierarchy = 'birthday'
 
 
 class CinemaProfessionAdmin(admin.ModelAdmin):
@@ -96,20 +93,22 @@ class CinemaFilmPersonProfessionAdmin(admin.ModelAdmin):
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('film', 'price', 'in_stock', 'created_at')
-    list_display_links = ('film', 'price', 'in_stock', 'created_at')
+    list_display_links = ('film', 'price',)
     list_filter = ('price', 'in_stock')
-    fields = ['film', ('price', 'in_stock')]
+    fields = ['film', ('price', 'in_stock'), 'created_at']
+    date_hierarchy = 'created_at'
+    readonly_fields = ('created_at',)
 
 
 @admin.register(News)
 class NewsAdmin(admin.ModelAdmin):
     list_display = ('title', 'news_source', 'news_author', 'created_at')
-    list_display_links = ('title', 'news_source', 'news_author', 'created_at')
+    list_display_links = ('title', 'news_source', 'news_author',)
     list_filter = ('news_source', 'news_author')
     search_fields = ('title', 'news_source', 'news_author')
     fieldsets = (
         ('Main', {
-            'fields': ('title', 'description')
+            'fields': ('title', 'description', 'created_at',)
         }),
         ('Source Details', {
             'fields': ('news_source', 'news_author')
@@ -121,6 +120,30 @@ class NewsAdmin(admin.ModelAdmin):
             'fields': ('news_feed_photo', 'news_detail_photo')
         }),
     )
+    date_hierarchy = 'created_at'
+    readonly_fields = ('created_at',)
+
+
+class CommentToPersonAdmin(admin.ModelAdmin):
+    list_display = ('author', 'content', 'created_at', 'is_active')
+    list_display_links = ('author', 'content')
+    list_filter = ('is_active',)
+    search_fields = ('author', 'content',)
+    date_hierarchy = 'created_at'
+    fields = ('author', 'content', 'is_active', 'created_at')
+    readonly_fields = ('created_at',)
+
+
+class CommentToFilmAdmin(CommentToPersonAdmin):
+    pass
+
+
+class CommentToNewsAdmin(CommentToPersonAdmin):
+    pass
+
+
+class CommentToProductAdmin(CommentToPersonAdmin):
+    pass
 
 
 admin.site.register(Genre, GenreAdmin)
@@ -133,3 +156,7 @@ admin.site.register(CinemaPerson, CinemaPersonAdmin)
 admin.site.register(CinemaProfession, CinemaProfessionAdmin)
 admin.site.register(CinemaFilmPersonProfession, CinemaFilmPersonProfessionAdmin)
 admin.site.register(Product, ProductAdmin)
+admin.site.register(CommentToPerson, CommentToPersonAdmin)
+admin.site.register(CommentToFilm, CommentToFilmAdmin)
+admin.site.register(CommentToNews, CommentToNewsAdmin)
+admin.site.register(CommentToProduct, CommentToProductAdmin)

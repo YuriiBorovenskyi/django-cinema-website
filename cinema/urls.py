@@ -1,21 +1,21 @@
 from django.urls import path
 
 from .apps import CinemaConfig
-from .views import (ProductListView, ProductDetailView, NewsListView,
-                    NewsDetailView, FilmDetailView, CinemaPersonDetailView,
+from .views import (ProductListView, product_detail, NewsListView,
+                    news_detail, film_detail, cinema_person_detail,
                     FilmListView, TopRatedProductListView,
                     NewReleasesProductListView, CelebrityNewsListView,
                     TopRatedFilmListView, BudgetFilmListView,
                     UsaGrossFilmListView, WorldGrossFilmListView,
                     SearchResultsView, YearFilmListView, GenreFilmListView,
                     CountryFilmListView, LanguageFilmListView, MpaaFilmListView,
-                    DistributorFilmListView, IndexListView)
+                    DistributorFilmListView, IndexView)
 
 
 app_name = CinemaConfig.name
 
 urlpatterns = [
-    path('', IndexListView.as_view(), name='index-list'),
+    path('', IndexView.as_view(), name='index'),
     path('blu-ray/', ProductListView.as_view(), name='product-list'),
     path('film/', FilmListView.as_view(), name='film-list'),
     path('news/', NewsListView.as_view(), name='news-list'),
@@ -34,14 +34,11 @@ urlpatterns = [
          name='world-gross-film-list'),
     path('news/celebrity/', CelebrityNewsListView.as_view(),
          name='celebrity-news-list'),
-    path('blu-ray/<int:pk>/', ProductDetailView.as_view(),
-         name='product-detail'),
-    path('film/<int:pk>/', FilmDetailView.as_view(),
-         name='film-detail'),
-    path('movie-person/<int:pk>/', CinemaPersonDetailView.as_view(),
+    path('blu-ray/<int:pk>/', product_detail, name='product-detail'),
+    path('film/<int:pk>/', film_detail, name='film-detail'),
+    path('movie-person/<int:pk>/', cinema_person_detail,
          name='movie-person-detail'),
-    path('news/<int:pk>/', NewsDetailView.as_view(),
-         name='news-detail'),
+    path('news/<int:pk>/', news_detail, name='news-detail'),
     path('film/year/<int:year>/', YearFilmListView.as_view(),
          name='year-film-list'),
     path('film/genre/<str:genre>/', GenreFilmListView.as_view(),

@@ -3,6 +3,9 @@ from datetime import date, timedelta
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
+from django.db.models.signals import post_save
+
+from .utilities import send_new_product_notification
 
 GENDER_CHOICES = (
     ("M", "Male"),
@@ -51,7 +54,7 @@ class Country(models.Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = "countries"
+        verbose_name_plural = "Countries"
         ordering = ["name"]
 
 
@@ -204,7 +207,7 @@ class CinemaFilmPersonProfession(models.Model):
         )
 
     class Meta:
-        verbose_name = "cinema film person profession"
+        verbose_name = "Cinema film person profession"
         verbose_name_plural = "Cinema films persons professions"
         ordering = ["film__title", "profession",
                     "cinema_person__user__first_name"]
@@ -228,7 +231,7 @@ class News(DateMixin):
         return self.title
 
     class Meta:
-        verbose_name_plural = "news"
+        verbose_name_plural = "News"
         ordering = ["-created_at"]
 
 
@@ -247,3 +250,47 @@ class Product(DateMixin):
 
     class Meta:
         ordering = ["film__title", ]
+
+
+class CommentMixin(models.Model):
+    author = models.CharField(max_length=32)
+    content = models.TextField()
+    is_active = models.BooleanField(default=True, db_index=True,
+                                    verbose_name='Display on screen?')
+
+    class Meta:
+        abstract = True
+
+
+class CommentToPerson(CommentMixin, DateMixin):
+    cinema_person = models.ForeignKey(CinemaPerson, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = 'Comments to persons'
+        ordering = ["-created_at"]
+
+
+class CommentToFilm(CommentMixin, DateMixin):
+    film = models.ForeignKey(Film, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = 'Comments to films'
+        ordering = ["-created_at"]
+
+
+class CommentToNews(CommentMixin, DateMixin):
+    news = models.ForeignKey(News, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = 'Comments to news'
+        ordering = ["-created_at"]
+
+
+class CommentToProduct(CommentMixin, DateMixin):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = 'Comments to products'
+        ordering = ["-created_at"]
+
+

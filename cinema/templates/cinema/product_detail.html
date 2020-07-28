@@ -42,3 +42,8 @@
 {% block page_box_office %}
 {% include "cinema/includes/inc_cinema_box_office.html" with cinema=product.film %}
 {% endblock page_box_office %}
+
+
+{% block page_comments %}
+{% include "cinema/includes/inc_cinema_comments.html" with style_pl='188px' col_width='8' pr='5' %}
+{% endblock page_comments %}
