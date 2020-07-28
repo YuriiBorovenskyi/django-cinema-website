@@ -294,3 +294,9 @@ class CommentToProduct(CommentMixin, DateMixin):
         ordering = ["-created_at"]
 
 
+def post_save_dispatcher(sender, **kwargs):
+    if kwargs['created']:
+        send_new_product_notification(kwargs['instance'])
+
+
+post_save.connect(post_save_dispatcher, sender=Product)

@@ -1,0 +1,9 @@
+Dear user, {{ user.username }}!
+
+Perhaps You will be interested in our new product.
+For more information, please follow the link
+
+{{ host }}{% url 'cinema:product-detail' pk=product.pk %}
+
+Good by!
+With respect, website administration.
