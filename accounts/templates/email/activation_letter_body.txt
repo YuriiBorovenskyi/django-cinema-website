@@ -1,4 +1,4 @@
-Dear User, {{ user.username }}!
+Dear user, {{ user.username }}!
 
 You have registered on our website.
 You need to complete the activation in order to verify your identity.

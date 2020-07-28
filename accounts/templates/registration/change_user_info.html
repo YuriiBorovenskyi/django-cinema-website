@@ -10,19 +10,26 @@
 
 {% block main_content %}
 
-<h2 class="text-center mt-1 mb-4" style="color: #e6010a;">Editing Personal Data of
-  <span class="text-dark">
-  {% if user.get_full_name %} {{ user.get_full_name }}
-  {% else %} {{ user.username }}
-  {% endif %}
-  </span>
-</h2>
-<form method="post" class="mb-3">
+<div class="row justify-content-md-center">
+  <div class="col-md-auto">
+    <h2 class="text-center mt-1 mb-4" style="color: #e6010a;">Editing Personal Data of
+      <span class="text-dark">
+      {% if user.get_full_name %} {{ user.get_full_name }}
+      {% else %} {{ user.username }}
+      {% endif %}
+      </span>
+    </h2>
+    <form method="post" class="my-3">
 
-  {% csrf_token %}
-  {% bootstrap_form form layout='horizontal' %}
-  <center>{% buttons submit='Save' %}{% endbuttons %}</center>
+      {% csrf_token %}
+      {% bootstrap_form form layout='horizontal' %}
 
-</form>
+      <center>
+        {% buttons submit='Save' %}{% endbuttons %}
+      </center>
+
+    </form>
+  </div>
+</div>
 
 {% endblock main_content %}

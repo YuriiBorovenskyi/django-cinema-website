@@ -5,7 +5,8 @@ from django.core.exceptions import ValidationError
 
 from .models import user_registrated
 
-user_emails = User.objects.values_list('email', flat=True)
+users = User.objects.exclude(email='')
+user_emails = users.values_list('email', flat=True).distinct()
 
 
 class ChangeUserInfoForm(forms.ModelForm):

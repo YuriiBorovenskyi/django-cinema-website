@@ -1,4 +1,4 @@
-Dear User, {{ user.username }}!
+Dear user, {{ user.username }}!
 
 You have requested password reset on our website.
 To do this, please follow the link

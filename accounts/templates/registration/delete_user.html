@@ -10,21 +10,25 @@
 
 {% block main_content %}
 
-<h2 class="text-center mt-1 mb-4" style="color: #e6010a;">
-  Are you sure you want to delete account of
-  <span class="text-dark">
-  {% if user.get_full_name %} {{ user.get_full_name }}
-  {% else %} {{ user.username }}
-  {% endif %}
-  </span>?
-</h2>
-<center>
-  <form method="post" class="mb-3">
+<div class="row justify-content-md-center">
+  <div class="col-md-auto">
+    <h2 class="text-center mt-1 mb-4" style="color: #e6010a;">
+      Are you sure you want to delete account of
+      <span class="text-dark">
+      {% if user.get_full_name %} {{ user.get_full_name }}
+      {% else %} {{ user.username }}
+      {% endif %}
+      </span>?
+    </h2>
+    <center>
+      <form method="post" class="my-3">
 
-    {% csrf_token %}
-    {% buttons submit='Delete Account' %}{% endbuttons %}
+        {% csrf_token %}
+        {% buttons submit='Delete Account' %}{% endbuttons %}
 
-  </form>
-</center>
+      </form>
+    </center>
+  </div>
+</div>
 
 {% endblock main_content %}
