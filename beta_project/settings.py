@@ -28,7 +28,7 @@ INSTALLED_APPS = [
     'social_django',
     'django_cleanup',
     'easy_thumbnails',
-    # 'captcha',
+    'captcha',
     # 'rest_framework',
     # 'corsheaders',
 
@@ -175,14 +175,14 @@ THUMBNAIL_ALIASES = {
 }
 THUMBNAIL_BASEDIR = 'thumbnails'
 
-LOGOUT_REDIRECT_URL = 'cinema:index-list'
+LOGOUT_REDIRECT_URL = 'cinema:index'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = 'yurii.borovenskyi@gmail.com'
-EMAIL_HOST_PASSWORD = 'ACMilan1899'
+EMAIL_HOST_PASSWORD = 'ACMilan1899Maldini'
 
 AUTHENTICATION_BACKENDS = [
     'social_core.backends.github.GithubOAuth2',
