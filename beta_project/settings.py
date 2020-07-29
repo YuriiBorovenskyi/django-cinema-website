@@ -29,13 +29,13 @@ INSTALLED_APPS = [
     'django_cleanup',
     'easy_thumbnails',
     'captcha',
-    # 'rest_framework',
-    # 'corsheaders',
+    'rest_framework',
+    'corsheaders',
 
     # Custom main apps
     'cinema.apps.CinemaConfig',
     'accounts',
-    # 'api.apps.ApiConfig',
+    'api.apps.ApiConfig',
 ]
 
 MIDDLEWARE = [

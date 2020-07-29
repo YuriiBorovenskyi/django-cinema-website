@@ -73,7 +73,7 @@ class CinemaPersonAdmin(admin.ModelAdmin):
     list_display = (
         'fullname', 'gender', 'country', 'birthday', 'oscar_awards'
     )
-    list_display_links = ('fullname', 'birthday',)
+    list_display_links = ('fullname', 'birthday')
     list_filter = ('gender', 'country', 'oscar_awards')
     search_fields = ('bio',)
     fields = (
@@ -93,7 +93,7 @@ class CinemaFilmPersonProfessionAdmin(admin.ModelAdmin):
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('film', 'price', 'in_stock', 'created_at')
-    list_display_links = ('film', 'price',)
+    list_display_links = ('film', 'price')
     list_filter = ('price', 'in_stock')
     fields = ['film', ('price', 'in_stock'), 'created_at']
     date_hierarchy = 'created_at'
@@ -103,12 +103,12 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(News)
 class NewsAdmin(admin.ModelAdmin):
     list_display = ('title', 'news_source', 'news_author', 'created_at')
-    list_display_links = ('title', 'news_source', 'news_author',)
+    list_display_links = ('title', 'news_source', 'news_author')
     list_filter = ('news_source', 'news_author')
     search_fields = ('title', 'news_source', 'news_author')
     fieldsets = (
         ('Main', {
-            'fields': ('title', 'description', 'created_at',)
+            'fields': ('title', 'description', 'created_at')
         }),
         ('Source Details', {
             'fields': ('news_source', 'news_author')
@@ -125,25 +125,39 @@ class NewsAdmin(admin.ModelAdmin):
 
 
 class CommentToPersonAdmin(admin.ModelAdmin):
-    list_display = ('author', 'content', 'created_at', 'is_active')
+    list_display = (
+         'author', 'content', 'created_at', 'is_active', 'cinema_person'
+    )
     list_display_links = ('author', 'content')
-    list_filter = ('is_active',)
-    search_fields = ('author', 'content',)
+    list_filter = ('is_active', 'cinema_person')
+    search_fields = ('author', 'content')
     date_hierarchy = 'created_at'
-    fields = ('author', 'content', 'is_active', 'created_at')
+    fields = ('cinema_person', 'author', 'content', 'created_at', 'is_active')
     readonly_fields = ('created_at',)
 
 
 class CommentToFilmAdmin(CommentToPersonAdmin):
-    pass
+    list_display = (
+         'author', 'content', 'created_at', 'is_active', 'film'
+    )
+    list_filter = ('is_active', 'film')
+    fields = ('film', 'author', 'content', 'created_at', 'is_active')
 
 
 class CommentToNewsAdmin(CommentToPersonAdmin):
-    pass
+    list_display = (
+         'author', 'content', 'created_at', 'is_active', 'news'
+    )
+    list_filter = ('is_active', 'news')
+    fields = ('news', 'author', 'content', 'created_at', 'is_active')
 
 
 class CommentToProductAdmin(CommentToPersonAdmin):
-    pass
+    list_display = (
+         'author', 'content', 'created_at', 'is_active', 'product'
+    )
+    list_filter = ('is_active', 'product')
+    fields = ('product', 'author', 'content', 'created_at', 'is_active')
 
 
 admin.site.register(Genre, GenreAdmin)
