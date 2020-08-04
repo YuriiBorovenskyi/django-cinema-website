@@ -1,7 +1,9 @@
 from django.conf import settings
 from django.template.loader import render_to_string
 
-from accounts.forms import users
+from accounts.models import User
+
+users = User.objects.exclude(email__endswith='hollywood.com')
 
 
 def send_new_product_notification(product):

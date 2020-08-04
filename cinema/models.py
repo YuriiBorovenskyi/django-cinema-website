@@ -1,6 +1,6 @@
 from datetime import date, timedelta
 
-from django.contrib.auth.models import User
+from accounts.models import User
 from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
 from django.db.models.signals import post_save
@@ -141,7 +141,7 @@ class CinemaPerson(ExtendedProfileMixin):
 
     @property
     def fullname(self):
-        return f"{self.user.first_name} {self.user.last_name}"
+        return f"{self.user.get_full_name()}"
 
     def __str__(self):
         return self.fullname

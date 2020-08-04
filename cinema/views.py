@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render
-from django.views.generic import ListView, DetailView, TemplateView
+from django.views.generic import ListView, TemplateView
 
 from .forms import UserCommentToProductForm, GuestCommentToProductForm, \
     UserCommentToFilmForm, GuestCommentToFilmForm, UserCommentToPersonForm, \
@@ -362,7 +362,8 @@ def film_detail(request, pk):
     film = get_object_or_404(film_list, pk=pk)
     film_info = info_by_films[pk]
     context = {
-        'film': film, 'countries': sorted(film_info['country__name']),
+        'film': film,
+        'countries': sorted(film_info['country__name']),
         'genres': sorted(film_info['genre__name']),
         'languages': sorted(film_info['language__name']),
         'distributors': sorted(film_info['distributor__name']),
