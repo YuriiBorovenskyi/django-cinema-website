@@ -2,28 +2,21 @@
 
 {% block description %}{% endblock %}
 
-
 {% block title %}{% endblock %}
 
-
 {% block main_content %}
-
 <div class="row">
   <div class="col-md-4 detail_photo align-self-center pl-4">
-
     {% block page_photo %}{% endblock %}
-
   </div>
   <div class="col-md-6 detail_main_info align-self-center">
-    <h4 class="detail_main_info_title mb-4 pl-2">{% block page_name %}{% endblock %}</h4>
-
+    <h4 class="detail_main_info_title mb-4 pl-2">
+      {% block page_name %}{% endblock %}
+    </h4>
     {% block page_main_info %}{% endblock %}
-
   </div>
   <div class="col-md-2 mb-4 align-self-end">
-
     {% block page_oscar_price %}{% endblock %}
-
   </div>
 </div>
 <div class="row mt-2">
@@ -31,7 +24,8 @@
     <a class="detail_extra_heading pl-2"
        href="javascript:collapsElement('1001')"
        title=""
-       rel="nofollow">Overview &#9660
+       rel="nofollow">
+      Overview &#9660
     </a>
     <div class="pt-3 pr-5"
          id="1001"
@@ -39,12 +33,12 @@
       <table class="table table-responsive">
         <tbody>
         <tr class="align-top">
-          <th scope="col">{% block page_overview_title %}{% endblock %}</th>
+          <th scope="col">
+            {% block page_overview_title %}{% endblock %}
+          </th>
           <td>
             <p class="text-justify">
-
-            {% block page_overview_description %}{% endblock %}
-
+              {% block page_overview_description %}{% endblock %}
             </p>
           </td>
         </tr>
@@ -53,18 +47,13 @@
     </div>
   </div>
 </div>
-
 {% block page_extra_info %}{% endblock %}
-
 
 {% block page_box_office %}{% endblock %}
 
-
 {% block page_related_news %}{% endblock %}
 
-
 {% block page_comments %}{% endblock %}
-
 <script>
   function collapsElement(id) {
   if ( document.getElementById(id).style.display != "none" ) {
@@ -75,5 +64,4 @@
   }
   }
 </script>
-
 {% endblock main_content %}

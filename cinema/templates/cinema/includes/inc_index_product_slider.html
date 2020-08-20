@@ -1,20 +1,15 @@
 {% load thumbnail %}
 
 {% for product in product_list %}
-
-<div class="item">
-  <div class="card text-center h-100">
-  <a href="{% url 'cinema:product-detail' product.pk %}">
-    <img src="{% thumbnail product.film.poster 'index' %}"
-         class="card-img-top"
-         alt="{{ product.film.title }} picture"
-         title="{{ product.film.title }}">
-  </a>
-
-
-{% include "cinema/includes/inc_product_card.html" with title="h6" text="85%" price="h5" %}
-
+  <div class="item">
+    <div class="card text-center h-100">
+      <a href="{% url 'cinema:product-detail' product.pk %}">
+        <img src="{% thumbnail product.film.poster 'index' %}"
+             class="card-img-top"
+             alt="{{ product.film.title }} picture"
+             title="{{ product.film.title }}">
+      </a>
+      {% include "cinema/includes/inc_product_card.html" with title="h6" text="85%" price="h5" %}
+    </div>
   </div>
-</div>
-
 {% endfor %}

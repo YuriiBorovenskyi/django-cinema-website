@@ -1,1 +1,1 @@
-Password Reset of User {{ user.username ))
+Password Reset of {{ user.username|default_if_none:"user" }}

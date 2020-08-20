@@ -1,44 +1,52 @@
+{% load get_key_filter %}
+
 <div class="row mt-2">
   <div class="col-md-12">
     <p class="detail_extra_heading pl-2">Details</p>
     <table class="table table-responsive table-striped">
       <tbody>
-      {{ film_format }}
+      {% if format %}
+        <tr>
+          <th scope="col">Format:</th>
+          <td>Blu-ray</td>
+        </tr>
+      {% endif %}
       <tr>
         <th scope="col">Release Date:</th>
         <td>{{ cinema.release_data|date:"j M Y" }}</td>
       </tr>
       <tr>
+      {% with languages=film_info|get_key:'language__name' %}
         <th scope="col">Language{{ languages|pluralize:"s" }}:</th>
         <td>
-
-          {% for language in languages %}
-
-          <a href="{% url 'cinema:language-film-list' language %}">{{ language }}</a>
-          {% if not forloop.last %} |{% endif %}
-
+          {% for language in languages|dictsort:0 %}
+            <a href="{% url 'cinema:language-film-list' language %}">
+              {{ language }}
+            </a>
+            {% if not forloop.last %} | {% endif %}
           {% endfor %}
-
         </td>
+      {% endwith %}
       </tr>
       <tr>
+      {% with distributors=film_info|get_key:'distributor__name' %}
         <th scope="col">Distributor{{ distributors|pluralize:"s" }}:</th>
         <td>
-
-          {% for distributor in distributors %}
-
-          <a href="{% url 'cinema:distributor-film-list' distributor %}">{{ distributor }}</a>
-          {% if not forloop.last %} |{% endif %}
-
+          {% for distributor in distributors|dictsort:0 %}
+            <a href="{% url 'cinema:distributor-film-list' distributor %}">
+              {{ distributor }}
+            </a>
+            {% if not forloop.last %} | {% endif %}
           {% endfor %}
-
         </td>
+      {% endwith %}
       </tr>
       <tr>
         <th scope="col">MPAA:</th>
         <td>
           <a href="{% url 'cinema:mpaa-film-list' cinema.mpaa_rating.pk %}">
-            {{ cinema.mpaa_rating.value }}</a>
+            {{ cinema.mpaa_rating.value }}
+          </a>
         </td>
       </tr>
       </tbody>

@@ -1,1 +1,1 @@
-New product for user {{ user.username }}
+New product for {{ user.username|default_if_none:"user" }}

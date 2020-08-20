@@ -4,28 +4,21 @@
 
 {% block description %}Registration{% endblock %}
 
-
 {% block title %}Registration{% endblock %}
 
-
 {% block main_content %}
-
 <div class="row justify-content-md-center">
   <div class="col-md-auto">
     <h2 class="text-center mt-1 mb-4" style="color: #e6010a;">
       Create Account
     </h2>
     <form method="post" class="my-3">
-
       {% csrf_token %}
       {% bootstrap_form form layout='horizontal' %}
-
       <center>
         {% buttons submit='Create Your Account' %}{% endbuttons %}
       </center>
-
     </form>
   </div>
 </div>
-
 {% endblock main_content %}
