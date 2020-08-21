@@ -6,13 +6,13 @@ from .utilities import send_activation_notification
 
 
 class User(AbstractUser):
+    """
+    Custom 'User' Model.
+
+    It uses user authentication system of Django.
+    Class of this model inherits from standard 'AbstractUser' class.
+    """
     email = models.EmailField(unique=True, verbose_name='Email address')
-    # is_activated = models.BooleanField(
-    #     default=True, db_index=True, verbose_name='Activated?'
-    # )
-    # send_messages = models.BooleanField(
-    #     default=True, verbose_name='Send notifications about new comments?'
-    # )
 
     class Meta:
         db_table = 'auth_user'
@@ -23,6 +23,15 @@ user_registrated = Signal(providing_args=['instance'])
 
 
 def user_registrated_dispatcher(sender, **kwargs):
+    """
+    Signal handler function.
+
+    After saving record of 'User' model in database, 'user_registrated' signal
+    will be send, which calls this signal handler.
+
+    Call 'send_activation_notification' function, that sends notification
+    messages to current user with instructions for activation his account.
+    """
     send_activation_notification(kwargs['instance'])
 
 

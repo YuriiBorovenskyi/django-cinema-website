@@ -1,7 +1,6 @@
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -29,13 +28,10 @@ INSTALLED_APPS = [
     'django_cleanup',
     'easy_thumbnails',
     'captcha',
-    # 'rest_framework',
-    # 'corsheaders',
 
     # Custom main apps
     'cinema.apps.CinemaConfig',
     'accounts',
-    # 'api.apps.ApiConfig',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -183,8 +179,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
-EMAIL_HOST_USER = 'yurii.borovenskyi@gmail.com'
-EMAIL_HOST_PASSWORD = 'ACMilan1899Maldini'
 
 AUTHENTICATION_BACKENDS = [
     'social_core.backends.github.GithubOAuth2',
