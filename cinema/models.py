@@ -351,12 +351,12 @@ class FilmManager(models.Manager):
         """
         return self.get_queryset().prefetch_related(
             "country", "genre", "language", "distributor", "news_set",
-            Prefetch("staff__cinemafilmpersonprofession_set",
-                     queryset=CinemaFilmPersonProfession.objects.select_related(
-                         "profession"
-                     )),
-            Prefetch("staff",
-                     queryset=CinemaPerson.objects.select_related("user"))
+            "staff__user", Prefetch(
+                "staff__cinemafilmpersonprofession_set",
+                queryset=CinemaFilmPersonProfession.objects.select_related(
+                    "profession"
+                )
+            )
         )
 
     def get_specified_films_data(self, fields_names):
