@@ -1,12 +1,17 @@
 from django import forms
 from django.contrib.auth import password_validation
-from accounts.models import User
 from django.core.exceptions import ValidationError
 
+from accounts.models import User
 from .models import user_registrated
 
 
 class ChangeUserInfoForm(forms.ModelForm):
+    """
+    Form for editing personal user data.
+
+    It is created from 'User' model.
+    """
     email = forms.EmailField(required=True, label='E-mail')
 
     class Meta:
@@ -15,6 +20,11 @@ class ChangeUserInfoForm(forms.ModelForm):
 
 
 class RegisterUserForm(forms.ModelForm):
+    """
+    Form for entering information about new user.
+
+    It is created from 'User' model.
+    """
     email = forms.EmailField(required=True, label='E-mail')
     password1 = forms.CharField(
         label='Password', widget=forms.PasswordInput,

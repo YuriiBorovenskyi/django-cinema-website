@@ -7,10 +7,16 @@ users = User.objects.exclude(email__endswith='hollywood.com')
 
 
 def send_new_product_notification(product):
-    if settings.ALLOWED_HOSTS:
-        host = 'http://' + settings.ALLOWED_HOSTS[0]
-    else:
-        host = 'http://localhost:8000'
+    """
+    Function, that is called by 'post_save_dispatcher' signal handler.
+
+    Send notification messages to registered users about appearance of new
+    movie on blu-ray.
+    """
+    host = 'http://{0}'.format(
+        settings.ALLOWED_HOSTS[0] if settings.ALLOWED_HOSTS else
+        'localhost:8000'
+    )
     for user in users:
         context = {'user': user, 'host': host, 'product': product}
         subject = render_to_string(

@@ -6,6 +6,12 @@ signer = Signer()
 
 
 def send_activation_notification(user):
+    """
+    Function, that is called by 'user_registrated_dispatcher' signal handler.
+
+    Send notification messages to current user with instructions for
+    activation his account.
+    """
     if settings.ALLOWED_HOSTS:
         host = 'http://' + settings.ALLOWED_HOSTS[0]
     else:

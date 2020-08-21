@@ -1,11 +1,22 @@
 from django import forms
 from captcha.fields import CaptchaField
 
-from .models import CommentToPerson, CommentToFilm, CommentToNews, \
+from .models import (
+    CommentToPerson,
+    CommentToFilm,
+    CommentToNews,
     CommentToProduct
+)
 
 
 class UserCommentToPersonForm(forms.ModelForm):
+    """
+    Form for adding comments to cinema person.
+
+    It is created from 'CommentToPerson' model.
+
+    This form will be filled in by registered, signed-in users.
+    """
     class Meta:
         model = CommentToPerson
         exclude = ('is_active',)
@@ -13,6 +24,15 @@ class UserCommentToPersonForm(forms.ModelForm):
 
 
 class GuestCommentToPersonForm(forms.ModelForm):
+    """
+    Form for adding comments to cinema person.
+
+    It is created from 'CommentToPerson' model.
+
+    This form will be filled in by website guests.
+    Form additionally contains "CAPTCHA" field, which allows you to protect
+    website from bots.
+    """
     captcha = CaptchaField(label='Input text from picture', error_messages={
         'invalid': 'Wrong text'
     })
@@ -24,6 +44,13 @@ class GuestCommentToPersonForm(forms.ModelForm):
 
 
 class UserCommentToFilmForm(forms.ModelForm):
+    """
+    Form for adding comments to movie.
+
+    It is created from 'CommentToFilm' model.
+
+    This form will be filled in by registered, signed-in users.
+    """
     class Meta:
         model = CommentToFilm
         exclude = ('is_active',)
@@ -31,6 +58,15 @@ class UserCommentToFilmForm(forms.ModelForm):
 
 
 class GuestCommentToFilmForm(forms.ModelForm):
+    """
+    Form for adding comments to movie.
+
+    It is created from 'CommentToFilm' model.
+
+    This form will be filled in by website guests.
+    Form additionally contains "CAPTCHA" field, which allows you to protect
+    website from bots.
+    """
     captcha = CaptchaField(label='Input text from picture', error_messages={
         'invalid': 'Wrong text'
     })
@@ -42,6 +78,13 @@ class GuestCommentToFilmForm(forms.ModelForm):
 
 
 class UserCommentToNewsForm(forms.ModelForm):
+    """
+    Form for adding comments to news.
+
+    It is created from 'CommentToNews' model.
+
+    This form will be filled in by registered, signed-in users.
+    """
     class Meta:
         model = CommentToNews
         exclude = ('is_active',)
@@ -49,6 +92,15 @@ class UserCommentToNewsForm(forms.ModelForm):
 
 
 class GuestCommentToNewsForm(forms.ModelForm):
+    """
+    Form for adding comments to news.
+
+    It is created from 'CommentToNews' model.
+
+    This form will be filled in by website guests.
+    Form additionally contains "CAPTCHA" field, which allows you to protect
+    website from bots.
+    """
     captcha = CaptchaField(label='Input text from picture', error_messages={
         'invalid': 'Wrong text'
     })
@@ -60,6 +112,13 @@ class GuestCommentToNewsForm(forms.ModelForm):
 
 
 class UserCommentToProductForm(forms.ModelForm):
+    """
+    Form for adding comments to movie on blu-ray.
+
+    It is created from 'CommentToProduct' model.
+
+    This form will be filled in by registered, signed-in users.
+    """
     class Meta:
         model = CommentToProduct
         exclude = ('is_active',)
@@ -67,6 +126,15 @@ class UserCommentToProductForm(forms.ModelForm):
 
 
 class GuestCommentToProductForm(forms.ModelForm):
+    """
+    Form for adding comments to movie on blu-ray.
+
+    It is created from 'CommentToProduct' model.
+
+    This form will be filled in by website guests.
+    Form additionally contains "CAPTCHA" field, which allows you to protect
+    website from bots.
+    """
     captcha = CaptchaField(label='Input text from picture', error_messages={
         'invalid': 'Wrong text'
     })
