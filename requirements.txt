@@ -9,3 +9,4 @@ django-simple-captcha==0.5.12
 djangorestframework==3.11.0
 django-cors-headers==3.4.0
 celery==4.4.7
+psycopg2-binary==2.8.5
