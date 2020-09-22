@@ -13,8 +13,8 @@ from ..models import (
 
 register = template.Library()
 
-brief_persons_data = CinemaPerson.persons.get_brief_persons_data()
-brief_films_data = Film.films.get_brief_films_data()
+brief_persons_data = CinemaPerson.persons.get_brief_data()
+brief_films_data = Film.films.get_brief_data()
 
 
 @register.filter(name='get_text_hyperlinks')

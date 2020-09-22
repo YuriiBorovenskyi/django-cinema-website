@@ -15,9 +15,9 @@
     <form method="post" class="my-3">
       {% csrf_token %}
       {% bootstrap_form form layout='horizontal' %}
-      <center>
+      <div class="text-center">
         {% buttons submit='Create Your Account' %}{% endbuttons %}
-      </center>
+      </div>
     </form>
   </div>
 </div>

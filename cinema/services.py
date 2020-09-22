@@ -1,11 +1,11 @@
 from .models import (
     Film,
     CinemaPerson,
-    News
+    News,
 )
 
-cached_films_data = Film.films.get_cached_films_data()
-cached_persons_data = CinemaPerson.persons.get_cached_persons_data()
+cached_films_data = Film.films.get_cached_data()
+cached_persons_data = CinemaPerson.persons.get_cached_data()
 
 
 def get_films_ratings_sets():
@@ -54,7 +54,7 @@ def get_films_info():
         "country__name", "genre__name", "language__name",
         "distributor__name", "news__pk"
     )
-    films_data = Film.films.get_specified_films_data(film_fields)
+    films_data = Film.films.get_related_data(film_fields)
 
     films_info = {}
     for film in films_data:
@@ -90,7 +90,7 @@ def get_persons_info():
     Get information about all cinema persons from related models.
     """
     person_fields = ("film__genre__name", "news__pk")
-    persons_data = CinemaPerson.persons.get_specified_persons_data(
+    persons_data = CinemaPerson.persons.get_related_data(
         person_fields
     )
     persons_info = {}
@@ -119,12 +119,12 @@ def get_celebrity_news_id():
     """
     Get id of news related to celebrities.
     """
-    persons_data = CinemaPerson.persons.get_brief_persons_data()
+    persons_data = CinemaPerson.persons.get_brief_data()
     celebrities = [
         f"{person.user__first_name} {person.user__last_name}" for person in
         persons_data
     ]
-    news_data = News.news.get_brief_news_data()
+    news_data = News.news.get_brief_data()
     news_titles = {news.pk: news.title for news in news_data}
     celebrity_news_id = []
     for pk, title in news_titles.items():

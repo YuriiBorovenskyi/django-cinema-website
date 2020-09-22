@@ -20,18 +20,16 @@
   </div>
 {% else %}
   <div class="row justify-content-md-center mb-3">
-    <div class="col-md-auto">
-      <center>
-        <form method="post">
-          {% csrf_token %}
-          {% bootstrap_form form layout='horizontal' %}
-          <input type="hidden" name="next" value="{{ next }}">
-          {% buttons submit='Continue' %}{% endbuttons %}
-        </form>
-        <p>
-          <a href="{% url 'password_reset' %}">Lost password?</a>
-        </p>
-      </center>
+    <div class="col-md-auto text-center">
+      <form method="post">
+        {% csrf_token %}
+        {% bootstrap_form form layout='horizontal' %}
+        <input type="hidden" name="next" value="{{ next }}">
+        {% buttons submit='Continue' %}{% endbuttons %}
+      </form>
+      <p>
+        <a href="{% url 'password_reset' %}">Lost password?</a>
+      </p>
     </div>
   </div>
   <div class="row justify-content-md-center mb-3">

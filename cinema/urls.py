@@ -8,7 +8,7 @@ from .views import (
     BudgetFilmListView, UsaGrossFilmListView, WorldGrossFilmListView,
     SearchResultsView, YearFilmListView, GenreFilmListView,
     CountryFilmListView, LanguageFilmListView, MpaaFilmListView,
-    DistributorFilmListView, IndexView
+    DistributorFilmListView, IndexView,
 )
 
 app_name = CinemaConfig.name

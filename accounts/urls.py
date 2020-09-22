@@ -5,7 +5,7 @@ from .views import (
     ProfileView, ChangeUserInfoView, UserPasswordChangeView,
     RegisterUserView, RegisterDoneView, user_activate, DeleteUserView,
     UserPasswordResetView, UserPasswordResetDoneView,
-    UserPasswordResetConfirmView, UserPasswordResetCompleteView
+    UserPasswordResetConfirmView, UserPasswordResetCompleteView,
 )
 
 urlpatterns = [

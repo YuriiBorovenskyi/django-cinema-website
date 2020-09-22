@@ -5,7 +5,7 @@ from .models import (
     CommentToPerson,
     CommentToFilm,
     CommentToNews,
-    CommentToProduct
+    CommentToProduct,
 )
 
 

@@ -173,13 +173,13 @@ class CinemaPersonManager(models.Manager):
     Custom Manager used in 'CinemaPerson' model by extending base Manager class
     and instantiating custom Manager in 'CinemaPerson' model.
     """
-    def get_queryset(self):
+    def all(self):
         """
         Return QuerySet object with cached data of some related models.
         """
         return super().get_queryset().select_related("user", "country")
 
-    def get_brief_persons_data(self):
+    def get_brief_data(self):
         """
         Return QuerySet object with data of specified fields of
         'CinemaPerson' and 'User' models.
@@ -188,34 +188,34 @@ class CinemaPersonManager(models.Manager):
             "pk", "user__first_name",  "user__last_name", named=True
         )
 
-    def filter_by_search_word(self, search_word):
+    def filter_by_search_word(self, search_words):
         """
         Return QuerySet object, value of selected field corresponds to
         search word entered by visitor.
         """
-        split_query = search_word.split()
-        q = (Q(user__first_name__istartswith=split_query[0]) &
-             Q(user__last_name__iendswith=split_query[-1])) | Q(
-            user__first_name__icontains=search_word) | Q(
-            user__last_name__icontains=search_word
+        separate_search_words = search_words.split()
+        q = (Q(user__first_name__istartswith=separate_search_words[0]) &
+             Q(user__last_name__iendswith=separate_search_words[-1])) | Q(
+            user__first_name__icontains=search_words) | Q(
+            user__last_name__icontains=search_words
         )
-        return self.get_queryset().filter(q)
+        return self.all().filter(q)
 
-    def get_cached_persons_data(self):
+    def get_cached_data(self):
         """
         Return QuerySet object with cached data of all related models.
         """
-        return self.get_queryset().prefetch_related(
+        return self.all().prefetch_related(
             "news_set", "film_set__genre",
             Prefetch("film_set", Film.objects.select_related("imdb_rating"))
         )
 
-    def get_specified_persons_data(self, fields_names):
+    def get_related_data(self, fields_names):
         """
         Return QuerySet object with data of specified fields of
         'CinemaPerson' model and some related models.
         """
-        return self.get_cached_persons_data().values_list(
+        return self.get_cached_data().values_list(
             "pk", *fields_names, "news__title", named=True
         ).order_by("-news__created_at")
 
@@ -270,7 +270,7 @@ class FilmManager(models.Manager):
     Custom Manager used in 'Film' model by extending base Manager class
     and instantiating custom Manager in 'Film' model.
     """
-    def get_queryset(self):
+    def all(self):
         """
         Return QuerySet object with cached data of some related models.
         """
@@ -278,63 +278,63 @@ class FilmManager(models.Manager):
             "imdb_rating", "mpaa_rating", "product"
         )
 
-    def get_brief_films_data(self):
+    def get_brief_data(self):
         """
         Return QuerySet object with data of specified fields of 'Film' model.
         """
         return super().get_queryset().values_list("pk", "title", named=True)
 
-    def filter_by_film_selected_year(self, selected_year):
+    def filter_by_selected_year(self, selected_year):
         """
         Return QuerySet object filtered by selected year and order by
         imdb rating of movies.
         """
-        return self.get_queryset().filter(
+        return self.all().filter(
             release_data__year=selected_year
         ).order_by("-imdb_rating__value")
 
-    def filter_by_film_selected_genre(self, selected_genre):
+    def filter_by_selected_genre(self, selected_genre):
         """
         Return QuerySet object filtered by selected genre and order by
         imdb rating of movies.
         """
-        return self.get_queryset().filter(
+        return self.all().filter(
             genre__name=selected_genre
         ).order_by("-imdb_rating__value")
 
-    def filter_by_film_selected_country(self, selected_country):
+    def filter_by_selected_country(self, selected_country):
         """
         Return QuerySet object filtered by selected country and order by
         imdb rating of movies.
         """
-        return self.get_queryset().filter(
+        return self.all().filter(
             country__name=selected_country
         ).order_by("-imdb_rating__value")
 
-    def filter_by_film_selected_language(self, selected_language):
+    def filter_by_selected_language(self, selected_language):
         """
         Return QuerySet object filtered by selected language and order by
         imdb rating of movies.
         """
-        return self.get_queryset().filter(
+        return self.all().filter(
             language__name=selected_language
         ).order_by("-imdb_rating__value")
 
-    def filter_by_film_selected_distributor(self, selected_distributor):
+    def filter_by_selected_distributor(self, selected_distributor):
         """
         Return QuerySet object filtered by selected distributor and order by
         imdb rating of movies.
         """
-        return self.get_queryset().filter(
+        return self.all().filter(
             distributor__name=selected_distributor
         ).order_by("-imdb_rating__value")
 
-    def filter_by_film_selected_mpaa_rating(self, selected_mpaa_rating):
+    def filter_by_selected_mpaa_rating(self, selected_mpaa_rating):
         """
         Return QuerySet object filtered by selected MPAA rating and order by
         imdb rating of movies.
         """
-        return self.get_queryset().filter(
+        return self.all().filter(
             mpaa_rating__pk=selected_mpaa_rating
         ).order_by("-imdb_rating__value")
 
@@ -343,13 +343,13 @@ class FilmManager(models.Manager):
         Return QuerySet object, value of selected field corresponds to
         search word entered by visitor.
         """
-        return self.get_queryset().filter(title__icontains=search_word)
+        return self.all().filter(title__icontains=search_word)
 
-    def get_cached_films_data(self):
+    def get_cached_data(self):
         """
         Return QuerySet object with cached data of all related models.
         """
-        return self.get_queryset().prefetch_related(
+        return self.all().prefetch_related(
             "country", "genre", "language", "distributor", "news_set",
             "staff__user", Prefetch(
                 "staff__cinemafilmpersonprofession_set",
@@ -359,12 +359,12 @@ class FilmManager(models.Manager):
             )
         )
 
-    def get_specified_films_data(self, fields_names):
+    def get_related_data(self, fields_names):
         """
         Return QuerySet object with data of specified fields of 'Film'
         model and some related models.
         """
-        return self.get_cached_films_data().values_list(
+        return self.get_cached_data().values_list(
             "pk", *fields_names, "news__title", named=True
         ).order_by("-news__created_at")
 
@@ -463,24 +463,24 @@ class NewsManager(models.Manager):
     Custom Manager used in 'News' model by extending base Manager class
     and instantiating custom Manager in 'News' model.
     """
-    def get_brief_news_data(self):
+    def get_brief_data(self):
         """
         Return QuerySet object with data of specified fields of 'News' model.
         """
         return super().get_queryset().values_list("pk", "title", named=True)
 
-    def get_celebrity_news(self, celebrity_news_id):
+    def get_news_about_celebrities(self, celebrity_news_id):
         """
         Return QuerySet object containing celebrity news data.
         """
-        return self.get_queryset().filter(pk__in=celebrity_news_id)
+        return super().get_queryset().filter(pk__in=celebrity_news_id)
 
     def filter_by_search_word(self, search_word):
         """
         Return QuerySet object, value of selected field corresponds to
         search word entered by visitor.
         """
-        return self.get_queryset().filter(title__icontains=search_word)
+        return super().get_queryset().filter(title__icontains=search_word)
 
 
 class News(DateMixin):
@@ -523,7 +523,7 @@ class ProductManager(models.Manager):
     Custom Manager used in 'Product' model by extending base Manager class
     and instantiating custom Manager in 'Product' model.
     """
-    def get_queryset(self):
+    def all(self):
         """
         Return QuerySet object with cached data of related models.
         """
@@ -531,28 +531,28 @@ class ProductManager(models.Manager):
             "film", "film__imdb_rating", "film__mpaa_rating"
         )
 
-    def order_by_product_name(self):
+    def order_by_name(self):
         """
         Return QuerySet object containing only 'Product' model data and
         order by name of blu-ray movies.
         """
-        return self.get_queryset().only("pk", "price", "film", "in_stock")
+        return self.all().only("pk", "price", "film", "in_stock")
 
-    def order_by_film_imdb_rating(self):
+    def order_by_imdb_rating(self):
         """
         Return QuerySet object containing only 'Product' model data and
         order by imdb rating of blu-ray movies.
         """
-        return self.get_queryset().only(
+        return self.all().only(
             "pk", "price", "film", "in_stock"
         ).order_by("-film__imdb_rating__value")
 
-    def order_by_film_release_data(self):
+    def order_by_release_data(self):
         """
         Return QuerySet object containing only 'Product' model data and
         order by release date of blu-ray movies.
         """
-        return self.get_queryset().only(
+        return self.all().only(
             "pk", "price", "film", "in_stock"
         ).order_by("-film__release_data")
 
@@ -561,7 +561,7 @@ class ProductManager(models.Manager):
         Return QuerySet object, value of selected field corresponds to
         search word entered by visitor.
         """
-        return self.get_queryset().filter(film__title__icontains=search_word)
+        return self.all().filter(film__title__icontains=search_word)
 
 
 class Product(DateMixin):
@@ -658,7 +658,7 @@ class CommentToProduct(CommentMixin, DateMixin):
         ordering = ["-created_at"]
 
 
-def post_save_dispatcher(sender, **kwargs):
+def post_save_dispatcher(sender, instance, **kwargs):
     """
     Signal handler function.
 
@@ -669,7 +669,7 @@ def post_save_dispatcher(sender, **kwargs):
     messages to registered users about appearance of new movie on blu-ray.
     """
     if kwargs['created']:
-        send_new_product_notification(kwargs['instance'])
+        send_new_product_notification(instance)
 
 
 post_save.connect(post_save_dispatcher, sender=Product)

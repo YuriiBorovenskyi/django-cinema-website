@@ -13,7 +13,7 @@ from .forms import (
     UserCommentToPersonForm,
     GuestCommentToPersonForm,
     UserCommentToNewsForm,
-    GuestCommentToNewsForm
+    GuestCommentToNewsForm,
 )
 from .models import (
     Product,
@@ -27,7 +27,8 @@ from .services import (
     get_films_info,
     get_persons_info,
     get_films_ratings_sets,
-    get_celebrity_news_id, get_filmography_and_extra_info
+    get_celebrity_news_id,
+    get_filmography_and_extra_info,
 )
 
 DESCRIPTION_BLU_RAY = "Welcome to the fantastic Blu-ray department here, " \
@@ -51,7 +52,7 @@ class ProductListView(ListView):
     Display page with list of blue-ray movies.
     """
     paginate_by = 8
-    queryset = Product.products.order_by_product_name()
+    queryset = Product.products.order_by_name()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -94,8 +95,8 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        top_rated_products = Product.products.order_by_film_imdb_rating()
-        new_releases_products = Product.products.order_by_film_release_data()
+        top_rated_products = Product.products.order_by_imdb_rating()
+        new_releases_products = Product.products.order_by_release_data()
         news_list = News.objects.all()
         context.update({
             'page_title': "Latest Movie News, Movies on Blu-ray",
@@ -121,7 +122,7 @@ def product_detail(request, pk):
     Create "CommentToProduct" model record.
     After saving data, redirect to current page.
     """
-    product_list = Product.products.get_queryset()
+    product_list = Product.products.all()
     product = get_object_or_404(product_list, pk=pk)
     context = {
         'product': product,
@@ -155,7 +156,7 @@ class FilmListView(ListView):
     Display page with list of movies.
     """
     paginate_by = 8
-    queryset = Film.films.get_queryset()
+    queryset = Film.films.all()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -235,7 +236,7 @@ class YearFilmListView(FilmListView):
 
     def get_queryset(self):
         self.requested_year = self.kwargs.get('year')
-        return Film.films.filter_by_film_selected_year(self.requested_year)
+        return Film.films.filter_by_selected_year(self.requested_year)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -251,7 +252,7 @@ class GenreFilmListView(FilmListView):
 
     def get_queryset(self):
         self.requested_genre = self.kwargs.get('genre')
-        return Film.films.filter_by_film_selected_genre(
+        return Film.films.filter_by_selected_genre(
             self.requested_genre
         )
 
@@ -269,7 +270,7 @@ class CountryFilmListView(FilmListView):
 
     def get_queryset(self):
         self.requested_country = self.kwargs.get('country')
-        return Film.films.filter_by_film_selected_country(
+        return Film.films.filter_by_selected_country(
             self.requested_country
         )
 
@@ -287,7 +288,7 @@ class LanguageFilmListView(FilmListView):
 
     def get_queryset(self):
         self.requested_language = self.kwargs.get('language')
-        return Film.films.filter_by_film_selected_language(
+        return Film.films.filter_by_selected_language(
             self.requested_language
         )
 
@@ -306,7 +307,7 @@ class DistributorFilmListView(FilmListView):
 
     def get_queryset(self):
         self.requested_distributor = self.kwargs.get('distributor')
-        return Film.films.filter_by_film_selected_distributor(
+        return Film.films.filter_by_selected_distributor(
             self.requested_distributor
         )
 
@@ -325,7 +326,7 @@ class MpaaFilmListView(FilmListView):
 
     def get_queryset(self):
         self.requested_mpaa = self.kwargs.get('pk')
-        return Film.films.filter_by_film_selected_mpaa_rating(
+        return Film.films.filter_by_selected_mpaa_rating(
             self.requested_mpaa
         )
 
@@ -348,7 +349,7 @@ def film_detail(request, pk):
     Create "CommentToFilm" model record.
     After saving data, redirect to current page.
     """
-    film_list = Film.films.get_queryset()
+    film_list = Film.films.all()
     film = get_object_or_404(film_list, pk=pk)
     context = {
         'film': film,
@@ -388,7 +389,7 @@ def cinema_person_detail(request, pk):
 
     Only signed-in users will be allowed to access this web page.
     """
-    cinema_person_list = CinemaPerson.persons.get_queryset()
+    cinema_person_list = CinemaPerson.persons.all()
     cinema_person = get_object_or_404(cinema_person_list, pk=pk)
     filmography, person_professions, films_number, films_years_range = \
         get_filmography_and_extra_info(cinema_person)
@@ -446,7 +447,7 @@ class CelebrityNewsListView(NewsListView):
     """
     Display page with list of latest celebrity news.
     """
-    queryset = News.news.get_celebrity_news(celebrity_news_id)
+    queryset = News.news.get_news_about_celebrities(celebrity_news_id)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -488,7 +489,8 @@ def news_detail(request, pk):
             messages.add_message(request, messages.WARNING, 'No Comment added')
 
     context['form'] = form
-
+    print(request.get_host(), request.scheme, request.build_absolute_uri(),
+          sep='\n')
     return render(request, 'cinema/news_detail.html', context)
 
 

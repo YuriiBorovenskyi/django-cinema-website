@@ -6,7 +6,7 @@ from django.contrib.auth.views import (
     PasswordResetView,
     PasswordResetDoneView,
     PasswordResetConfirmView,
-    PasswordResetCompleteView
+    PasswordResetCompleteView,
 )
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.signing import BadSignature
@@ -16,7 +16,7 @@ from django.views.generic import (
     TemplateView,
     UpdateView,
     CreateView,
-    DeleteView
+    DeleteView,
 )
 
 from accounts.models import User

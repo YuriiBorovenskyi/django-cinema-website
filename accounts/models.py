@@ -22,7 +22,7 @@ class User(AbstractUser):
 user_registrated = Signal(providing_args=['instance'])
 
 
-def user_registrated_dispatcher(sender, **kwargs):
+def user_registrated_dispatcher(sender, instance, **kwargs):
     """
     Signal handler function.
 
@@ -32,7 +32,7 @@ def user_registrated_dispatcher(sender, **kwargs):
     Call 'send_activation_notification' function, that sends notification
     messages to current user with instructions for activation his account.
     """
-    send_activation_notification(kwargs['instance'])
+    send_activation_notification(instance)
 
 
 user_registrated.connect(user_registrated_dispatcher)

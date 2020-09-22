@@ -1,4 +1,4 @@
-Dear {{ user.username|default_if_none:"user" }}!
+Dear {{ user.username | default_if_none:"user" }}!
 
 You have registered on our website.
 You need to complete the activation in order to verify your identity.

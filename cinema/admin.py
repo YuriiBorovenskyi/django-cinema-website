@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import (
     Country, Genre, Language, Distributor, ImdbRating, MpaaRating, Film,
     CinemaPerson, CinemaProfession, CinemaFilmPersonProfession, Product,
-    News, CommentToPerson, CommentToFilm, CommentToNews, CommentToProduct
+    News, CommentToPerson, CommentToFilm, CommentToNews, CommentToProduct,
 )
 
 
@@ -14,7 +14,6 @@ class CountryAdmin(admin.ModelAdmin):
 
     Set parameters of 'Country' model view in interface of admin site Django.
     """
-    pass
 
 
 @admin.register(Genre)
@@ -24,7 +23,6 @@ class GenreAdmin(admin.ModelAdmin):
 
     Set parameters of 'Genre' model view in interface of admin site Django.
     """
-    pass
 
 
 @admin.register(Language)
@@ -34,7 +32,6 @@ class LanguageAdmin(admin.ModelAdmin):
 
     Set parameters of 'Language' model view in interface of admin site Django.
     """
-    pass
 
 
 @admin.register(Distributor)
@@ -45,7 +42,6 @@ class DistributorAdmin(admin.ModelAdmin):
     Set parameters of 'Distributor' model view in interface of admin site
     Django.
     """
-    pass
 
 
 @admin.register(ImdbRating)
@@ -55,7 +51,6 @@ class ImdbRatingAdmin(admin.ModelAdmin):
 
     Set parameters of 'ImdbRating' model view in interface of admin site Django.
     """
-    pass
 
 
 @admin.register(MpaaRating)
@@ -65,7 +60,6 @@ class MpaaRatingAdmin(admin.ModelAdmin):
 
     Set parameters of 'MpaaRating' model view in interface of admin site Django.
     """
-    pass
 
 
 class CinemaFilmPersonProfessionInline(admin.TabularInline):
@@ -149,7 +143,6 @@ class CinemaProfessionAdmin(admin.ModelAdmin):
     Set parameters of 'CinemaProfession' model view in interface of admin site
     Django.
     """
-    pass
 
 
 @admin.register(CinemaFilmPersonProfession)
@@ -160,7 +153,6 @@ class CinemaFilmPersonProfessionAdmin(admin.ModelAdmin):
     Set parameters of 'CinemaFilmPersonProfession' model view in interface of
     admin site Django.
     """
-    pass
 
 
 class ProductAdmin(admin.ModelAdmin):
