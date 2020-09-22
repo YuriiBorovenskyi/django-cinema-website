@@ -8,7 +8,9 @@
           <div class="card">
             <div class="card-body pt-2 pb-0">
               <h5 style="font-size: 1.1rem;"
-                  align="center"><b>{{ title }}</b></h5>
+                  class="text-center font-weight-bold">
+                {{ title }}
+              </h5>
             </div>
           </div>
         </div>
@@ -16,20 +18,17 @@
       <div class="top_rated">
         <table class="table table-sm table-striped m-0" style="font-size: 0.9rem;">
           <tbody>
-
           {% for film in top_5 %}
-
-          <tr>
-            <td class="align-middle" align="left">
-              {{ forloop.counter }}.
-            </td>
-            <td class="align-middle" align="left">
-              <a href="{% url 'cinema:film-detail' film.pk %}">
-                {{ film.title }}
-              </a>
-            </td>
-            <td class="align-middle" align="right">
-
+            <tr>
+              <td class="align-middle" align="left">
+                {{ forloop.counter }}.
+              </td>
+              <td class="align-middle" align="left">
+                <a href="{% url 'cinema:film-detail' film.pk %}">
+                  {{ film.title }}
+                </a>
+              </td>
+              <td class="align-middle" align="right">
               {% if criterion == "imdb_top_5" %}
                 {{ film.imdb_rating__value }}
               {% elif criterion == "budget_top_5" %}
@@ -39,27 +38,22 @@
               {% elif criterion == "world_gross_top_5" %}
                 ${{ film.world_gross|intword }}
               {% endif %}
-
-            </td>
-          </tr>
-
+              </td>
+            </tr>
           {% endfor %}
-
           </tbody>
         </table>
       </div>
       <div class="list-group text-center p-2">
-
-        {% if criterion == "imdb_top_5" %}
-          <a href="{% url 'cinema:top-rated-film-list' %}">The whole list</a>
-        {% elif criterion == "budget_top_5" %}
-          <a href="{% url 'cinema:budget-film-list' %}">The whole list</a>
-        {% elif criterion == "usa_gross_top_5" %}
-          <a href="{% url 'cinema:usa-gross-film-list' %}">The whole list</a>
-        {% elif criterion == "world_gross_top_5" %}
-          <a href="{% url 'cinema:world-gross-film-list' %}">The whole list</a>
-        {% endif %}
-
+      {% if criterion == "imdb_top_5" %}
+        <a href="{% url 'cinema:top-rated-film-list' %}">The whole list</a>
+      {% elif criterion == "budget_top_5" %}
+        <a href="{% url 'cinema:budget-film-list' %}">The whole list</a>
+      {% elif criterion == "usa_gross_top_5" %}
+        <a href="{% url 'cinema:usa-gross-film-list' %}">The whole list</a>
+      {% elif criterion == "world_gross_top_5" %}
+        <a href="{% url 'cinema:world-gross-film-list' %}">The whole list</a>
+      {% endif %}
       </div>
     </div>
   </div>

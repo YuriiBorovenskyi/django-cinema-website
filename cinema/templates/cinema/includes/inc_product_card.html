@@ -2,17 +2,15 @@
 
 <div class="card-body py-3 px-0">
   <a href="{% url 'cinema:product-detail' product.pk %}">
-    <div class="{{ title }} card-title m-0">{{ product.film.title }}</div>
+    <div class="{{ title }} card-title m-0">
+      {{ product.film.title }}
+    </div>
   </a>
   <p class="card-text m-1" style="font-size: {{ text }};">
-
-    {% for actor in persons_by_films|get_key:product.film.pk|get_key:"Actor"|slice:":3" %}
-
-      <a class="text-dark" href="{% url 'cinema:movie-person-detail' actor.pk %}">
-        {{ actor.name }}</a>{% if not forloop.last %},{% endif %}
-
-    {% endfor %}
-
+  {% for actor in films_cast_and_crew|get_key:product.film.pk|get_key:"Actor"|slice:":3" %}
+    <a class="text-dark" href="{% url 'cinema:movie-person-detail' actor.pk %}">
+      {{ actor.name }}</a>{% if not forloop.last %},{% endif %}
+  {% endfor %}
   </p>
   <p class="card-text small my-1">Blu-ray</p>
   <div class="{{ price }} card-text m-0" style="color: #ec0505;">
@@ -20,21 +18,17 @@
   </div>
 </div>
 <div class="card-footer p-0 my-0">
-
-  {% if product.in_stock %}
-
+{% if product.in_stock %}
   <button type="button"
           class="btn btn-primary btn-sm btn-block active btn-success"
-          aria-pressed="true" title="Add to Cart">Add to Cart
+          aria-pressed="true" title="Add to Cart">
+    Add to Cart
   </button>
-
-  {% else %}
-
+{% else %}
   <button type="button"
           class="btn btn-primary btn-sm btn-block active btn-success"
-          aria-pressed="true" title="Pre-order Now">Pre-order Now
+          aria-pressed="true" title="Pre-order Now">
+    Pre-order Now
   </button>
-
-  {% endif %}
-
+{% endif %}
 </div>

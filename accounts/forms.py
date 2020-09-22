@@ -1,14 +1,17 @@
 from django import forms
 from django.contrib.auth import password_validation
-from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
+from accounts.models import User
 from .models import user_registrated
-
-user_emails = User.objects.values_list('email', flat=True)
 
 
 class ChangeUserInfoForm(forms.ModelForm):
+    """
+    Form for editing personal user data.
+
+    It is created from 'User' model.
+    """
     email = forms.EmailField(required=True, label='E-mail')
 
     class Meta:
@@ -17,6 +20,11 @@ class ChangeUserInfoForm(forms.ModelForm):
 
 
 class RegisterUserForm(forms.ModelForm):
+    """
+    Form for entering information about new user.
+
+    It is created from 'User' model.
+    """
     email = forms.EmailField(required=True, label='E-mail')
     password1 = forms.CharField(
         label='Password', widget=forms.PasswordInput,
@@ -44,11 +52,6 @@ class RegisterUserForm(forms.ModelForm):
         if self.password1 and self.password2 and self.password1 != self.password2:
             errors = {"password2": ValidationError(
                 'The passwords entered do not match', code='password_mismatch'
-            )}
-            raise ValidationError(errors)
-        if self.cleaned_data["email"] in user_emails:
-            errors = {"email": ValidationError(
-                'Such an e-mail address is already in use', code='invalid_email'
             )}
             raise ValidationError(errors)
 

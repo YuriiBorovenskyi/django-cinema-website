@@ -1,4 +1,4 @@
-{% load datetime_filter %}
+{% load datetime_filter get_key_filter %}
 
 <table class="table table-responsive table-striped">
   <tbody class="align-top">
@@ -9,50 +9,42 @@
     </td>
   </tr>
   <tr>
+  {% with countries=film_info|get_key:'country__name' %}
     <th scope="col">Countr{{ countries|pluralize:"y,ies" }}:</th>
     <td>
-
-      {% for country in countries %}
-
-      <a href="{% url 'cinema:country-film-list' country %}"> {{ country }}</a>
-      {% if not forloop.last %} |{% endif %}
-
-      {% endfor %}
-
+    {% for country in countries|dictsort:0 %}
+      <a href="{% url 'cinema:country-film-list' country %}">
+        {{ country }}
+      </a>
+      {% if not forloop.last %} | {% endif %}
+    {% endfor %}
     </td>
+  {% endwith %}
   </tr>
   <tr>
+  {% with genres=film_info|get_key:'genre__name' %}
     <th scope="col">Genre{{ genres|pluralize:"s" }}:</th>
     <td>
-
-      {% for genre in genres %}
-
-      <a href="{% url 'cinema:genre-film-list' genre %}"> {{ genre }}</a>
-      {% if not forloop.last %} |{% endif %}
-
-      {% endfor %}
-
+    {% for genre in genres|dictsort:0 %}
+      <a href="{% url 'cinema:genre-film-list' genre %}">
+        {{ genre }}
+      </a>
+      {% if not forloop.last %} | {% endif %}
+    {% endfor %}
     </td>
+  {% endwith %}
   </tr>
-
-  {% for profession, persons in film_persons.items %}
-
-  <tr>
-    <th scope="col">{{ profession }}{{ persons|pluralize:"s" }}:</th>
-    <td>
-
+  {% for profession, persons in film_cast_and_crew.items %}
+    <tr>
+      <th scope="col">{{ profession }}{{ persons|pluralize:"s" }}:</th>
+      <td>
       {% for person in persons %}
-
-      <a href="{% url 'cinema:movie-person-detail' person.pk %}">
-        {{ person.name }}</a>{% if not forloop.last %},{% endif %}
-
+        <a href="{% url 'cinema:movie-person-detail' person.pk %}">
+          {{ person.name }}</a>{% if not forloop.last %},{% endif %}
       {% endfor %}
-
-    </td>
-  </tr>
-
+      </td>
+    </tr>
   {% endfor %}
-
   <tr>
     <th scope="col">Runtime:</th>
     <td>

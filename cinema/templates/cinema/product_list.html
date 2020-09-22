@@ -4,21 +4,16 @@
 
 {% block description %}{{ page_title }}{% endblock %}
 
-
 {% block title %}{{ page_title }}{% endblock %}
 
-
 {% block main_content %}
-
 <div class="row mt-1 mb-3">
   <div class="col-md-12 text-center">
     <h1>{{ page_title }}</h1>
   </div>
 </div>
 <div class="row row-cols-md-4">
-
-  {% for product in product_list %}
-
+{% for product in product_list %}
   <div class="col mb-3">
     <div class="card text-center h-100">
       <a href="{% url 'cinema:product-detail' product.pk %}">
@@ -27,14 +22,9 @@
              alt="{{ product.film.title }} picture"
              title="{{ product.film.title }}">
       </a>
-
-{% include "cinema/includes/inc_product_card.html" with title="h5" text="100%" price="h4" %}
-
+      {% include "cinema/includes/inc_product_card.html" with title="h5" text="100%" price="h4" %}
     </div>
   </div>
-
-  {% endfor %}
-
+{% endfor %}
 </div>
-
 {% endblock main_content %}

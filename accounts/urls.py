@@ -1,10 +1,12 @@
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
 
-from .views import ProfileView, ChangeUserInfoView, UserPasswordChangeView, \
-    RegisterUserView, RegisterDoneView, user_activate, DeleteUserView, \
-    UserPasswordResetView, UserPasswordResetDoneView, \
-    UserPasswordResetConfirmView, UserPasswordResetCompleteView
+from .views import (
+    ProfileView, ChangeUserInfoView, UserPasswordChangeView,
+    RegisterUserView, RegisterDoneView, user_activate, DeleteUserView,
+    UserPasswordResetView, UserPasswordResetDoneView,
+    UserPasswordResetConfirmView, UserPasswordResetCompleteView,
+)
 
 urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),

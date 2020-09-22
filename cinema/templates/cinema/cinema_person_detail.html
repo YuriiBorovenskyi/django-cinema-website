@@ -1,28 +1,21 @@
 {% extends 'cinema/base_cinema_detail.html' %}
 
-{% load thumbnail get_text_hyperlinks_filter %}
+{% load thumbnail get_text_hyperlinks_filter get_key_filter %}
 
 {% block description %}{{ cinema_person.fullname }}{% endblock %}
 
-
 {% block title %}{{ cinema_person.fullname }}{% endblock %}
 
-
 {% block page_photo %}
-
 <img src="{% thumbnail cinema_person.avatar 'person' %}"
      alt="{{ cinema_person.fullname }} picture"
      title="{{ cinema_person.fullname }}"
      class="card-img-top mb-3">
-
 {% endblock page_photo %}
-
 
 {% block page_name %}{{ cinema_person.fullname }}{% endblock %}
 
-
 {% block page_main_info %}
-
 <table class="table table-responsive table-striped">
   <tbody class="align-top">
   <tr>
@@ -48,103 +41,83 @@
   <tr>
     <th scope="col">Career:</th>
     <td>
-
-      {% for profession in person_professions %}
-
-      {{ profession }}{% if not forloop.last %},{% endif %}
-
-      {% endfor %}
-
+    {% for profession in person_professions %}
+      {{ profession }}
+      {% if not forloop.last %} | {% endif %}
+    {% endfor %}
     </td>
   </tr>
   <tr>
+  {% with genres=person_info|get_key:'film__genre__name' %}
     <th scope="col">Genre{{ genres|pluralize:"s" }}:</th>
     <td>
-
-      {% for genre in genres %}
-
-      <a href="{% url 'cinema:genre-film-list' genre %}">{{ genre }}</a>
-      {% if not forloop.last %},{% endif %}
-
-      {% endfor %}
-
+    {% for genre in genres|dictsort:0 %}
+      <a href="{% url 'cinema:genre-film-list' genre %}">
+        {{ genre }}
+      </a>
+      {% if not forloop.last %} | {% endif %}
+    {% endfor %}
     </td>
+  {% endwith %}
   </tr>
   <tr>
-    <th scope="col">Mov{{ number_of_films|pluralize:"y,ies" }}:</th>
-    <td>{{ number_of_films }}</td>
+    <th scope="col">Mov{{ films_number|pluralize:"y,ies" }}:</th>
+    <td>{{ films_number }}</td>
   </tr>
   <tr>
     <th scope="col">Years:</th>
-    <td>{{ years_of_films }}</td>
+    <td>{{ films_years_range }}</td>
   </tr>
-
   </tbody>
 </table>
-
 {% endblock page_main_info %}
 
-
 {% block page_oscar_price %}
-{% include "cinema/includes/inc_cinema_oscar.html" with cinema=cinema_person %}
+  {% include "cinema/includes/inc_cinema_oscar.html" with cinema=cinema_person %}
 {% endblock page_oscar_price %}
-
 
 {% block page_overview_title %}Biography:{% endblock %}
 
-
-{% block page_overview_description %}{{ cinema_person.bio|get_text_hyperlinks|safe }}{% endblock %}
-
+{% block page_overview_description %}
+  {{ cinema_person.bio|get_text_hyperlinks|safe }}
+{% endblock %}
 
 {% block page_extra_info %}
-
 <div class="row mt-2">
   <div class="col-md-12">
     <p class="detail_extra_heading pl-2">Filmography</p>
     <div class="row d-flex justify-content-center">
-
-      {% for profession, films in filmography.items %}
-
+    {% for profession, films in filmography.items %}
       <p class="font-weight-bold">{{ profession }}</p>
       <table class="table table-responsive table-striped d-flex justify-content-center">
         <tbody>
-
         {% for film in films %}
-
-        <tr>
-          <td class="align-middle">
-
-            {{ forloop.counter }}.
-
-          </td>
-          <td class="align-middle" width=560px">
-            <a href="{% url 'cinema:film-detail' film.pk %}">
-
-              {{ film.title }} ({{ film.release_data__year }})
-
-            </a>
-          </td>
-          <td class="align-middle">
-
-            {{ film.imdb_rating__value }}
-
-          </td>
-        </tr>
-
+          <tr>
+            <td class="align-middle">
+              {{ forloop.counter }}.
+            </td>
+            <td class="align-middle" width=560px">
+              <a href="{% url 'cinema:film-detail' film.pk %}">
+                {{ film.title }} ({{ film.release_data__year }})
+              </a>
+            </td>
+            <td class="align-middle">
+              {{ film.imdb_rating__value }}
+            </td>
+          </tr>
         {% endfor %}
-
         </tbody>
       </table>
-
-      {% endfor %}
-
+    {% endfor %}
     </div>
   </div>
 </div>
-
 {% endblock page_extra_info %}
 
-
 {% block page_related_news %}
-{% include "cinema/includes/inc_cinema_related_news.html" %}
+  {% include "cinema/includes/inc_cinema_related_news.html"  with related_news=person_info|get_key:'news' %}
 {% endblock page_related_news %}
+
+{% block page_comments %}
+  {% include "cinema/includes/inc_cinema_comments.html" with comments=cinema_person.commenttoperson_set.all style_pl='188px' col_width='8' pr='5' %}
+{% endblock page_comments %}

@@ -9,12 +9,11 @@
         content="{% block description %}{% endblock %} - World of Cinema">
   <meta name="author" content="Yurii Borovenskyi">
   <meta name="generator" content="Jekyll v3.8.6">
-
-  <title>{% block title %}{% endblock %} - World of Cinema</title>
-
+  <title>
+    {% block title %}{% endblock %} - World of Cinema
+  </title>
   <!-- Bootstrap core CSS -->
   <link href="{% static 'cinema/css/bootstrap.min.css' %}" rel="stylesheet">
-
   <!-- Favicons -->
   <link rel="apple-touch-icon"
         href="{% static 'cinema/img/favicon-180.png' %}" sizes="180x180">
@@ -23,7 +22,6 @@
   <meta name="msapplication-config"
         content="/docs/4.4/assets/img/favicons/browserconfig.xml">
   <meta name="theme-color" content="#563d7c">
-
   <!-- Custom styles for this template -->
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"
         rel="stylesheet">
@@ -33,11 +31,10 @@
           src="{% static 'cinema/js/1eaefda9f709934a5d.js' %}">
   </script>
 </head>
-
 <body>
 <nav class="navbar navbar-expand-md navbar-dark fixed-top content"
      style="padding-left: 190px; padding-right: 190px">
-  <a class="navbar-brand py-0" href="{% url 'cinema:index-list' %}">
+  <a class="navbar-brand py-0" href="{% url 'cinema:index' %}">
     <img style="width: auto !important; height: 40px !important;"
          src="{% static 'cinema/img/cinema_logo_gold.png' %}"
          alt="Cinema logo picture">
@@ -47,54 +44,67 @@
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle font-weight-bold"
            href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true"
-           aria-expanded="false">Blu-ray
+           aria-expanded="false">
+          Blu-ray
         </a>
         <div class="dropdown-menu" aria-labelledby="dropdown01">
           <a class="dropdown-item active"
-             href="{% url 'cinema:product-list' %}">Blu-Ray
+             href="{% url 'cinema:product-list' %}">
+            Blu-Ray
           </a>
           <a class="dropdown-item"
-             href="{% url 'cinema:top-rated-product-list' %}">Top Rated
+             href="{% url 'cinema:top-rated-product-list' %}">
+            Top Rated
           </a>
           <a class="dropdown-item"
-             href="{% url 'cinema:new-releases-product-list' %}">New Releases
+             href="{% url 'cinema:new-releases-product-list' %}">
+            New Releases
           </a>
         </div>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle font-weight-bold"
            href="#" id="dropdown02" data-toggle="dropdown" aria-haspopup="true"
-           aria-expanded="false">Kinonews
+           aria-expanded="false">
+          Kinonews
         </a>
         <div class="dropdown-menu" aria-labelledby="dropdown02">
           <a class="dropdown-item active"
-             href="{% url 'cinema:news-list' %}">Movie News
+             href="{% url 'cinema:news-list' %}">
+            Movie News
           </a>
           <a class="dropdown-item"
-             href="{% url 'cinema:celebrity-news-list' %}">Celebrity News
+             href="{% url 'cinema:celebrity-news-list' %}">
+            Celebrity News
           </a>
         </div>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle font-weight-bold"
            href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true"
-           aria-expanded="false">Movies
+           aria-expanded="false">
+          Movies
         </a>
         <div class="dropdown-menu" aria-labelledby="dropdown03">
           <a class="dropdown-item active"
-             href="{% url 'cinema:film-list' %}">Movies
+             href="{% url 'cinema:film-list' %}">
+            Movies
           </a>
           <a class="dropdown-item"
-             href="{% url 'cinema:top-rated-film-list' %}">Top Rated
+             href="{% url 'cinema:top-rated-film-list' %}">
+            Top Rated
           </a>
           <a class="dropdown-item"
-             href="{% url 'cinema:budget-film-list' %}">Budget Box Office
+             href="{% url 'cinema:budget-film-list' %}">
+            Budget Box Office
           </a>
           <a class="dropdown-item"
-             href="{% url 'cinema:usa-gross-film-list' %}">USA Gross Box Office
+             href="{% url 'cinema:usa-gross-film-list' %}">
+            USA Gross Box Office
           </a>
           <a class="dropdown-item"
-             href="{% url 'cinema:world-gross-film-list' %}">World Gross Box Office
+             href="{% url 'cinema:world-gross-film-list' %}">
+            World Gross Box Office
           </a>
         </div>
       </li>
@@ -109,9 +119,7 @@
       </button>
     </form>
     <ul class="navbar-nav ml-auto my-2 my-lg-0">
-
-      {% if user.is_authenticated %}
-
+    {% if user.is_authenticated %}
       <li class="nav-item dropdown">
         <a class="nav-link"
            href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true"
@@ -121,89 +129,76 @@
           <p class="d-inline text-white">{{ user.get_short_name }}</p>
         </a>
         <div class="dropdown-menu" aria-labelledby="dropdown04">
-          <a class="dropdown-item" href="{% url 'profile' %}">My Profile</a>
-          <a class="dropdown-item" href="{% url 'profile_change' %}">Edit Profile</a>
-          <a class="dropdown-item" href="{% url 'password_change' %}">Change Password</a>
+          <a class="dropdown-item" href="{% url 'profile' %}">
+            My Profile
+          </a>
+          <a class="dropdown-item" href="{% url 'profile_change' %}">
+            Edit Profile
+          </a>
+          <a class="dropdown-item" href="{% url 'password_change' %}">
+            Change Password
+          </a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="{% url 'profile_delete' %}">Delete Account</a>
+          <a class="dropdown-item" href="{% url 'profile_delete' %}">
+            Delete Account
+          </a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="{% url 'logout'%}">Logout</a>
+          <a class="dropdown-item" href="{% url 'logout'%}">
+            Logout
+          </a>
         </div>
       </li>
-
-      {% else %}
-
+    {% else %}
       <li class="nav-item dropdown">
-          <a class="nav-link text-white"
-             href="{% url 'register' %}">Register
+          <a class="nav-link text-white" href="{% url 'register' %}">
+            Register
           </a>
       </li>
       <li class="nav-item dropdown">
-          <a class="nav-link text-white"
-             href="{% url 'login' %}">Login
+          <a class="nav-link text-white" href="{% url 'login' %}">
+            Login
           </a>
       </li>
-
-      {% endif %}
-
+    {% endif %}
     </ul>
   </div>
 </nav>
-
 <main class="content" role="main">
   <div class="container">
     <div class="row justify-content-center my-2">
       <div class="col-md-auto align-self-center">
-
         {% bootstrap_messages %}
-
       </div>
     </div>
-
     {% block main_content %}{% endblock %}
 
-
     {% block pagination %}
-
     {% if is_paginated %}
-
-    <div class="pagination">
+      <div class="pagination">
         <span class="page-links">
-
           {% if page_obj.has_previous %}
-
             <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">
               previous
             </a>
-
           {% endif %}
-
             <span class="page-current">
               Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
             </span>
-
           {% if page_obj.has_next %}
-
             <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">
               next
             </a>
-
           {% endif %}
-
         </span>
-    </div>
-
+      </div>
     {% endif %}
-
     {% endblock pagination %}
-
   </div> <!-- /container -->
 </main>
-
 <footer class="container-fluid content">
   <div class="row p-2 justify-content-center align-items-center">
-    <div class="col-md-auto text-center h3"
-         style="color: #ec0505;">18+
+    <div class="col-md-auto text-center h3" style="color: #ec0505;">
+      18+
     </div>
     <div class="col-md-auto text-white text-center">
       Copyright © 2020 World of CINEMA. All rights reserved
@@ -215,12 +210,10 @@
   </div>
 </footer>
 </body>
-
 <script src="{% static 'cinema/js/jquery-3.4.1.slim.min.js' %}"></script>
 <script src="{% static 'cinema/js/popper.min.js' %}"></script>
 <script src="{% static 'cinema/js/bootstrap.min.js' %}"></script>
 <script src="{% static 'cinema/js/bootstrap.bundle.min.js' %}"></script>
 <script src="{% static 'cinema/js/jquery.min.js' %}"></script>
 <script src="{% static 'cinema/js/product_carousel.js' %}"></script>
-
 </html>

@@ -1,27 +1,26 @@
 <div class="detail_price">
-  <p class="detail_info_heading">Article:
+  <p class="detail_info_heading">
+    Article:
     <span class="detail_info_text">{{ product.pk }}</span>
   </p>
-  <h4 class="detail_price_heading" style="color: #ec0505;">${{ product.price }}</h4>
-
+  <h4 class="detail_price_heading" style="color: #ec0505;">
+    ${{ product.price }}
+  </h4>
   {% if product.in_stock %}
-
-  <span class="detail_info_text">In stock</span>
-  <div class="detail_price_button pt-3">
-    <button type="button" class="btn btn-primary btn-md active btn-success"
-            aria-pressed="true" title="Add to Cart">Add to Cart
-    </button>
-  </div>
-
+    <span class="detail_info_text">In stock</span>
+    <div class="detail_price_button pt-3">
+      <button type="button" class="btn btn-primary btn-md active btn-success"
+              aria-pressed="true" title="Add to Cart">
+        Add to Cart
+      </button>
+    </div>
   {% else %}
-
-  <span class="detail_info_text">Out of stock</span>
-  <div class="detail_price_button pt-3">
-    <button type="button" class="btn btn-primary btn-md active btn-success"
-            aria-pressed="true" title="Pre-order Now">Pre-order Now
-    </button>
-  </div>
-
+    <span class="detail_info_text">Out of stock</span>
+    <div class="detail_price_button pt-3">
+      <button type="button" class="btn btn-primary btn-md active btn-success"
+              aria-pressed="true" title="Pre-order Now">
+        Pre-order Now
+      </button>
+    </div>
   {% endif %}
-
 </div>

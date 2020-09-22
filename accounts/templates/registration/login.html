@@ -4,59 +4,52 @@
 
 {% block description %}Sign-In{% endblock %}
 
-
 {% block title %}Sign-In{% endblock %}
 
-
 {% block main_content %}
-
 <div class="row justify-content-md-center mt-1 mb-4">
   <div class="col-md-auto">
     <h2 style="color: #e6010a;">Sign-In</h2>
   </div>
 </div>
-
 {% if user.is_authenticated %}
-
-<div class="row justify-content-md-center mb-3">
-  <div class="col-md-auto">
-    <p class="text-success">You are already signed in.</p>
+  <div class="row justify-content-md-center mb-3">
+    <div class="col-md-auto">
+      <p class="text-success">You are already signed in.</p>
+    </div>
   </div>
-</div>
-
 {% else %}
-
-<div class="row justify-content-md-center mb-3">
-  <div class="col-md-auto">
-    <center>
+  <div class="row justify-content-md-center mb-3">
+    <div class="col-md-auto text-center">
       <form method="post">
-
         {% csrf_token %}
         {% bootstrap_form form layout='horizontal' %}
-
         <input type="hidden" name="next" value="{{ next }}">
-
         {% buttons submit='Continue' %}{% endbuttons %}
-
       </form>
-      <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
-    </center>
+      <p>
+        <a href="{% url 'password_reset' %}">Lost password?</a>
+      </p>
+    </div>
   </div>
-</div>
-<div class="row justify-content-md-center my-3">
-  <div class="col-md-auto mx-auto social-container my-2 order-md-1">
-    <button class="btn btn-danger mb-2">
-      <a href="{% url 'social:begin' 'twitter' %}">Sign in with Twitter</a>
-    </button>
-    <button class="btn btn-primary mb-2">
-      <a href="{% url 'social:begin' 'facebook' %}">Sign in with Facebook</a>
-    </button>
-    <button class="btn btn-info mb-2">
-      <a href="{% url 'social:begin' 'github' %}">Sign in with GitHub</a>
-    </button>
+  <div class="row justify-content-md-center mb-3">
+    <div class="col-md-auto mx-auto social-container my-2 order-md-1">
+      <button class="btn btn-danger mb-2">
+        <a href="{% url 'social:begin' 'twitter' %}">
+          Sign in with Twitter
+        </a>
+      </button>
+      <button class="btn btn-info mb-2">
+        <a href="{% url 'social:begin' 'facebook' %}">
+          Sign in with Facebook
+        </a>
+      </button>
+      <button class="btn btn-success">
+        <a href="{% url 'social:begin' 'github' %}">
+          Sign in with GitHub
+        </a>
+      </button>
+    </div>
   </div>
-</div>
-
 {% endif %}
-
 {% endblock main_content %}

@@ -1,101 +1,72 @@
-from django.db.models import Q
-from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, TemplateView
-from django.contrib.auth.mixins import LoginRequiredMixin
+import re
 
-from .models import Product, News, Film, CinemaPerson, MpaaRating
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, render
+from django.views.generic import ListView, TemplateView
 
-all_films = Film.objects.prefetch_related(
-    "staff__cinemafilmpersonprofession_set__profession", "staff__user",
-    "country", "genre", "language", "distributor", "news_set"
-).select_related("imdb_rating", "mpaa_rating", "product")
-
-top_films = all_films.values_list(
-    "pk", "title", "imdb_rating__value", "budget", "usa_gross",
-    "world_gross", named=True
+from .forms import (
+    UserCommentToProductForm,
+    GuestCommentToProductForm,
+    UserCommentToFilmForm,
+    GuestCommentToFilmForm,
+    UserCommentToPersonForm,
+    GuestCommentToPersonForm,
+    UserCommentToNewsForm,
+    GuestCommentToNewsForm,
 )
-imdb_top_5 = top_films.order_by("-imdb_rating__value")[:5]
-budget_top_5 = top_films.order_by("-budget")[:5]
-usa_gross_top_5 = top_films.order_by("-usa_gross")[:5]
-world_gross_top_5 = top_films.order_by("-world_gross")[:5]
-
-professions = ("Director", "Actor", "Writer")
-persons_by_films = {}
-
-for film in all_films:
-    persons_by_films[film.pk] = {}
-
-    for profession in professions:
-        persons_by_films[film.pk][profession] = []
-        film_persons = film.staff.filter(
-            cinemafilmpersonprofession__profession__name=profession
-        ).order_by("pk").values_list(
-            "pk", "user__first_name", "user__last_name", named=True
-        )
-        for person in film_persons:
-            persons_by_films[film.pk][profession].append(
-                {"pk": person.pk,
-                 "name": f"{person.user__first_name} "
-                         f"{person.user__last_name}"}
-            )
-film_fields = (
-    "country__name", "genre__name", "language__name",
-    "distributor__name", "news__pk", "news__title"
+from .models import (
+    Product,
+    News,
+    Film,
+    CinemaPerson,
+    MpaaRating
 )
-info_by_films_qs = all_films.values_list(
-    "pk", *film_fields, named=True
-).order_by("-news__created_at")
+from .services import (
+    get_cast_and_crew,
+    get_films_info,
+    get_persons_info,
+    get_films_ratings_sets,
+    get_celebrity_news_id,
+    get_filmography_and_extra_info,
+)
 
-info_by_films = {}
-for film in info_by_films_qs:
-    if film.pk not in info_by_films:
-        info_by_films[film.pk] = {}
+DESCRIPTION_BLU_RAY = "Welcome to the fantastic Blu-ray department here, " \
+                      "where you can find the films, you could ever want to " \
+                      "see in superb high definition quality. We're " \
+                      "constantly adding all of the latest Blu-ray releases " \
+                      "to our collection and always have an unbelievable " \
+                      "offer or two. We promise great deals on the best films!"
+DESCRIPTION_NEWS = "The latest movie news on the movies 'you're most " \
+                   "interested in seeing."
 
-    for field in film_fields:
-        if field not in ("news__pk", "news__title"):
-            if field not in info_by_films[film.pk]:
-                info_by_films[film.pk][field] = []
-            if field == "country__name" and film.country__name not in \
-                    info_by_films[film.pk][field]:
-                info_by_films[film.pk][field].append(film.country__name)
-            elif field == "genre__name" and film.genre__name not in \
-                    info_by_films[film.pk][field]:
-                info_by_films[film.pk][field].append(film.genre__name)
-            elif field == "language__name" and film.language__name not in \
-                    info_by_films[film.pk][field]:
-                info_by_films[film.pk][field].append(film.language__name)
-            elif field == "distributor__name" and film.distributor__name \
-                    not in info_by_films[film.pk][field]:
-                info_by_films[film.pk][field].append(film.distributor__name)
-        else:
-            if "news" not in info_by_films[film.pk]:
-                info_by_films[film.pk]["news"] = {}
-            if field == "news__pk" and film.news__pk and film.news__pk not in \
-                    info_by_films[film.pk]["news"]:
-                info_by_films[film.pk]["news"][film.news__pk] = film.news__title
-
-all_persons = CinemaPerson.objects.prefetch_related(
-    "film_set__genre", "film_set__imdb_rating", "news_set"
-).select_related("user")
+films_cast_and_crew = get_cast_and_crew()
+films_info = get_films_info()
+persons_info = get_persons_info()
+films_ratings_sets = get_films_ratings_sets()
+celebrity_news_id = get_celebrity_news_id()
 
 
 class ProductListView(ListView):
-    model = Product
+    """
+    Display page with list of blue-ray movies.
+    """
     paginate_by = 8
-
-    def get_queryset(self):
-        return super().get_queryset().select_related("film").only(
-            "pk", "price", "film", "in_stock"
-        )
+    queryset = Product.products.order_by_name()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_title'] = 'Movies on Blu-ray'
-        context['persons_by_films'] = persons_by_films
+        context.update({
+            'page_title': 'Movies on Blu-ray',
+            'films_cast_and_crew': films_cast_and_crew
+        })
         return context
 
 
 class TopRatedProductListView(ProductListView):
+    """
+    Display page with list of top rated blue-ray movies.
+    """
     ordering = "-film__imdb_rating__value"
 
     def get_context_data(self, **kwargs):
@@ -105,6 +76,9 @@ class TopRatedProductListView(ProductListView):
 
 
 class NewReleasesProductListView(ProductListView):
+    """
+    Display page with list of new releases blue-ray movies.
+    """
     ordering = "-film__release_data"
 
     def get_context_data(self, **kwargs):
@@ -113,134 +87,156 @@ class NewReleasesProductListView(ProductListView):
         return context
 
 
-class IndexListView(ListView):
-    template_name = 'cinema/index_list.html'
-    context_object_name = 'new_releases_list'
-
-    queryset = Product.objects.select_related("film").only(
-        "pk", "price", "film", "in_stock"
-    ).order_by("-film__imdb_rating__value")
-
-    def get_queryset(self):
-        return self.queryset.order_by("-film__release_data")
+class IndexView(TemplateView):
+    """
+    Display home page of website.
+    """
+    template_name = 'cinema/index.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        news_list = News.objects.only(
-            "pk", "title", "news_source", "news_detail_photo", "created_at"
-        )
-        context['page_title'] = "Latest Movie News, Movies on Blu-ray"
-        context['title_news'] = "Cinema News"
-        context['description_news'] = "The latest movie news on the movies " \
-                                      "'you're most interested in seeing. "
-        context['title_blu_ray'] = "Movies on Blu-ray"
-        context['description_blu_ray'] = "Welcome to the fantastic Blu-ray " \
-                                         "department here, where you can find " \
-                                         "the films, you could ever want to " \
-                                         "see in superb high definition " \
-                                         "quality. We're constantly adding " \
-                                         "all of the latest Blu-ray releases " \
-                                         "to our collection and always have " \
-                                         "an unbelievable offer or two. We " \
-                                         "promise great deals on the best " \
-                                         "films! "
-        context['title_top_rated'] = 'Top Rated'
-        context['title_new_releases'] = 'New Releases'
-        context['persons_by_films'] = persons_by_films
-        context['news_list'] = news_list
-        context['top_rated_list'] = self.queryset
-
+        top_rated_products = Product.products.order_by_imdb_rating()
+        new_releases_products = Product.products.order_by_release_data()
+        news_list = News.objects.all()
+        context.update({
+            'page_title': "Latest Movie News, Movies on Blu-ray",
+            'title_news': "Cinema News",
+            'description_news': DESCRIPTION_NEWS,
+            'title_blu_ray': "Movies on Blu-ray",
+            'description_blu_ray': DESCRIPTION_BLU_RAY,
+            'title_top_rated': 'Top Rated',
+            'title_new_releases': 'New Releases',
+            'films_cast_and_crew': films_cast_and_crew,
+            'news_list': news_list,
+            'new_releases_products': new_releases_products,
+            'top_rated_products': top_rated_products
+        })
         return context
 
 
-class ProductDetailView(DetailView):
-    model = Product
+def product_detail(request, pk):
+    """
+    Display page with details of blue-ray movie selected by visitor.
 
-    def get_queryset(self):
-        return super().get_queryset().select_related(
-            "film__imdb_rating", "film__mpaa_rating"
-        )
+    Also display comments to blue-ray movie and form for adding new comment.
+    Create "CommentToProduct" model record.
+    After saving data, redirect to current page.
+    """
+    product_list = Product.products.all()
+    product = get_object_or_404(product_list, pk=pk)
+    context = {
+        'product': product,
+        'film_info': films_info[pk],
+        'film_cast_and_crew': films_cast_and_crew[pk]
+    }
+    initial = {'product': product.pk}
+    if request.user.is_authenticated:
+        initial['author'] = request.user.username
+        form_class = UserCommentToProductForm
+    else:
+        form_class = GuestCommentToProductForm
+    form = form_class(initial=initial)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        film_info = info_by_films[self.kwargs.get('pk')]
-        context['countries'] = sorted(film_info['country__name'])
-        context['genres'] = sorted(film_info['genre__name'])
-        context['languages'] = sorted(film_info['language__name'])
-        context['distributors'] = sorted(film_info['distributor__name'])
-        context['film_persons'] = persons_by_films[self.kwargs.get('pk')]
+    if request.method == 'POST':
+        c_form = form_class(request.POST)
+        if c_form.is_valid():
+            c_form.save()
+            messages.add_message(request, messages.SUCCESS, 'Comment added')
+        else:
+            form = c_form
+            messages.add_message(request, messages.WARNING, 'No Comment added')
 
-        # print(f'Инфо о всех фильмах: {info_by_films}')
-        # print(f'Инфо о выбранном фильме: {film_info}')
+    context['form'] = form
 
-        return context
+    return render(request, 'cinema/product_detail.html', context)
 
 
 class FilmListView(ListView):
-    model = Film
+    """
+    Display page with list of movies.
+    """
     paginate_by = 8
-
-    def get_queryset(self):
-        return super().get_queryset().select_related(
-            "imdb_rating", "mpaa_rating"
-        )
+    queryset = Film.films.all()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_title'] = 'Movies [A-Z]'
-        context['info_by_films'] = info_by_films
-        context['persons_by_films'] = persons_by_films
+        context.update({
+            'page_title': 'Movies [A-Z]',
+            'films_info': films_info,
+            'films_cast_and_crew': films_cast_and_crew
+        })
         return context
 
 
 class TopRatedFilmListView(FilmListView):
+    """
+    Display page with list of top rated movies.
+    """
     ordering = "-imdb_rating__value"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_title'] = 'Top Rated IMDb Movies'
-        context['criterion_name'] = 'IMDb Rating'
+        context.update({
+            'page_title': 'Top Rated IMDb Movies',
+            'criterion_name': 'IMDb Rating'
+        })
         return context
 
 
 class BudgetFilmListView(FilmListView):
+    """
+    Display page with list of most expensive movies.
+    """
     ordering = "-budget"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_title'] = 'Most Expensive Movies'
-        context['criterion_name'] = 'Budget'
+        context.update({
+            'page_title': 'Most Expensive Movies',
+            'criterion_name': 'Budget'
+        })
         return context
 
 
 class UsaGrossFilmListView(FilmListView):
+    """
+    Display page with list of most USA grossing movies.
+    """
     ordering = "-usa_gross"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_title'] = 'Most USA Grossing Movies'
-        context['criterion_name'] = 'USA Gross'
+        context.update({
+            'page_title': 'Most USA Grossing Movies',
+            'criterion_name': 'USA Gross'
+        })
         return context
 
 
 class WorldGrossFilmListView(FilmListView):
+    """
+    Display page with list of most worldwide grossing movies.
+    """
     ordering = "-world_gross"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_title'] = 'Most Worldwide Grossing Movies'
-        context['criterion_name'] = 'World Gross'
+        context.update({
+            'page_title': 'Most Worldwide Grossing Movies',
+            'criterion_name': 'World Gross'
+        })
         return context
 
 
 class YearFilmListView(FilmListView):
-    ordering = "-imdb_rating__value"
+    """
+    Display page with list of most popular movies, that are related to
+    selected year by visitor.
+    """
 
     def get_queryset(self):
         self.requested_year = self.kwargs.get('year')
-        return super().get_queryset().filter(
-            release_data__year=self.requested_year
-        )
+        return Film.films.filter_by_selected_year(self.requested_year)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -249,12 +245,15 @@ class YearFilmListView(FilmListView):
 
 
 class GenreFilmListView(FilmListView):
-    ordering = "-imdb_rating__value"
+    """
+    Display page with list of most popular movies, that are related to
+    selected genre by visitor.
+    """
 
     def get_queryset(self):
         self.requested_genre = self.kwargs.get('genre')
-        return super().get_queryset().filter(
-            genre__name=self.requested_genre
+        return Film.films.filter_by_selected_genre(
+            self.requested_genre
         )
 
     def get_context_data(self, **kwargs):
@@ -264,12 +263,15 @@ class GenreFilmListView(FilmListView):
 
 
 class CountryFilmListView(FilmListView):
-    ordering = "-imdb_rating__value"
+    """
+    Display page with list of most popular movies, that are related to
+    selected country by visitor.
+    """
 
     def get_queryset(self):
         self.requested_country = self.kwargs.get('country')
-        return super().get_queryset().filter(
-            country__name=self.requested_country
+        return Film.films.filter_by_selected_country(
+            self.requested_country
         )
 
     def get_context_data(self, **kwargs):
@@ -279,28 +281,34 @@ class CountryFilmListView(FilmListView):
 
 
 class LanguageFilmListView(FilmListView):
-    ordering = "-imdb_rating__value"
+    """
+    Display page with list of most popular movies, that are related to
+    selected language by visitor.
+    """
 
     def get_queryset(self):
         self.requested_language = self.kwargs.get('language')
-        return super().get_queryset().filter(
-            language__name=self.requested_language
+        return Film.films.filter_by_selected_language(
+            self.requested_language
         )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context[
-            'page_title'] = f'Most Popular Movies in {self.requested_language}'
+        context['page_title'] = f'Most Popular Movies in ' \
+                                f'{self.requested_language} '
         return context
 
 
 class DistributorFilmListView(FilmListView):
-    ordering = "-imdb_rating__value"
+    """
+    Display page with list of most popular movies, that are related to
+    selected distributor by visitor.
+    """
 
     def get_queryset(self):
         self.requested_distributor = self.kwargs.get('distributor')
-        return super().get_queryset().filter(
-            distributor__name=self.requested_distributor
+        return Film.films.filter_by_selected_distributor(
+            self.requested_distributor
         )
 
     def get_context_data(self, **kwargs):
@@ -311,173 +319,135 @@ class DistributorFilmListView(FilmListView):
 
 
 class MpaaFilmListView(FilmListView):
-    ordering = "-imdb_rating__value"
+    """
+    Display page with list of most popular movies, that are related to
+    selected MPAA rating by visitor.
+    """
 
     def get_queryset(self):
         self.requested_mpaa = self.kwargs.get('pk')
-        return super().get_queryset().filter(
-            mpaa_rating__pk=self.requested_mpaa
+        return Film.films.filter_by_selected_mpaa_rating(
+            self.requested_mpaa
         )
 
     def get_context_data(self, **kwargs):
         mpaa = MpaaRating.objects.get(pk=self.requested_mpaa)
         context = super().get_context_data(**kwargs)
-        context['page_title'] = f'Most Popular Movies with MPAA Rating of ' \
-                                f'{mpaa.value}'
-        context['page_description'] = mpaa.description
+        context.update({
+            'page_title':
+                f'Most Popular Movies with MPAA Rating of {mpaa.value}',
+            'page_description': mpaa.description
+        })
         return context
 
 
-class FilmDetailView(DetailView):
-    model = Film
+def film_detail(request, pk):
+    """
+    Display page with details of movie selected by visitor.
 
-    def get_queryset(self):
-        return super().get_queryset().select_related(
-            "imdb_rating", "mpaa_rating"
-        )
+    Also display comments to movie and form for adding new comment.
+    Create "CommentToFilm" model record.
+    After saving data, redirect to current page.
+    """
+    film_list = Film.films.all()
+    film = get_object_or_404(film_list, pk=pk)
+    context = {
+        'film': film,
+        'film_info': films_info[pk],
+        'film_cast_and_crew': films_cast_and_crew[pk]
+    }
+    initial = {'film': film.pk}
+    if request.user.is_authenticated:
+        initial['author'] = request.user.username
+        form_class = UserCommentToFilmForm
+    else:
+        form_class = GuestCommentToFilmForm
+    form = form_class(initial=initial)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        film_info = info_by_films[self.kwargs.get('pk')]
-        context['countries'] = sorted(film_info['country__name'])
-        context['genres'] = sorted(film_info['genre__name'])
-        context['languages'] = sorted(film_info['language__name'])
-        context['distributors'] = sorted(film_info['distributor__name'])
-        context['related_news'] = film_info['news']
-        context['film_persons'] = persons_by_films[self.kwargs.get('pk')]
+    if request.method == 'POST':
+        c_form = form_class(request.POST)
+        if c_form.is_valid():
+            c_form.save()
+            messages.add_message(request, messages.SUCCESS, 'Comment added')
+        else:
+            form = c_form
+            messages.add_message(request, messages.WARNING, 'No Comment added')
 
-        # print(context)
-        # print(f'Атрибут "object" - это фильм "{self.object.title}", т.е. запись'
-        #       f' модели/таблицы БД "{self.object.__class__.__name__}"')
-        # print(self.get_template_names())
-        # print(self.template_name_suffix)
-        # print(self.get_context_object_name(self.object))
-        # print(self.kwargs)
-        # print(self.request)
-        # print(self.request.user.username)
-        # print(self.http_method_names)
-        # print(self.response_class)
-        # print(self.model)
-        # print(self.pk_url_kwarg)
-        # print(self.request.user.is_authenticated)
-        # print(self.request.get_host())
-        # print(
-        #     reverse_lazy('social:begin', args=('twitter',)),
-        #     reverse_lazy('social:complete', args=('twitter',))
-        # )
+    context['form'] = form
 
-        return context
+    return render(request, 'cinema/film_detail.html', context)
 
 
-class CinemaPersonDetailView(LoginRequiredMixin, DetailView):
-    context_object_name = 'cinema_person'
-    template_name = 'cinema/cinema_person_detail.html'
+@login_required
+def cinema_person_detail(request, pk):
+    """
+    Display page with details of cinema person selected by visitor.
 
-    person_fields = ("film__genre__name", "news__pk")
-    info_by_persons_qs = all_persons.values_list(
-        "pk", *person_fields, "news__title", named=True
-    ).order_by("-news__created_at")
+    Also display comments to cinema person and form for adding new comment.
+    Create "CommentToPerson" model record.
+    After saving data, redirect to current page.
 
-    info_by_persons = {}
-    for person in info_by_persons_qs:
-        if person.pk not in info_by_persons:
-            info_by_persons[person.pk] = {}
+    Only signed-in users will be allowed to access this web page.
+    """
+    cinema_person_list = CinemaPerson.persons.all()
+    cinema_person = get_object_or_404(cinema_person_list, pk=pk)
+    filmography, person_professions, films_number, films_years_range = \
+        get_filmography_and_extra_info(cinema_person)
 
-        for field in person_fields:
-            if "news" not in info_by_persons[person.pk]:
-                info_by_persons[person.pk]["news"] = {}
-            if field == "film__genre__name":
-                if field not in info_by_persons[person.pk]:
-                    info_by_persons[person.pk][field] = []
-                if person.film__genre__name not in info_by_persons[
-                        person.pk][field]:
-                    info_by_persons[person.pk][field].append(
-                        person.film__genre__name
-                    )
-            elif field == "news__pk" and person.news__pk and person.news__pk \
-                    not in info_by_persons[person.pk]["news"]:
-                info_by_persons[person.pk]["news"][
-                    person.news__pk] = person.news__title
+    context = {
+        'cinema_person': cinema_person,
+        'person_info': persons_info[pk],
+        'person_professions': person_professions,
+        'films_number': films_number,
+        'films_years_range': films_years_range,
+        'filmography': filmography
+    }
+    initial = {'cinema_person': cinema_person.pk}
+    if request.user.is_authenticated:
+        initial['author'] = request.user.username
+        form_class = UserCommentToPersonForm
+    else:
+        form_class = GuestCommentToPersonForm
+    form = form_class(initial=initial)
 
-    def get_queryset(self):
-        return CinemaPerson.objects.select_related("user", "country")
+    if request.method == 'POST':
+        c_form = form_class(request.POST)
+        if c_form.is_valid():
+            c_form.save()
+            messages.add_message(request, messages.SUCCESS, 'Comment added')
+        else:
+            form = c_form
+            messages.add_message(request, messages.WARNING, 'No Comment added')
 
-    def get_context_data(self, **kwargs):
-        person_extra_info = self.info_by_persons[self.kwargs.get('pk')]
+    context['form'] = form
 
-        person_info = CinemaPerson.objects.get(pk=self.kwargs.get('pk'))
-        person_professions = sorted(
-            set(
-                person_info.cinemafilmpersonprofession_set.values_list(
-                    "profession__name", flat=True
-                )
-            )
-        )
-        filmography = {}
-        for person_profession in person_professions:
-            film_info_qs = person_info.film_set.filter(
-                cinemafilmpersonprofession__profession__name=person_profession
-            ).values_list(
-                "pk", "title", "release_data__year", "imdb_rating__value",
-                named=True
-            ).order_by("-release_data")
-
-            filmography[person_profession] = film_info_qs
-
-        number_of_films = []
-        years_of_films = []
-
-        for person_films in filmography.values():
-            for person_film in person_films:
-                number_of_films.append(person_film.pk)
-                years_of_films.append(person_film.release_data__year)
-
-        context = super().get_context_data(**kwargs)
-        context['genres'] = sorted(person_extra_info['film__genre__name'])
-        context['related_news'] = person_extra_info['news']
-        context['person_professions'] = tuple(person_professions)
-        context['number_of_films'] = len(set(number_of_films))
-        context['years_of_films'] = f'{min(years_of_films)} - ' \
-                                    f'{max(years_of_films)}'
-        context['filmography'] = filmography
-
-        return context
+    return render(request, 'cinema/cinema_person_detail.html', context)
 
 
 class NewsListView(ListView):
+    """
+    Display page with list of latest movie news.
+    """
     model = News
     paginate_by = 5
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_title'] = 'Latest Movie News'
-        context['imdb_top_5'] = imdb_top_5
-        context['budget_top_5'] = budget_top_5
-        context['usa_gross_top_5'] = usa_gross_top_5
-        context['world_gross_top_5'] = world_gross_top_5
+        context.update({
+            'page_title': 'Latest Movie News',
+            'imdb_top_5': films_ratings_sets['imdb_rating__value'],
+            'budget_top_5': films_ratings_sets['budget'],
+            'usa_gross_top_5': films_ratings_sets['usa_gross'],
+            'world_gross_top_5': films_ratings_sets['world_gross'],
+        })
         return context
 
 
 class CelebrityNewsListView(NewsListView):
-    persons = CinemaPerson.objects.select_related("user").values_list(
-        "user__first_name", "user__last_name", named=True
-    )
-    celebrities = [
-        f"{person.user__first_name} {person.user__last_name}" for person in
-        persons
-    ]
-    all_news = News.objects.values_list("pk", "title", named=True)
-    news_titles = {news.pk: news.title for news in all_news}
-    found_titles = []
-
-    for pk, title in news_titles.items():
-        for celebrity in celebrities:
-            if celebrity in title:
-                found_titles.append(pk)
-                break
-
-    def get_queryset(self):
-        return super().get_queryset().filter(pk__in=self.found_titles)
+    """
+    Display page with list of latest celebrity news.
+    """
+    queryset = News.news.get_news_about_celebrities(celebrity_news_id)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -485,66 +455,83 @@ class CelebrityNewsListView(NewsListView):
         return context
 
 
-class NewsDetailView(DetailView):
-    model = News
+def news_detail(request, pk):
+    """
+    Display page with details of cinema news selected by visitor.
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['imdb_top_5'] = imdb_top_5
-        context['budget_top_5'] = budget_top_5
-        context['usa_gross_top_5'] = usa_gross_top_5
-        context['world_gross_top_5'] = world_gross_top_5
-        return context
+    Also display comments to news and form for adding new comment.
+    Create "CommentToNews" model record.
+    After saving data, redirect to current page.
+    """
+    news = get_object_or_404(News, pk=pk)
+    context = {
+        'news': news,
+        'imdb_top_5': films_ratings_sets['imdb_rating__value'],
+        'budget_top_5': films_ratings_sets['budget'],
+        'usa_gross_top_5': films_ratings_sets['usa_gross'],
+        'world_gross_top_5': films_ratings_sets['world_gross'],
+    }
+    initial = {'news': news.pk}
+    if request.user.is_authenticated:
+        initial['author'] = request.user.username
+        form_class = UserCommentToNewsForm
+    else:
+        form_class = GuestCommentToNewsForm
+    form = form_class(initial=initial)
+
+    if request.method == 'POST':
+        c_form = form_class(request.POST)
+        if c_form.is_valid():
+            c_form.save()
+            messages.add_message(request, messages.SUCCESS, 'Comment added')
+        else:
+            form = c_form
+            messages.add_message(request, messages.WARNING, 'No Comment added')
+
+    context['form'] = form
+    print(request.get_host(), request.scheme, request.build_absolute_uri(),
+          sep='\n')
+    return render(request, 'cinema/news_detail.html', context)
 
 
 class SearchResultsView(TemplateView):
+    """
+    Displays page with search results for website.
+    """
     template_name = 'cinema/search_results.html'
 
     def get_context_data(self, **kwargs):
         context = {}
-        query = self.request.GET.get('q')
+        search_word = self.request.GET.get('q')
+        cleaned_search_word = re.sub(r'\s+', ' ', search_word.strip())
 
-        # foo = {'get': self.request.GET,
-        #        'method': self.request.method,
-        #        'scheme': self.request.scheme,
-        #        'path': self.request.path,
-        #        'encoding': self.request.encoding,
-        #        'content_type': self.request.content_type,
-        #        'content_params': self.request.content_params,
-        #        'body': self.request.body,
-        #        'get_host': self.request.get_host(),
-        #        'get_port': self.request.get_port(),
-        #        'get_full_path': self.request.get_full_path(),
-        #        'is_secure': self.request.is_secure()}
-        #
-        # print(foo)
-
-        formatted_query = ' '.join(query.strip().split())
-
-        if formatted_query:
-            product_list = Product.objects.filter(
-                film__title__icontains=formatted_query
-            ).select_related('film')
-            film_list = Film.objects.filter(title__icontains=formatted_query)
-            query_fullname = formatted_query.split()
-            q = Q(user__first_name__iexact=query_fullname[:1]) & Q(
-                user__last_name__iexact=query_fullname[1:]
-            ) | Q(user__first_name__icontains=formatted_query) | Q(
-                user__last_name__icontains=formatted_query
+        if cleaned_search_word:
+            product_list = Product.products.filter_by_search_word(
+                cleaned_search_word
             )
-            person_list = CinemaPerson.objects.filter(q).select_related('user')
-            news_list = News.objects.filter(title__icontains=formatted_query)
-            context['product_list'] = product_list
-            context['film_list'] = film_list
-            context['person_list'] = person_list
-            context['news_list'] = news_list
+            film_list = Film.films.filter_by_search_word(
+                cleaned_search_word
+            )
+            person_list = CinemaPerson.persons.filter_by_search_word(
+                cleaned_search_word
+            )
+            news_list = News.news.filter_by_search_word(
+                cleaned_search_word
+            )
+            context = {
+                'product_list': product_list,
+                'film_list': film_list,
+                'person_list': person_list,
+                'news_list': news_list
+            }
 
-        context['search_title'] = 'Search results for '
-        context['no_results'] = 'No results found for '
-        context['query'] = query
-        context['imdb_top_5'] = imdb_top_5
-        context['budget_top_5'] = budget_top_5
-        context['usa_gross_top_5'] = usa_gross_top_5
-        context['world_gross_top_5'] = world_gross_top_5
-
+        context.update({
+            'search_title': 'Search results for ',
+            'no_results': 'No results found for ',
+            'search_word': search_word,
+            'imdb_top_5': films_ratings_sets['imdb_rating__value'],
+            'budget_top_5': films_ratings_sets['budget'],
+            'usa_gross_top_5': films_ratings_sets['usa_gross'],
+            'world_gross_top_5': films_ratings_sets['world_gross'],
+        })
         return context

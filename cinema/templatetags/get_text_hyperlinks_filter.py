@@ -6,21 +6,20 @@ from re import search, sub
 from django import template
 from django.urls import reverse
 
-from ..views import all_persons, all_films
+from ..models import (
+    Film,
+    CinemaPerson
+)
 
 register = template.Library()
 
-info_by_persons_qs = all_persons.values_list(
-    "pk", "user__first_name",  "user__last_name", named=True
-)
-info_by_films_qs = all_films.values_list(
-    "pk", "title", named=True
-)
+brief_persons_data = CinemaPerson.persons.get_brief_data()
+brief_films_data = Film.films.get_brief_data()
 
 
 @register.filter(name='get_text_hyperlinks')
 def get_text_hyperlinks(text):
-    for person in info_by_persons_qs:
+    for person in brief_persons_data:
         person_name = f'{person.user__first_name} {person.user__last_name}'
         match = search(f'\s?(?i:{person_name})\s?', text)
         if match:
@@ -33,7 +32,7 @@ def get_text_hyperlinks(text):
                 f"<a href='{url_path}'>{person_name}</a>",
                 text
             )
-    for film in info_by_films_qs:
+    for film in brief_films_data:
         match = search(f'\s?{film.title}\s?', text)
         if match:
             url_path = reverse(

@@ -2,14 +2,14 @@
 
 {% block description %}My Profile{% endblock %}
 
-
 {% block title %}My Profile{% endblock %}
 
-
 {% block main_content %}
-
-<h2 class="text-center mt-1 mb-4" style="color: #e6010a;">My Profile:
-  <a href="{% url 'profile_change' %}">[Settings / Edit Profile]</a>
+<h2 class="text-center mt-1 mb-4" style="color: #e6010a;">
+  My Profile:
+  <a href="{% url 'profile_change' %}">
+    [Settings / Edit Profile]
+  </a>
 </h2>
 <table class="table mb-3">
   <tbody>
@@ -43,5 +43,4 @@
   </tr>
   </tbody>
 </table>
-
 {% endblock main_content %}

@@ -2,20 +2,20 @@
 
 {% block description %}Activation Completed{% endblock %}
 
-
 {% block title %}Activation Completed{% endblock %}
 
-
 {% block main_content %}
-
 <h2 class="text-center mt-1 mb-4" style="color: #e6010a;">
   Activation
 </h2>
 <div class="row justify-content-md-center mb-3">
   <div class="col-md-auto">
-    <p class="text-left">User with this name has been successfully activated.</p>
-    <p class="text-center mt-3"><a href="{% url 'login' %}">Sign in</a></p>
+    <p class="text-left">
+      User with this name has been successfully activated.
+    </p>
+    <p class="text-center mt-3">
+      <a href="{% url 'login' %}">Sign in</a>
+    </p>
   </div>
 </div>
-
 {% endblock main_content %}
