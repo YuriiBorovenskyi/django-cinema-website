@@ -232,7 +232,7 @@ class CinemaPerson(ExtendedProfileMixin):
     Class of this model inherits from 'ExtendedProfileMixin' class.
     """
     user = models.OneToOneField(User, on_delete=models.PROTECT)
-    bio = models.TextField(unique=True)
+    bio = models.TextField()
     oscar_awards = models.PositiveSmallIntegerField(default=0)
     avatar = models.ImageField(
         upload_to=upload_to_cinema_person, blank=True, null=True
@@ -389,7 +389,7 @@ class Film(models.Model):
     usa_gross = models.PositiveIntegerField(default=0)
     world_gross = models.PositiveIntegerField(default=0)
     run_time = models.DurationField()
-    description = models.TextField(unique=True)
+    description = models.TextField()
     release_data = models.DateField()
     language = models.ManyToManyField(Language)
     distributor = models.ManyToManyField(Distributor)
@@ -494,7 +494,7 @@ class News(DateMixin):
     Class of this model inherits from 'DateMixin' class.
     """
     title = models.CharField(max_length=128, unique=True)
-    description = models.TextField(unique=True)
+    description = models.TextField()
     news_source = models.CharField(max_length=32)
     news_author = models.CharField(max_length=64)
     film = models.ManyToManyField(Film, blank=True)
