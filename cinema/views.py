@@ -426,7 +426,7 @@ def cinema_person_detail(request, pk):
 
 class NewsListView(ListView):
     """
-    Display page with list of latest movie news.
+    Display page with list of latest cinema news.
     """
     model = News
     paginate_by = 5
@@ -445,7 +445,7 @@ class NewsListView(ListView):
 
 class CelebrityNewsListView(NewsListView):
     """
-    Display page with list of latest celebrity news.
+    Display page with list of latest cinema news about celebrities.
     """
     queryset = News.news.get_news_about_celebrities(celebrity_news_id)
 
@@ -489,8 +489,7 @@ def news_detail(request, pk):
             messages.add_message(request, messages.WARNING, 'No Comment added')
 
     context['form'] = form
-    print(request.get_host(), request.scheme, request.build_absolute_uri(),
-          sep='\n')
+
     return render(request, 'cinema/news_detail.html', context)
 
 

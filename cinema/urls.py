@@ -2,13 +2,28 @@ from django.urls import path
 
 from .apps import CinemaConfig
 from .views import (
-    ProductListView, product_detail, NewsListView, news_detail, film_detail,
-    cinema_person_detail, FilmListView, TopRatedProductListView,
-    NewReleasesProductListView, CelebrityNewsListView, TopRatedFilmListView,
-    BudgetFilmListView, UsaGrossFilmListView, WorldGrossFilmListView,
-    SearchResultsView, YearFilmListView, GenreFilmListView,
-    CountryFilmListView, LanguageFilmListView, MpaaFilmListView,
-    DistributorFilmListView, IndexView,
+    IndexView,
+    ProductListView,
+    TopRatedProductListView,
+    NewReleasesProductListView,
+    product_detail,
+    FilmListView,
+    TopRatedFilmListView,
+    BudgetFilmListView,
+    UsaGrossFilmListView,
+    WorldGrossFilmListView,
+    YearFilmListView,
+    GenreFilmListView,
+    CountryFilmListView,
+    LanguageFilmListView,
+    MpaaFilmListView,
+    DistributorFilmListView,
+    film_detail,
+    NewsListView,
+    CelebrityNewsListView,
+    news_detail,
+    cinema_person_detail,
+    SearchResultsView,
 )
 
 app_name = CinemaConfig.name
