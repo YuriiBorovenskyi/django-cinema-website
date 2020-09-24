@@ -471,7 +471,7 @@ class NewsManager(models.Manager):
 
     def get_news_about_celebrities(self, celebrity_news_id):
         """
-        Return QuerySet object containing celebrity news data.
+        Return QuerySet object with news data about celebrities.
         """
         return super().get_queryset().filter(pk__in=celebrity_news_id)
 

@@ -28,10 +28,13 @@ INSTALLED_APPS = [
     'django_cleanup',
     'easy_thumbnails',
     'captcha',
+    'rest_framework',
+    'corsheaders',
 
     # Custom main apps
-    'cinema.apps.CinemaConfig',
+    'cinema',
     'accounts',
+    'api',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'

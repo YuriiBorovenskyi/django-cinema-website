@@ -10,6 +10,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('social/', include('social_django.urls', namespace='social')),
     path('captcha/', include('captcha.urls')),
+    path('api/', include('api.urls')),
     path('', include('cinema.urls', namespace='')),
 ]
 
@@ -18,5 +19,6 @@ if settings.DEBUG:
 
     urlpatterns.append(path('__debug__/', include(debug_toolbar.urls)))
     urlpatterns.append(path('static/<path:path>', never_cache(serve)))
-    urlpatterns += static(settings.MEDIA_URL,
-                          document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(
+        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
+    )
