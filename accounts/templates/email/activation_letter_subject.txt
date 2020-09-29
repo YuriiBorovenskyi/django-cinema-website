@@ -1,1 +1,1 @@
-Activation of {{ user.username | default_if_none:"user" }}
+Activation of {{ username | default_if_none:"user" }}

@@ -21,7 +21,7 @@ from django.views.generic import (
 
 from accounts.models import User
 from .forms import ChangeUserInfoForm, RegisterUserForm
-from .utilities import signer
+from .tasks import signer
 
 
 class ProfileView(LoginRequiredMixin, TemplateView):
