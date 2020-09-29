@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.core.signing import Signer
 from django.template.loader import render_to_string
 
-from beta_project.celery import celery_app
+from django_cinema.celery import celery_app
 
 signer = Signer()
 

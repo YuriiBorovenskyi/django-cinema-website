@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.template.loader import render_to_string
 
-from beta_project.celery import celery_app
+from django_cinema.celery import celery_app
 
 
 @celery_app.task
