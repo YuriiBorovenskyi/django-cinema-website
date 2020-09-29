@@ -6,7 +6,7 @@ from django.db.models import Prefetch, Q
 from django.db.models.signals import post_save
 
 from accounts.models import User
-from .utilities import send_new_product_notification
+from .tasks import send_new_product_notification
 
 GENDER_CHOICES = (
     ("M", "Male"),
@@ -658,18 +658,20 @@ class CommentToProduct(CommentMixin, DateMixin):
         ordering = ["-created_at"]
 
 
-def post_save_dispatcher(sender, instance, **kwargs):
+def post_save_dispatcher(sender, instance, created, **kwargs):
     """
     Signal handler function.
 
     After saving record of 'Product' model in database, 'post_save' signal
     will be send, which calls this signal handler.
+    Call function that sends notification messages to registered users about
+    appearance of new movie on blu-ray.
 
-    Call 'send_new_product_notification' function that sends notification
-    messages to registered users about appearance of new movie on blu-ray.
+    'send_new_product_notification' is celery task that will run in task
+    queue (keeps in redis) and launch in background.
     """
-    if kwargs['created']:
-        send_new_product_notification(instance)
+    if created:
+        send_new_product_notification.delay(instance.pk)
 
 
 post_save.connect(post_save_dispatcher, sender=Product)

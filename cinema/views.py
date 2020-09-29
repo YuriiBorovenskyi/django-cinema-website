@@ -20,7 +20,7 @@ from .models import (
     News,
     Film,
     CinemaPerson,
-    MpaaRating
+    MpaaRating,
 )
 from .services import (
     get_cast_and_crew,
