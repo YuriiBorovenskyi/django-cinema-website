@@ -201,21 +201,12 @@ class CinemaPersonManager(models.Manager):
         )
         return self.all().filter(q)
 
-    def get_cached_data(self):
-        """
-        Return QuerySet object with cached data of all related models.
-        """
-        return self.all().prefetch_related(
-            "news_set", "film_set__genre",
-            Prefetch("film_set", Film.objects.select_related("imdb_rating"))
-        )
-
     def get_related_data(self, fields_names):
         """
         Return QuerySet object with data of specified fields of
         'CinemaPerson' model and some related models.
         """
-        return self.get_cached_data().values_list(
+        return self.all().values_list(
             "pk", *fields_names, "news__title", named=True
         ).order_by("-news__created_at")
 
@@ -345,26 +336,12 @@ class FilmManager(models.Manager):
         """
         return self.all().filter(title__icontains=search_word)
 
-    def get_cached_data(self):
-        """
-        Return QuerySet object with cached data of all related models.
-        """
-        return self.all().prefetch_related(
-            "country", "genre", "language", "distributor", "news_set",
-            "staff__user", Prefetch(
-                "staff__cinemafilmpersonprofession_set",
-                queryset=CinemaFilmPersonProfession.objects.select_related(
-                    "profession"
-                )
-            )
-        )
-
     def get_related_data(self, fields_names):
         """
         Return QuerySet object with data of specified fields of 'Film'
         model and some related models.
         """
-        return self.get_cached_data().values_list(
+        return self.all().values_list(
             "pk", *fields_names, "news__title", named=True
         ).order_by("-news__created_at")
 
@@ -430,6 +407,30 @@ class CinemaProfession(models.Model):
         ordering = ["pk"]
 
 
+class CinemaFilmPersonProfessionManager(models.Manager):
+    """
+    Custom Manager, adding extra manager methods.
+
+    Custom Manager used in 'CinemaFilmPersonProfession' model by extending
+    base Manager class and instantiating custom Manager in
+    'CinemaFilmPersonProfession' model.
+    """
+    def get_full_cast(self):
+        """
+        Return QuerySet object with cached data of some related models.
+        """
+        return super().get_queryset().select_related(
+            'film', 'cinema_person__user', 'profession'
+        ).values_list(
+            'film__pk',
+            'profession__name',
+            'cinema_person__pk',
+            'cinema_person__user__first_name',
+            'cinema_person__user__last_name',
+            named=True
+        ).order_by("cinema_person__pk")
+
+
 class CinemaFilmPersonProfession(models.Model):
     """
     Intermediate relation model.
@@ -442,6 +443,8 @@ class CinemaFilmPersonProfession(models.Model):
     profession = models.ForeignKey(
         CinemaProfession, on_delete=models.PROTECT, default=2
     )
+    objects = models.Manager()
+    cfppm = CinemaFilmPersonProfessionManager()
 
     def __str__(self):
         return (

@@ -1,7 +1,3 @@
-"""
-The custom filter for getting hyperlinks in a text.
-"""
-
 from re import search, sub
 from django import template
 from django.urls import reverse
@@ -13,12 +9,13 @@ from ..models import (
 
 register = template.Library()
 
-brief_persons_data = CinemaPerson.persons.get_brief_data()
-brief_films_data = Film.films.get_brief_data()
-
 
 @register.filter(name='get_text_hyperlinks')
 def get_text_hyperlinks(text):
+    """
+    Custom filter for getting hyperlinks in text.
+    """
+    brief_persons_data = CinemaPerson.persons.get_brief_data()
     for person in brief_persons_data:
         person_name = f'{person.user__first_name} {person.user__last_name}'
         match = search(f'\s?(?i:{person_name})\s?', text)
@@ -32,6 +29,7 @@ def get_text_hyperlinks(text):
                 f"<a href='{url_path}'>{person_name}</a>",
                 text
             )
+    brief_films_data = Film.films.get_brief_data()
     for film in brief_films_data:
         match = search(f'\s?{film.title}\s?', text)
         if match:

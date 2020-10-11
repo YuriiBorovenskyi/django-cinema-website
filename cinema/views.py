@@ -40,12 +40,6 @@ DESCRIPTION_BLU_RAY = "Welcome to the fantastic Blu-ray department here, " \
 DESCRIPTION_NEWS = "The latest movie news on the movies 'you're most " \
                    "interested in seeing."
 
-films_cast_and_crew = get_cast_and_crew()
-films_info = get_films_info()
-persons_info = get_persons_info()
-films_ratings_sets = get_films_ratings_sets()
-celebrity_news_id = get_celebrity_news_id()
-
 
 class ProductListView(ListView):
     """
@@ -58,7 +52,7 @@ class ProductListView(ListView):
         context = super().get_context_data(**kwargs)
         context.update({
             'page_title': 'Movies on Blu-ray',
-            'films_cast_and_crew': films_cast_and_crew
+            'films_cast_and_crew': get_cast_and_crew()
         })
         return context
 
@@ -106,7 +100,7 @@ class IndexView(TemplateView):
             'description_blu_ray': DESCRIPTION_BLU_RAY,
             'title_top_rated': 'Top Rated',
             'title_new_releases': 'New Releases',
-            'films_cast_and_crew': films_cast_and_crew,
+            'films_cast_and_crew': get_cast_and_crew(),
             'news_list': news_list,
             'new_releases_products': new_releases_products,
             'top_rated_products': top_rated_products
@@ -126,8 +120,8 @@ def product_detail(request, pk):
     product = get_object_or_404(product_list, pk=pk)
     context = {
         'product': product,
-        'film_info': films_info[pk],
-        'film_cast_and_crew': films_cast_and_crew[pk]
+        'film_info': get_films_info()[pk],
+        'film_cast_and_crew': get_cast_and_crew()[pk]
     }
     initial = {'product': product.pk}
     if request.user.is_authenticated:
@@ -162,8 +156,8 @@ class FilmListView(ListView):
         context = super().get_context_data(**kwargs)
         context.update({
             'page_title': 'Movies [A-Z]',
-            'films_info': films_info,
-            'films_cast_and_crew': films_cast_and_crew
+            'films_info': get_films_info(),
+            'films_cast_and_crew': get_cast_and_crew()
         })
         return context
 
@@ -353,8 +347,8 @@ def film_detail(request, pk):
     film = get_object_or_404(film_list, pk=pk)
     context = {
         'film': film,
-        'film_info': films_info[pk],
-        'film_cast_and_crew': films_cast_and_crew[pk]
+        'film_info': get_films_info()[pk],
+        'film_cast_and_crew': get_cast_and_crew()[pk]
     }
     initial = {'film': film.pk}
     if request.user.is_authenticated:
@@ -396,7 +390,7 @@ def cinema_person_detail(request, pk):
 
     context = {
         'cinema_person': cinema_person,
-        'person_info': persons_info[pk],
+        'person_info': get_persons_info()[pk],
         'person_professions': person_professions,
         'films_number': films_number,
         'films_years_range': films_years_range,
@@ -435,10 +429,10 @@ class NewsListView(ListView):
         context = super().get_context_data(**kwargs)
         context.update({
             'page_title': 'Latest Movie News',
-            'imdb_top_5': films_ratings_sets['imdb_rating__value'],
-            'budget_top_5': films_ratings_sets['budget'],
-            'usa_gross_top_5': films_ratings_sets['usa_gross'],
-            'world_gross_top_5': films_ratings_sets['world_gross'],
+            'imdb_top_5': get_films_ratings_sets()['imdb_rating__value'],
+            'budget_top_5': get_films_ratings_sets()['budget'],
+            'usa_gross_top_5': get_films_ratings_sets()['usa_gross'],
+            'world_gross_top_5': get_films_ratings_sets()['world_gross'],
         })
         return context
 
@@ -447,7 +441,9 @@ class CelebrityNewsListView(NewsListView):
     """
     Display page with list of latest cinema news about celebrities.
     """
-    queryset = News.news.get_news_about_celebrities(celebrity_news_id)
+    def get_queryset(self):
+        celebrity_news_id = get_celebrity_news_id()
+        return News.news.get_news_about_celebrities(celebrity_news_id)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -466,10 +462,10 @@ def news_detail(request, pk):
     news = get_object_or_404(News, pk=pk)
     context = {
         'news': news,
-        'imdb_top_5': films_ratings_sets['imdb_rating__value'],
-        'budget_top_5': films_ratings_sets['budget'],
-        'usa_gross_top_5': films_ratings_sets['usa_gross'],
-        'world_gross_top_5': films_ratings_sets['world_gross'],
+        'imdb_top_5': get_films_ratings_sets()['imdb_rating__value'],
+        'budget_top_5': get_films_ratings_sets()['budget'],
+        'usa_gross_top_5': get_films_ratings_sets()['usa_gross'],
+        'world_gross_top_5': get_films_ratings_sets()['world_gross'],
     }
     initial = {'news': news.pk}
     if request.user.is_authenticated:
@@ -523,14 +519,13 @@ class SearchResultsView(TemplateView):
                 'person_list': person_list,
                 'news_list': news_list
             }
-
         context.update({
             'search_title': 'Search results for ',
             'no_results': 'No results found for ',
             'search_word': search_word,
-            'imdb_top_5': films_ratings_sets['imdb_rating__value'],
-            'budget_top_5': films_ratings_sets['budget'],
-            'usa_gross_top_5': films_ratings_sets['usa_gross'],
-            'world_gross_top_5': films_ratings_sets['world_gross'],
+            'imdb_top_5': get_films_ratings_sets()['imdb_rating__value'],
+            'budget_top_5': get_films_ratings_sets()['budget'],
+            'usa_gross_top_5': get_films_ratings_sets()['usa_gross'],
+            'world_gross_top_5': get_films_ratings_sets()['world_gross'],
         })
         return context
