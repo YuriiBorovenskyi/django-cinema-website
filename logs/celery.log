@@ -1,0 +1,102 @@
+
+[2020-10-11 16:49:07,598: INFO/MainProcess] Connected to redis://redis:6379/0
+[2020-10-11 16:49:07,620: INFO/MainProcess] mingle: searching for neighbors
+[2020-10-11 16:49:08,658: INFO/MainProcess] mingle: all alone
+[2020-10-11 16:49:08,679: WARNING/MainProcess] /usr/local/lib/python3.8/site-packages/celery/fixups/django.py:205: UserWarning: Using settings.DEBUG leads to a memory
+            leak, never use this setting in production environments!
+  warnings.warn('''Using settings.DEBUG leads to a memory
+[2020-10-11 16:49:08,679: INFO/MainProcess] celery@3083fdaa043b ready.
+[2020-10-11 16:49:27,365: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[0a47515e-0ca5-4d8a-a6d7-2779be4cf6db]  
+[2020-10-11 16:49:27,367: INFO/ForkPoolWorker-1] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,374: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[f3ef0be3-1d8c-405f-8a3c-64278e921c8a]  
+[2020-10-11 16:49:27,376: INFO/ForkPoolWorker-3] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,384: INFO/ForkPoolWorker-1] Task cinema.tasks.send_new_product_notification[0a47515e-0ca5-4d8a-a6d7-2779be4cf6db] succeeded in 0.01763007100089453s: None
+[2020-10-11 16:49:27,387: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[7d433f18-5583-4655-9dc2-6d20be9693ac]  
+[2020-10-11 16:49:27,389: INFO/ForkPoolWorker-1] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,397: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[47560f81-a2cb-4432-8b79-961aad32032d]  
+[2020-10-11 16:49:27,398: INFO/ForkPoolWorker-3] Task cinema.tasks.send_new_product_notification[f3ef0be3-1d8c-405f-8a3c-64278e921c8a] succeeded in 0.022036171008949168s: None
+[2020-10-11 16:49:27,400: INFO/ForkPoolWorker-2] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,401: INFO/ForkPoolWorker-1] Task cinema.tasks.send_new_product_notification[7d433f18-5583-4655-9dc2-6d20be9693ac] succeeded in 0.012007483004708774s: None
+[2020-10-11 16:49:27,406: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[15914a4c-c786-4921-906d-6419ae263f5c]  
+[2020-10-11 16:49:27,410: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[e68efd3d-2ce6-4648-b066-242e2aa7a268]  
+[2020-10-11 16:49:27,412: INFO/ForkPoolWorker-1] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,412: INFO/ForkPoolWorker-3] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,427: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[665ca9d5-0841-4734-b5d7-c2c038459f51]  
+[2020-10-11 16:49:27,429: INFO/ForkPoolWorker-1] Task cinema.tasks.send_new_product_notification[15914a4c-c786-4921-906d-6419ae263f5c] succeeded in 0.01745840400690213s: None
+[2020-10-11 16:49:27,433: INFO/ForkPoolWorker-3] Task cinema.tasks.send_new_product_notification[e68efd3d-2ce6-4648-b066-242e2aa7a268] succeeded in 0.020674547995440662s: None
+[2020-10-11 16:49:27,434: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[3d72f997-607b-4f03-b595-37fdcb49bb0b]  
+[2020-10-11 16:49:27,432: INFO/ForkPoolWorker-2] Task cinema.tasks.send_new_product_notification[47560f81-a2cb-4432-8b79-961aad32032d] succeeded in 0.03399627099861391s: None
+[2020-10-11 16:49:27,435: INFO/ForkPoolWorker-1] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,438: INFO/ForkPoolWorker-4] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,441: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[78bb2a09-3d9e-4cd4-aa9d-db35ab2470d1]  
+[2020-10-11 16:49:27,446: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[bc4c432f-fb94-47c8-a08c-e179abe9ccae]  
+[2020-10-11 16:49:27,447: INFO/ForkPoolWorker-3] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,452: INFO/ForkPoolWorker-2] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,463: INFO/ForkPoolWorker-3] Task cinema.tasks.send_new_product_notification[78bb2a09-3d9e-4cd4-aa9d-db35ab2470d1] succeeded in 0.016391445009503514s: None
+[2020-10-11 16:49:27,466: INFO/ForkPoolWorker-1] Task cinema.tasks.send_new_product_notification[665ca9d5-0841-4734-b5d7-c2c038459f51] succeeded in 0.031439377009519376s: None
+[2020-10-11 16:49:27,467: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[0e6ba3f5-122e-4cc8-aab2-a1a10e770246]  
+[2020-10-11 16:49:27,473: INFO/ForkPoolWorker-4] Task cinema.tasks.send_new_product_notification[3d72f997-607b-4f03-b595-37fdcb49bb0b] succeeded in 0.0348630030057393s: None
+[2020-10-11 16:49:27,474: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[e9e1db83-4a3f-4185-8e93-79e14236ca2e]  
+[2020-10-11 16:49:27,477: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[a66fad9e-4c13-4a0b-844a-217cfbfe132c]  
+[2020-10-11 16:49:27,478: INFO/ForkPoolWorker-2] Task cinema.tasks.send_new_product_notification[bc4c432f-fb94-47c8-a08c-e179abe9ccae] succeeded in 0.026224746005027555s: None
+[2020-10-11 16:49:27,478: INFO/ForkPoolWorker-1] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,481: INFO/ForkPoolWorker-3] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,487: INFO/ForkPoolWorker-4] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,490: INFO/ForkPoolWorker-1] Task cinema.tasks.send_new_product_notification[0e6ba3f5-122e-4cc8-aab2-a1a10e770246] succeeded in 0.01247631199657917s: None
+[2020-10-11 16:49:27,494: INFO/ForkPoolWorker-3] Task cinema.tasks.send_new_product_notification[e9e1db83-4a3f-4185-8e93-79e14236ca2e] succeeded in 0.013077730007353239s: None
+[2020-10-11 16:49:27,497: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[0b74ea09-ae33-4e45-88cd-f852902acb86]  
+[2020-10-11 16:49:27,503: INFO/ForkPoolWorker-4] Task cinema.tasks.send_new_product_notification[a66fad9e-4c13-4a0b-844a-217cfbfe132c] succeeded in 0.01547269600268919s: None
+[2020-10-11 16:49:27,503: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[5b88148b-e40c-40ea-9947-264e206d2058]  
+[2020-10-11 16:49:27,505: INFO/ForkPoolWorker-3] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,506: INFO/ForkPoolWorker-1] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,513: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[accf903b-4371-4876-b218-ae77891a5a8a]  
+[2020-10-11 16:49:27,515: INFO/ForkPoolWorker-3] Task cinema.tasks.send_new_product_notification[5b88148b-e40c-40ea-9947-264e206d2058] succeeded in 0.009469504992011935s: None
+[2020-10-11 16:49:27,526: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[8ea5e631-a3eb-461d-a4a7-0629e854a968]  
+[2020-10-11 16:49:27,528: INFO/ForkPoolWorker-1] Task cinema.tasks.send_new_product_notification[0b74ea09-ae33-4e45-88cd-f852902acb86] succeeded in 0.02290735099813901s: None
+[2020-10-11 16:49:27,529: INFO/ForkPoolWorker-3] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,533: INFO/ForkPoolWorker-2] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,541: INFO/ForkPoolWorker-3] Task cinema.tasks.send_new_product_notification[accf903b-4371-4876-b218-ae77891a5a8a] succeeded in 0.012750219990266487s: None
+[2020-10-11 16:49:27,542: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[72803960-e629-4222-8e19-c116c791d379]  
+[2020-10-11 16:49:27,546: INFO/ForkPoolWorker-2] Task cinema.tasks.send_new_product_notification[8ea5e631-a3eb-461d-a4a7-0629e854a968] succeeded in 0.013353953996556811s: None
+[2020-10-11 16:49:27,549: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[d67bfbf2-1025-46d8-923d-ac6970917226]  
+[2020-10-11 16:49:27,550: INFO/ForkPoolWorker-1] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,551: INFO/ForkPoolWorker-3] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,554: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[c6e74558-a394-400e-b4cb-23e355684017]  
+[2020-10-11 16:49:27,561: INFO/ForkPoolWorker-1] Task cinema.tasks.send_new_product_notification[72803960-e629-4222-8e19-c116c791d379] succeeded in 0.010870056998101063s: None
+[2020-10-11 16:49:27,562: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[2244243f-30ef-41e5-b31b-d63a66e06e59]  
+[2020-10-11 16:49:27,563: INFO/ForkPoolWorker-2] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,563: INFO/ForkPoolWorker-4] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,573: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[7732a7df-0736-428e-b298-1473081d815f]  
+[2020-10-11 16:49:27,574: INFO/ForkPoolWorker-3] Task cinema.tasks.send_new_product_notification[d67bfbf2-1025-46d8-923d-ac6970917226] succeeded in 0.022580337987164967s: None
+[2020-10-11 16:49:27,577: INFO/ForkPoolWorker-2] Task cinema.tasks.send_new_product_notification[c6e74558-a394-400e-b4cb-23e355684017] succeeded in 0.014077469008043408s: None
+[2020-10-11 16:49:27,579: INFO/ForkPoolWorker-4] Task cinema.tasks.send_new_product_notification[2244243f-30ef-41e5-b31b-d63a66e06e59] succeeded in 0.015739884998765774s: None
+[2020-10-11 16:49:27,580: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[8d69666d-9ddd-4ee9-af02-1c075d4ef18e]  
+[2020-10-11 16:49:27,581: INFO/ForkPoolWorker-1] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,582: INFO/ForkPoolWorker-3] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,586: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[6b4f1191-30f3-49dd-81a1-4fe1e03256a5]  
+[2020-10-11 16:49:27,592: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[e56d9620-2490-4b3b-9691-c677d65dcdad]  
+[2020-10-11 16:49:27,593: INFO/ForkPoolWorker-2] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,593: INFO/ForkPoolWorker-1] Task cinema.tasks.send_new_product_notification[7732a7df-0736-428e-b298-1473081d815f] succeeded in 0.011820015992270783s: None
+[2020-10-11 16:49:27,596: INFO/ForkPoolWorker-4] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,603: INFO/ForkPoolWorker-3] Task cinema.tasks.send_new_product_notification[8d69666d-9ddd-4ee9-af02-1c075d4ef18e] succeeded in 0.021340002000215463s: None
+[2020-10-11 16:49:27,601: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[cff6ec12-b952-46b6-a5b0-2176aa0f8e81]  
+[2020-10-11 16:49:27,609: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[d493deda-9c2f-4e7c-a34a-ebf938386190]  
+[2020-10-11 16:49:27,610: INFO/ForkPoolWorker-2] Task cinema.tasks.send_new_product_notification[6b4f1191-30f3-49dd-81a1-4fe1e03256a5] succeeded in 0.017495725987828337s: None
+[2020-10-11 16:49:27,610: INFO/ForkPoolWorker-1] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,613: INFO/ForkPoolWorker-3] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,618: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[6d76e1e7-c9c0-40d9-be76-05c5eb3f996a]  
+[2020-10-11 16:49:27,619: INFO/ForkPoolWorker-4] Task cinema.tasks.send_new_product_notification[e56d9620-2490-4b3b-9691-c677d65dcdad] succeeded in 0.022797248006099835s: None
+[2020-10-11 16:49:27,623: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[a6f64e46-f357-4ed6-9ebe-c1c55f24e574]  
+[2020-10-11 16:49:27,625: INFO/ForkPoolWorker-4] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,625: INFO/ForkPoolWorker-2] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,633: INFO/ForkPoolWorker-3] Task cinema.tasks.send_new_product_notification[d493deda-9c2f-4e7c-a34a-ebf938386190] succeeded in 0.020041226991452277s: None
+[2020-10-11 16:49:27,635: INFO/ForkPoolWorker-1] Task cinema.tasks.send_new_product_notification[cff6ec12-b952-46b6-a5b0-2176aa0f8e81] succeeded in 0.025168673004372977s: None
+[2020-10-11 16:49:27,638: INFO/MainProcess] Received task: cinema.tasks.send_new_product_notification[bc32ef4d-d5b1-4fc9-a7fb-5fa295cbe8d0]  
+[2020-10-11 16:49:27,641: INFO/ForkPoolWorker-4] Task cinema.tasks.send_new_product_notification[a6f64e46-f357-4ed6-9ebe-c1c55f24e574] succeeded in 0.016406285998527892s: None
+[2020-10-11 16:49:27,647: INFO/ForkPoolWorker-1] Run celery task - Send new product notification.
+[2020-10-11 16:49:27,648: INFO/ForkPoolWorker-2] Task cinema.tasks.send_new_product_notification[6d76e1e7-c9c0-40d9-be76-05c5eb3f996a] succeeded in 0.023716979994787835s: None
+[2020-10-11 16:49:27,659: INFO/ForkPoolWorker-1] Task cinema.tasks.send_new_product_notification[bc32ef4d-d5b1-4fc9-a7fb-5fa295cbe8d0] succeeded in 0.012066541996318847s: None
+[2020-10-11 16:54:29,135: INFO/MainProcess] Received task: accounts.tasks.send_activation_notification[228d2bf0-fb17-4cd8-8833-30c64df60c4a]  
+[2020-10-11 16:54:29,136: INFO/ForkPoolWorker-1] Run celery task - Send activation notification.
+[2020-10-11 16:54:32,304: INFO/ForkPoolWorker-1] Sent message to yurij.borovenskij's e-mail with instruction for activation his account.
+[2020-10-11 16:54:32,305: INFO/ForkPoolWorker-1] Task accounts.tasks.send_activation_notification[228d2bf0-fb17-4cd8-8833-30c64df60c4a] succeeded in 3.168744462003815s: None

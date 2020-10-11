@@ -2,10 +2,8 @@ from .models import (
     Film,
     CinemaPerson,
     News,
+    CinemaFilmPersonProfession,
 )
-
-cached_films_data = Film.films.get_cached_data()
-cached_persons_data = CinemaPerson.persons.get_cached_data()
 
 
 def get_films_ratings_sets():
@@ -13,6 +11,7 @@ def get_films_ratings_sets():
     Get sets from top 5 movies ordered by differ criterion name.
     """
     criteria = ("imdb_rating__value", "budget", "usa_gross", "world_gross")
+    cached_films_data = Film.films.all()
     films_ratings_sets = {}
     for criterion in criteria:
         top_5 = cached_films_data.order_by(f"-{criterion}")[:5].values_list(
@@ -27,23 +26,19 @@ def get_cast_and_crew():
     Get cast and crew by professions for all movies.
     """
     professions = ("Director", "Actor", "Writer")
-    films_cast_and_crew = {}
-    for film in cached_films_data:
-        films_cast_and_crew[film.pk] = {}
-        for profession in professions:
-            films_cast_and_crew[film.pk][profession] = []
-            persons_data = film.staff.filter(
-                cinemafilmpersonprofession__profession__name=profession
-            ).order_by("pk").values_list(
-                "pk", "user__first_name", "user__last_name", named=True
-            )
-            for person_data in persons_data:
-                films_cast_and_crew[film.pk][profession].append(
-                    {"pk": person_data.pk,
-                     "name": f"{person_data.user__first_name} "
-                             f"{person_data.user__last_name}"}
-                )
-    return films_cast_and_crew
+    films_full_cast = CinemaFilmPersonProfession.cfppm.get_full_cast()
+    cast_and_crew = {}
+    for cast in films_full_cast:
+        if cast.film__pk not in cast_and_crew:
+            cast_and_crew[cast.film__pk] = {}
+            for profession in professions:
+                cast_and_crew[cast.film__pk][profession] = []
+        cast_and_crew[cast.film__pk][cast.profession__name].append(
+            {"pk": cast.cinema_person__pk,
+             "name": f"{cast.cinema_person__user__first_name} "
+                     f"{cast.cinema_person__user__last_name}"}
+        )
+    return cast_and_crew
 
 
 def get_films_info():
