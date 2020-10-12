@@ -26,7 +26,7 @@ def send_new_product_notification(product_id):
     users = UserModel.objects.exclude(email__endswith='hollywood.com')
     ip = settings.ALLOWED_HOSTS[0]
     if not settings.DEBUG:
-        port = 1337
+        port = 80
     else:
         port = 8000
     host = f'http://{ip}:{port}'

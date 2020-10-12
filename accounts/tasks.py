@@ -29,7 +29,7 @@ def send_activation_notification(user_id):
     user = UserModel.objects.get(pk=user_id)
     ip = settings.ALLOWED_HOSTS[0]
     if not settings.DEBUG:
-        port = 1337
+        port = 80
     else:
         port = 8000
     host = f'http://{ip}:{port}'
