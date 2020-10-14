@@ -1,7 +1,6 @@
 import re
 
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import ListView, TemplateView
 
@@ -372,7 +371,6 @@ def film_detail(request, pk):
     return render(request, 'cinema/film_detail.html', context)
 
 
-@login_required
 def cinema_person_detail(request, pk):
     """
     Display page with details of cinema person selected by visitor.
@@ -380,8 +378,6 @@ def cinema_person_detail(request, pk):
     Also display comments to cinema person and form for adding new comment.
     Create "CommentToPerson" model record.
     After saving data, redirect to current page.
-
-    Only signed-in users will be allowed to access this web page.
     """
     cinema_person_list = CinemaPerson.persons.all()
     cinema_person = get_object_or_404(cinema_person_list, pk=pk)
