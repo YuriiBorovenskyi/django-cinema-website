@@ -5,9 +5,6 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile.prod
-    volumes:
-      - static_volume:/home/app/web/staticfiles
-      - media_volume:/home/app/web/media
     command: ./bin/run_django_app_prod.sh
     expose:
       - 8000
@@ -43,14 +40,9 @@ services:
   nginx:
     container_name: nginx
     build: ./nginx
-    volumes:
-      - static_volume:/home/app/web/staticfiles
-      - media_volume:/home/app/web/media
     ports:
       - 80:80
     depends_on:
       - web
 volumes:
   postgres_data:
-  static_volume:
-  media_volume:
