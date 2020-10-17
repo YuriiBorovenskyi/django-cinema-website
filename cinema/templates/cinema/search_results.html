@@ -16,7 +16,7 @@
         Movies on blu-ray found: {{ product_list.count }}
       </h4>
       {% for product in product_list %}
-        {% include "cinema/includes/inc_search.html" with object=product url_name='cinema:product-detail' image=product.film.poster.url title=product.film.title extra='Blu-ray' %}
+        {% include "cinema/includes/inc_search.html" with object=product url_name='cinema:product-detail' image=product.film.poster title=product.film.title extra='Blu-ray' %}
       {% endfor %}
     {% endif %}
     {% if film_list %}
@@ -24,7 +24,7 @@
         Movies found: {{ film_list.count }}
       </h4>
       {% for film in film_list %}
-        {% include "cinema/includes/inc_search.html" with object=film url_name='cinema:film-detail' image=film.poster.url title=film.title extra=film.year %}
+        {% include "cinema/includes/inc_search.html" with object=film url_name='cinema:film-detail' image=film.poster title=film.title extra=film.year %}
       {% endfor %}
     {% endif %}
     {% if person_list %}
@@ -32,7 +32,7 @@
         Cinema persons found: {{ person_list.count }}
       </h4>
       {% for person in person_list %}
-        {% include "cinema/includes/inc_search.html" with object=person url_name='cinema:movie-person-detail' image=person.avatar.url title=person.fullname extra=person.birthday|date:"Y" %}
+        {% include "cinema/includes/inc_search.html" with object=person url_name='cinema:movie-person-detail' image=person.avatar title=person.fullname extra=person.birthday|date:"Y" %}
       {% endfor %}
     {% endif %}
     {% if news_list %}
@@ -40,7 +40,7 @@
         Cinema news found: {{ news_list.count }}
       </h4>
       {% for news in news_list %}
-        {% include "cinema/includes/inc_search.html" with object=news url_name='cinema:news-detail' image=news.news_feed_photo.url title=news.title extra=news.created_at|date:"j M Y H:i" %}
+        {% include "cinema/includes/inc_search.html" with object=news url_name='cinema:news-detail' image=news.news_feed_photo title=news.title extra=news.created_at|date:"j M Y H:i" %}
       {% endfor %}
     {% endif %}
   {% else %}

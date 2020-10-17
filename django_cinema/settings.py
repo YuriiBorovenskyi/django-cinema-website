@@ -103,6 +103,7 @@ USE_L10N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images) + Media files (Images, Video)
+
 USE_S3 = int(os.environ.get('USE_S3'))
 
 if USE_S3:
@@ -127,9 +128,7 @@ else:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"), ]
 
 # 'easy-thumbnails' settings
 THUMBNAIL_BASEDIR = 'thumbnails'
@@ -152,6 +151,11 @@ THUMBNAIL_ALIASES = {
         },
         'detail': {
             'size': (341, 444),
+            'crop': 'smart',
+            'autocrop': True,
+        },
+        'search': {
+            'size': (111, 150),
             'crop': 'smart',
             'autocrop': True,
         },
@@ -179,10 +183,20 @@ THUMBNAIL_ALIASES = {
             'crop': 'smart',
             'autocrop': True,
         },
+        'search': {
+            'size': (111, 150),
+            'crop': 'smart',
+            'autocrop': True,
+        },
     },
     'cinema.CinemaPerson.avatar': {
         'person': {
             'size': (345, 450),
+            'crop': 'smart',
+            'autocrop': True,
+        },
+        'search': {
+            'size': (111, 150),
             'crop': 'smart',
             'autocrop': True,
         },
@@ -208,7 +222,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'user_link']
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
-  'fields': 'id, name, email, picture.type(large), link'
+  'fields': 'id, name, email, picture.type(large), link',
 }
 SOCIAL_AUTH_FACEBOOK_EXTRA_DATA = [
     ('name', 'name'),
@@ -219,17 +233,13 @@ SOCIAL_AUTH_FACEBOOK_EXTRA_DATA = [
 SOCIAL_AUTH_FACEBOOK_KEY = os.environ.get('SOCIAL_AUTH_FACEBOOK_KEY')
 SOCIAL_AUTH_FACEBOOK_SECRET = os.environ.get('SOCIAL_AUTH_FACEBOOK_SECRET')
 
-SOCIAL_AUTH_TWITTER_SCOPE = ['email', 'user']
-SOCIAL_AUTH_TWITTER_PROFILE_EXTRA_PARAMS = {
-  'fields': 'id, name, email'
-}
+SOCIAL_AUTH_TWITTER_SCOPE = ['email', 'user', ]
+SOCIAL_AUTH_TWITTER_PROFILE_EXTRA_PARAMS = {'fields': 'id, name, email', }
 SOCIAL_AUTH_TWITTER_KEY = os.environ.get('SOCIAL_AUTH_TWITTER_KEY')
 SOCIAL_AUTH_TWITTER_SECRET = os.environ.get('SOCIAL_AUTH_TWITTER_SECRET')
 
-SOCIAL_AUTH_GITHUB_SCOPE = ['email', 'user']
-SOCIAL_AUTH_GITHUB_PROFILE_EXTRA_PARAMS = {
-  'fields': 'id, name, email'
-}
+SOCIAL_AUTH_GITHUB_SCOPE = ['email', 'user', ]
+SOCIAL_AUTH_GITHUB_PROFILE_EXTRA_PARAMS = {'fields': 'id, name, email', }
 SOCIAL_AUTH_GITHUB_KEY = os.environ.get('SOCIAL_AUTH_GITHUB_KEY')
 SOCIAL_AUTH_GITHUB_SECRET = os.environ.get('SOCIAL_AUTH_GITHUB_SECRET')
 
@@ -238,8 +248,8 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_URLS_REGEX = r'^/api/.*$'
 
 # 'redis' settings
-CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
-CELERY_RESULT_BACKEND = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER')
+CELERY_RESULT_BACKEND = os.environ.get('CELERY_BACKEND')
 
 GRAPH_MODELS = {
   'all_applications': True,

@@ -14,10 +14,14 @@ fi
 #python manage.py collectstatic --no-input --clear
 
 # at first perform dump working DB on local host
-# python manage.py dumpdata > cinema/fixtures/db.json
+# python manage.py dumpdata > django_cinema/fixtures/db.json
 
 #python manage.py shell --command="from django.contrib.contenttypes.models import ContentType; ContentType.objects.all().delete(); exit()"
-#python manage.py loaddata cinema/fixtures/db.json
+#python manage.py loaddata django_cinema/fixtures/db.json
+#python manage.py captcha_clean
+#python manage.py thumbnail_cleanup
+#python manage.py clearsessions
+
 gunicorn django_cinema.wsgi:application --bind 0.0.0.0:8000
 
 exec "$@"
