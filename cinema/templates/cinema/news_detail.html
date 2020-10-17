@@ -1,6 +1,6 @@
 {% extends 'layout/base.html' %}
 
-{% load get_text_hyperlinks_filter %}
+{% load thumbnail get_text_hyperlinks_filter %}
 
 {% block description %}{{ news.title }}{% endblock %}
 
@@ -19,7 +19,7 @@
                   <h1 class="text-body">{{ news.title }}</h1>
                 </div>
                 <div class="news-image py-2" align="center">
-                  <img src="{{ news.news_detail_photo.url }}"
+                  <img src="{% thumbnail news.news_detail_photo 'news_detail' %}"
                        title="{{ news.title }}"
                        class="card-img-top">
                 </div>

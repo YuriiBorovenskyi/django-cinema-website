@@ -121,7 +121,7 @@ if USE_S3:
     AWS_MEDIA_LOCATION = 'media'
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_MEDIA_LOCATION}/'
     DEFAULT_FILE_STORAGE = 'django_cinema.storage_backends.MediaStorage'
-    THUMBNAIL_MEDIA_ROOT = DEFAULT_FILE_STORAGE
+    THUMBNAIL_DEFAULT_STORAGE = 'django_cinema.storage_backends.MediaStorage'
 else:
     STATIC_URL = '/static/'
     MEDIA_URL = '/media/'
@@ -132,6 +132,7 @@ STATICFILES_DIRS = [
 ]
 
 # 'easy-thumbnails' settings
+THUMBNAIL_BASEDIR = 'thumbnails'
 THUMBNAIL_ALIASES = {
     'cinema.Film.poster': {
         'index': {
@@ -166,6 +167,11 @@ THUMBNAIL_ALIASES = {
             'crop': 'smart',
             'autocrop': True,
         },
+        'news_detail': {
+            'size': (770, 430),
+            'crop': 'smart',
+            'autocrop': True,
+        },
     },
     'cinema.News.news_feed_photo': {
         'news_list': {
@@ -182,7 +188,6 @@ THUMBNAIL_ALIASES = {
         },
     },
 }
-THUMBNAIL_BASEDIR = 'thumbnails'
 
 LOGOUT_REDIRECT_URL = 'cinema:index'
 
