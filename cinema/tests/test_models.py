@@ -1,4 +1,5 @@
 import pytest
+from datetime import date
 
 from cinema.models import (
     Country,
@@ -7,20 +8,11 @@ from cinema.models import (
     MpaaRating,
     Language,
     Distributor,
+    CinemaPerson,
+    CinemaProfession,
+    Film,
+    CinemaFilmPersonProfession,
 )
-
-country_names = ["USA", "UK", "France", "Italy", "Australia"]
-genre_names = ["Crime", "Drama", "Comedy", "Adventure", "Western"]
-imdb_ratings = [8.0, 8.5, 9.0]
-mpaa_ratings = ["PG-13", "R", "Not Rated"]
-mpaa_descriptions = [
-    "Children under 13", "Children under 17", "The upcoming movie"
-]
-language_names = ["English", "German", "Italian", "French", "Spanish"]
-distributor_names = [
-    "Columbia Pictures", "Paramount Pictures",
-    "Universal Pictures", "Warner Bros.", "Netflix"
-]
 
 
 @pytest.mark.django_db
@@ -71,16 +63,9 @@ class TestCountryModel:
             )
         assert actual_option_value == expected_option_value
 
-    def test_record_string_representation_is_country_name(self, country):
-        expected_result_of_method_str = country.name
-        assert str(country) == expected_result_of_method_str
-
-    def test_values_of_record_fields(self, country_factory):
-        country = country_factory(name=country_names[0])
-        actual_name = country.name
-        expected_name = country_names[0]
-        assert actual_name, expected_name
-        assert Country.objects.count() == 1
+    def test_string_representation_of_record(self, country_factory):
+        country = country_factory(name="UK")
+        assert str(country) == "UK"
 
 
 @pytest.mark.django_db
@@ -131,16 +116,9 @@ class TestGenreModel:
             )
         assert actual_option_value == expected_option_value
 
-    def test_record_string_representation_is_genre_name(self, genre):
-        expected_result_of_method_str = genre.name
-        assert str(genre) == expected_result_of_method_str
-
-    def test_values_of_record_fields(self, genre_factory):
-        genre = genre_factory(name=genre_names[0])
-        actual_name = genre.name
-        expected_name = genre_names[0]
-        assert actual_name, expected_name
-        assert Genre.objects.count() == 1
+    def test_string_representation_of_record(self, genre_factory):
+        genre = genre_factory(name="Western")
+        assert str(genre) == "Western"
 
 
 @pytest.mark.django_db
@@ -198,18 +176,9 @@ class TestImdbRatingModel:
             )
         assert actual_option_value == expected_option_value
 
-    def test_record_string_representation_is_imdb_rating_value(
-            self, imdb_rating
-    ):
-        expected_result_of_method_str = str(imdb_rating.value)
-        assert str(imdb_rating) == expected_result_of_method_str
-
-    def test_values_of_record_fields(self, imdb_rating_factory):
-        imdb_rating = imdb_rating_factory(value=imdb_ratings[0])
-        actual_value = imdb_rating.value
-        expected_value = imdb_ratings[0]
-        assert actual_value, expected_value
-        assert ImdbRating.objects.count() == 1
+    def test_string_representation_of_record(self, imdb_rating_factory):
+        imdb_rating = imdb_rating_factory(value=9.0)
+        assert str(imdb_rating) == "9.0"
 
 
 @pytest.mark.django_db
@@ -267,23 +236,11 @@ class TestMpaaRatingModel:
             )
         assert actual_option_value == expected_option_value
 
-    def test_record_string_representation_is_mpaa_rating_value(
-            self, mpaa_rating
-    ):
-        expected_result_of_method_str = str(mpaa_rating.value)
-        assert str(mpaa_rating) == expected_result_of_method_str
-
-    def test_values_of_record_fields(self, mpaa_rating_factory):
+    def test_string_representation_of_record(self, mpaa_rating_factory):
         mpaa_rating = mpaa_rating_factory(
-            value=mpaa_ratings[0], description=mpaa_descriptions[0]
+            value="PG-13", description="Children under 13"
         )
-        actual_value = mpaa_rating.value
-        actual_description = mpaa_rating.description
-        expected_value = mpaa_ratings[0]
-        expected_description = mpaa_descriptions[0]
-        assert actual_value, expected_value
-        assert actual_description, expected_description
-        assert MpaaRating.objects.count() == 1
+        assert str(mpaa_rating) == "PG-13"
 
 
 @pytest.mark.django_db
@@ -336,16 +293,9 @@ class TestLanguageModel:
             )
         assert actual_option_value == expected_option_value
 
-    def test_record_string_representation_is_language_name(self, language):
-        expected_result_of_method_str = language.name
-        assert str(language) == expected_result_of_method_str
-
-    def test_values_of_record_fields(self, language_factory):
-        language = language_factory(name=language_names[0])
-        actual_name = language.name
-        expected_name = language_names[0]
-        assert actual_name, expected_name
-        assert Language.objects.count() == 1
+    def test_string_representation_of_record(self, language_factory):
+        language = language_factory(name="English")
+        assert str(language) == "English"
 
 
 @pytest.mark.django_db
@@ -396,15 +346,352 @@ class TestDistributorModel:
             )
         assert actual_option_value == expected_option_value
 
-    def test_record_string_representation_is_distributor_name(
-            self, distributor
-    ):
-        expected_result_of_method_str = distributor.name
-        assert str(distributor) == expected_result_of_method_str
+    def test_string_representation_of_record(self, distributor_factory):
+        distributor = distributor_factory(name="Columbia Pictures")
+        assert str(distributor) == "Columbia Pictures"
 
-    def test_values_of_record_fields(self, distributor_factory):
-        distributor = distributor_factory(name=distributor_names[0])
-        actual_name = distributor.name
-        expected_name = distributor_names[0]
-        assert actual_name, expected_name
-        assert Distributor.objects.count() == 1
+
+@pytest.mark.django_db
+class TestCinemaPersonModel:
+    label_argvalues = [
+        ("gender", "gender"),
+        ("country", "country"),
+        ("birthday", "birthday"),
+        ("user", "user"),
+        ("bio", "bio"),
+        ("oscar_awards", "oscar awards"),
+        ("avatar", "avatar"),
+    ]
+    label_ids = [
+        f"'{arg[0]}' field: is label '{arg[1]}'?"
+        for arg in label_argvalues
+    ]
+    field_argvalues = [
+        ("gender", "max_length", 1),
+        ("gender", "choices", (("M", "Male"), ("F", "Female"),)),
+        ("gender", "default", "M"),
+        ("country", "default", 1),
+        ("birthday", "null", True),
+        ("birthday", "blank", True),
+        ("oscar_awards", "default", 0),
+        ("avatar", "null", True),
+        ("avatar", "blank", True),
+    ]
+    field_ids = [
+        f"'{arg[0]}' field: is {arg[1]} {arg[2]}?"
+        for arg in field_argvalues
+    ]
+
+    def test_record_is_instance_of_model(self, cinema_person):
+        assert isinstance(cinema_person, CinemaPerson)
+
+    @pytest.mark.parametrize(
+        "field_name, expected_label",
+        label_argvalues,
+        ids=label_ids
+    )
+    def test_label_of_model_field(
+            self, cinema_person, field_name, expected_label
+    ):
+        actual_label = cinema_person._meta.get_field(field_name).verbose_name
+        assert actual_label == expected_label
+
+    @pytest.mark.parametrize(
+        "field_name, option_name, expected_option_value",
+        field_argvalues,
+        ids=field_ids
+    )
+    def test_options_of_model_fields(
+            self, cinema_person, field_name, option_name, expected_option_value
+    ):
+        if option_name == "max_length":
+            actual_option_value = cinema_person._meta.get_field(
+                field_name
+            ).max_length
+        elif option_name == "choices":
+            actual_option_value = cinema_person._meta.get_field(
+                field_name
+            ).choices
+        elif option_name == "default":
+            actual_option_value = cinema_person._meta.get_field(
+                field_name
+            ).default
+        elif option_name == "null":
+            actual_option_value = cinema_person._meta.get_field(field_name).null
+        elif option_name == "blank":
+            actual_option_value = cinema_person._meta.get_field(
+                field_name
+            ).blank
+        else:
+            raise AttributeError(
+                f"String '{option_name}' cannot be an attribute."
+            )
+        assert actual_option_value == expected_option_value
+
+    def test_string_representation_of_record(
+            self, user_factory, cinema_person_factory
+    ):
+        user = user_factory(first_name="Tom", last_name="Hanks")
+        cinema_person = cinema_person_factory(user=user)
+        assert str(cinema_person) == "Tom Hanks"
+
+    def test_fullname_of_cinema_person(
+            self, user_factory, cinema_person_factory
+    ):
+        user = user_factory(first_name="Tom", last_name="Hanks")
+        cinema_person = cinema_person_factory(user=user)
+        assert cinema_person.fullname == "Tom Hanks"
+
+    def test_age_of_cinema_person(self, cinema_person_factory):
+        cinema_person = cinema_person_factory(
+            birthday=date(year=1956, month=7, day=9)
+        )
+        assert cinema_person.age == 64
+
+
+@pytest.mark.django_db
+class TestCinemaProfessionModel:
+    label_argvalues = [("name", "name"), ]
+    label_ids = [
+        f"'{arg[0]}' field: is label '{arg[1]}'?"
+        for arg in label_argvalues
+    ]
+    field_argvalues = [
+        ("name", "max_length", 16),
+        ("name", "unique", True),
+    ]
+    field_ids = [
+        f"'{arg[0]}' field: is {arg[1]} {arg[2]}?"
+        for arg in field_argvalues
+    ]
+
+    def test_record_is_instance_of_model(self, cinema_profession):
+        assert isinstance(cinema_profession, CinemaProfession)
+
+    @pytest.mark.parametrize(
+        "field_name, expected_label",
+        label_argvalues,
+        ids=label_ids
+    )
+    def test_label_of_model_field(
+            self, cinema_profession, field_name, expected_label
+    ):
+        actual_label = cinema_profession._meta.get_field(field_name).verbose_name
+        assert actual_label == expected_label
+
+    @pytest.mark.parametrize(
+        "field_name, option_name, expected_option_value",
+        field_argvalues,
+        ids=field_ids
+    )
+    def test_options_of_model_fields(
+            self, cinema_profession, field_name, option_name,
+            expected_option_value
+    ):
+        if option_name == "max_length":
+            actual_option_value = cinema_profession._meta.get_field(
+                field_name
+            ).max_length
+        elif option_name == "unique":
+            actual_option_value = cinema_profession._meta.get_field(
+                field_name
+            ).unique
+        else:
+            raise AttributeError(
+                f"String '{option_name}' cannot be an attribute."
+            )
+        assert actual_option_value == expected_option_value
+
+    def test_string_representation_of_record(self, cinema_profession_factory):
+        cinema_profession = cinema_profession_factory(name="Actor")
+        assert str(cinema_profession) == "Actor"
+
+
+@pytest.mark.django_db
+class TestFilmModel:
+    label_argvalues = [
+        ("title", "title"),
+        ("country", "country"),
+        ("genre", "genre"),
+        ("staff", "staff"),
+        ("budget", "budget"),
+        ("usa_gross", "usa gross"),
+        ("world_gross", "world gross"),
+        ("run_time", "run time"),
+        ("description", "description"),
+        ("release_data", "release data"),
+        ("language", "language"),
+        ("distributor", "distributor"),
+        ("imdb_rating", "imdb rating"),
+        ("mpaa_rating", "mpaa rating"),
+        ("oscar_awards", "oscar awards"),
+        ("poster", "poster"),
+    ]
+    label_ids = [
+        f"'{arg[0]}' field: is label '{arg[1]}'?"
+        for arg in label_argvalues
+    ]
+    field_argvalues = [
+        ("title", "max_length", 64),
+        ("title", "db_index", True),
+        ("budget", "null", True),
+        ("budget", "blank", True),
+        ("usa_gross", "default", 0),
+        ("world_gross", "default", 0),
+        ("mpaa_rating", "default", 1),
+        ("oscar_awards", "default", 0),
+        ("poster", "blank", True),
+        ("poster", "null", True),
+    ]
+    field_ids = [
+        f"'{arg[0]}' field: is {arg[1]} {arg[2]}?"
+        for arg in field_argvalues
+    ]
+
+    def test_record_is_instance_of_model(self, film_fixture):
+        assert isinstance(film_fixture, Film)
+
+    @pytest.mark.parametrize(
+        "field_name, expected_label",
+        label_argvalues,
+        ids=label_ids
+    )
+    def test_label_of_model_field(
+            self, film_fixture, field_name, expected_label
+    ):
+        actual_label = film_fixture._meta.get_field(field_name).verbose_name
+        assert actual_label == expected_label
+
+    @pytest.mark.parametrize(
+        "field_name, option_name, expected_option_value",
+        field_argvalues,
+        ids=field_ids
+    )
+    def test_options_of_model_fields(
+            self, film_fixture, field_name, option_name, expected_option_value
+    ):
+        if option_name == "max_length":
+            actual_option_value = film_fixture._meta.get_field(
+                field_name
+            ).max_length
+        elif option_name == "db_index":
+            actual_option_value = film_fixture._meta.get_field(
+                field_name
+            ).db_index
+        elif option_name == "default":
+            actual_option_value = film_fixture._meta.get_field(
+                field_name
+            ).default
+        elif option_name == "null":
+            actual_option_value = film_fixture._meta.get_field(field_name).null
+        elif option_name == "blank":
+            actual_option_value = film_fixture._meta.get_field(
+                field_name
+            ).blank
+        else:
+            raise AttributeError(
+                f"String '{option_name}' cannot be an attribute."
+            )
+        assert actual_option_value == expected_option_value
+
+    def test_string_representation_of_record(self, film_fixture):
+        film_fixture.title = "Forrest Gump"
+        assert str(film_fixture) == "Forrest Gump"
+
+    def test_year_of_film(self, film_fixture):
+        film_fixture.release_data = date(year=2002, month=7, day=9)
+        assert film_fixture.year == 2002
+
+
+@pytest.mark.django_db
+class TestCinemaFilmPersonProfessionModel:
+    label_argvalues = [
+        ("cinema_person", "cinema person"),
+        ("film", "film"),
+        ("profession", "profession"),
+    ]
+    label_ids = [
+        f"'{arg[0]}' field: is label '{arg[1]}'?"
+        for arg in label_argvalues
+    ]
+    field_argvalues = [("profession", "default", 2), ]
+    field_ids = [
+        f"'{arg[0]}' field: is {arg[1]} {arg[2]}?"
+        for arg in field_argvalues
+    ]
+
+    def test_record_is_instance_of_model(self, cinema_film_person_profession):
+        assert isinstance(
+            cinema_film_person_profession, CinemaFilmPersonProfession
+        )
+
+    @pytest.mark.parametrize(
+        "field_name, expected_label",
+        label_argvalues,
+        ids=label_ids
+    )
+    def test_label_of_model_field(
+            self, cinema_film_person_profession, field_name, expected_label
+    ):
+        actual_label = cinema_film_person_profession._meta.get_field(
+            field_name
+        ).verbose_name
+        assert actual_label == expected_label
+
+    @pytest.mark.parametrize(
+        "field_name, option_name, expected_option_value",
+        field_argvalues,
+        ids=field_ids
+    )
+    def test_options_of_model_fields(
+            self, cinema_film_person_profession, field_name, option_name,
+            expected_option_value
+    ):
+        if option_name == "default":
+            actual_option_value = cinema_film_person_profession._meta.get_field(
+                field_name
+            ).default
+        else:
+            raise AttributeError(
+                f"String '{option_name}' cannot be an attribute."
+            )
+        assert actual_option_value == expected_option_value
+
+    def test_string_representation_of_record(
+            self, cinema_film_person_profession
+    ):
+        cinema_film_person_profession.film.title = "Forrest Gump"
+        cinema_film_person_profession.profession.name = "Actor"
+        cinema_film_person_profession.cinema_person.user.first_name = "Tom"
+        cinema_film_person_profession.cinema_person.user.last_name = "Hanks"
+
+        assert str(
+            cinema_film_person_profession
+        ) == "Forrest Gump: Actor - Tom Hanks"
+
+
+
+
+
+
+
+
+
+
+
+
+
+# @pytest.mark.django_db
+# class TestCinemaPersonManager:
+#     def test_get_brief_data(self, cinema_person_factory):
+#         cp_1 = cinema_person_factory()
+#         cp_2 = cinema_person_factory()
+#         expected_data = [
+#             {'pk': cp_2.pk, 'user__first_name': cp_2.user.first_name,
+#              'user__last_name': cp_2.user.last_name},
+#             {'pk': cp_1.pk, 'user__first_name': cp_1.user.first_name,
+#              'user__last_name': cp_1.user.last_name},
+#         ]
+#         result = CinemaPerson.persons.get_brief_data()
+#         assert len(result) == 2
+#         assert expected_data == list(map(lambda x: x._asdict(), result))
