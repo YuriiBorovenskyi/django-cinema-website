@@ -1,9 +1,7 @@
-README.md
-***
-#DjangoCinema
+# DjangoCinema
 Website of Cinema Library written in Django.
 ***
-####Include:
+#### Include:
 
 - Python
 - Django
@@ -15,14 +13,14 @@ Website of Cinema Library written in Django.
 - Nginx
 - Docker
 ***
-####Database diagrams:
+#### Database diagrams:
 
 - db_diagram/short_diagram.svg
 - db_diagram/full_diagram.svg
 ***
-#Quick start
-###I. Development
-####To run current project locally you need:
+# Quick start
+### I. Development
+#### To run current project locally you need:
 
 1. Requirements:
     - '.env.dev' file with environment variables
@@ -38,8 +36,8 @@ Website of Cinema Library written in Django.
 10. Open browser at <http://localhost:8000/> to visit website.
 
 ***
-###II. Production
-####To deploy current project to Amazon Web Services (AWS) EC2 you need:
+### II. Production
+#### To deploy current project to Amazon Web Services (AWS) EC2 you need:
 
 1. Configure ***Virtual Private Cloud*** (VPC) for your account:
     - Create AWS account
