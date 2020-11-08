@@ -15,6 +15,11 @@ from cinema.models import (
     CinemaProfession,
     CinemaFilmPersonProfession,
     News,
+    Product,
+    CommentToPerson,
+    CommentToFilm,
+    CommentToNews,
+    CommentToProduct,
 )
 
 faker = FakerFactory.create()
@@ -92,7 +97,7 @@ class FilmFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Film
 
-    title = factory.Faker("sentence", nb_words=3)
+    title = factory.Faker("sentence", nb_words=4)
 
     @factory.post_generation
     def country(self, create, extracted):
@@ -159,10 +164,91 @@ class CinemaPersonWithFilmFactory(CinemaPersonFactory):
     )
 
 
-# class FooFactory(factory.Factory):
-#     class Meta:
-#         model = Foo
-#     # Generate a list of `factory` objects of random size, ranging from 1 -> 5
-#     bar = factory.RelatedFactoryList(BarFactory, size=lambda: random.randint(1, 5))
-#     # Each Foo object will have exactly 3 Bar objects generated for its foobar attribute.
-#     foobar = factory.RelatedFactoryList(BarFactory, size=3)
+class NewsFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = News
+
+    title = factory.Faker("sentence")
+    description = factory.Faker("text")
+    news_source = factory.Faker("word")
+    news_author = factory.Faker("name")
+
+    @factory.post_generation
+    def film(self, create, extracted):
+        if not create:
+            return
+        if extracted:
+            for film in extracted:
+                self.film.add(film)
+
+    @factory.post_generation
+    def cinema_person(self, create, extracted):
+        if not create:
+            return
+        if extracted:
+            for person in extracted:
+                self.cinema_person.add(person)
+
+    news_feed_photo = NamedTemporaryFile(
+        suffix=".jpg", dir="/usr/src/app/media/"
+    ).name
+    news_detail_photo = NamedTemporaryFile(
+        suffix=".jpg", dir="/usr/src/app/media/"
+    ).name
+    created_at = factory.Faker("date_time")
+
+
+class ProductFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Product
+
+    price = factory.Faker(
+        "pyfloat", right_digits=2, max_value=200, positive=True
+    )
+    in_stock = factory.Faker("pyint", max_value=100)
+    film = factory.SubFactory(FilmFactory)
+    created_at = factory.Faker("date_time")
+
+
+class CommentToPersonFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = CommentToPerson
+
+    author = factory.Faker("name")
+    content = factory.Faker("text")
+    is_active = factory.Faker("pybool")
+    cinema_person = factory.SubFactory(CinemaPersonFactory)
+    created_at = factory.Faker("date_time")
+
+
+class CommentToFilmFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = CommentToFilm
+
+    author = factory.Faker("name")
+    content = factory.Faker("text")
+    is_active = factory.Faker("pybool")
+    film = factory.SubFactory(FilmFactory)
+    created_at = factory.Faker("date_time")
+
+
+class CommentToNewsFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = CommentToNews
+
+    author = factory.Faker("name")
+    content = factory.Faker("text")
+    is_active = factory.Faker("pybool")
+    news = factory.SubFactory(NewsFactory)
+    created_at = factory.Faker("date_time")
+
+
+class CommentToProductFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = CommentToProduct
+
+    author = factory.Faker("name")
+    content = factory.Faker("text")
+    is_active = factory.Faker("pybool")
+    product = factory.SubFactory(ProductFactory)
+    created_at = factory.Faker("date_time")

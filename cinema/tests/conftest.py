@@ -18,6 +18,12 @@ from .factories import (
     FilmFactory,
     CinemaFilmPersonProfessionFactory,
     CinemaPersonWithFilmFactory,
+    NewsFactory,
+    ProductFactory,
+    CommentToPersonFactory,
+    CommentToFilmFactory,
+    CommentToNewsFactory,
+    CommentToProductFactory,
 )
 from cinema.models import Film
 
@@ -52,6 +58,12 @@ register(CinemaProfessionFactory)
 register(FilmFactory)
 register(CinemaFilmPersonProfessionFactory)
 register(CinemaPersonWithFilmFactory)
+register(NewsFactory)
+register(ProductFactory)
+register(CommentToPersonFactory)
+register(CommentToFilmFactory)
+register(CommentToNewsFactory)
+register(CommentToProductFactory)
 
 
 @pytest.fixture()

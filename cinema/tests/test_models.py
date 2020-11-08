@@ -12,6 +12,17 @@ from cinema.models import (
     CinemaProfession,
     Film,
     CinemaFilmPersonProfession,
+    News,
+    Product,
+    CommentToPerson,
+    CommentToFilm,
+    CommentToNews,
+    CommentToProduct,
+    CommentToFilm,
+    upload_to_film,
+    upload_to_cinema_person,
+    upload_photo_to_news_feed,
+    upload_photo_to_news_detail,
 )
 
 
@@ -448,6 +459,12 @@ class TestCinemaPersonModel:
         )
         assert cinema_person.age == 64
 
+    def test_upload_to_cinema_person(self, cinema_person_factory):
+        person = cinema_person_factory()
+        expected_data = f"cinema_persons/{person.user.first_name}" \
+                        f"_{person.user.last_name}_{person.pk}.jpg"
+        assert upload_to_cinema_person(person, "") == expected_data
+
 
 @pytest.mark.django_db
 class TestCinemaProfessionModel:
@@ -602,6 +619,11 @@ class TestFilmModel:
         film_fixture.release_data = date(year=2002, month=7, day=9)
         assert film_fixture.year == 2002
 
+    def test_upload_to_film(self, film_factory):
+        film = film_factory()
+        expected_data = f"films/{film.title}_{film.pk}.jpg"
+        assert upload_to_film(film, "") == expected_data
+
 
 @pytest.mark.django_db
 class TestCinemaFilmPersonProfessionModel:
@@ -670,28 +692,499 @@ class TestCinemaFilmPersonProfessionModel:
         ) == "Forrest Gump: Actor - Tom Hanks"
 
 
+@pytest.mark.django_db
+class TestNewsModel:
+    label_argvalues = [
+        ("title", "title"),
+        ("description", "description"),
+        ("news_source", "news source"),
+        ("news_author", "news author"),
+        ("film", "film"),
+        ("cinema_person", "cinema person"),
+        ("news_feed_photo", "news feed photo"),
+        ("news_detail_photo", "news detail photo"),
+        ("created_at", "created at"),
+    ]
+    label_ids = [
+        f"'{arg[0]}' field: is label '{arg[1]}'?"
+        for arg in label_argvalues
+    ]
+    field_argvalues = [
+        ("title", "max_length", 128),
+        ("title", "unique", True),
+        ("news_source", "max_length", 32),
+        ("news_author", "max_length", 64),
+        ("film", "blank", True),
+        ("cinema_person", "blank", True),
+        ("news_feed_photo", "blank", True),
+        ("news_feed_photo", "null", True),
+        ("news_detail_photo", "blank", True),
+        ("news_detail_photo", "null", True),
+        ("created_at", "auto_now", True),
+        ("created_at", "db_index", True),
+    ]
+    field_ids = [
+        f"'{arg[0]}' field: is {arg[1]} {arg[2]}?"
+        for arg in field_argvalues
+    ]
+
+    def test_record_is_instance_of_model(self, news):
+        assert isinstance(news, News)
+
+    @pytest.mark.parametrize(
+        "field_name, expected_label",
+        label_argvalues,
+        ids=label_ids
+    )
+    def test_label_of_model_field(
+            self, news, field_name, expected_label
+    ):
+        actual_label = news._meta.get_field(field_name).verbose_name
+        assert actual_label == expected_label
+
+    @pytest.mark.parametrize(
+        "field_name, option_name, expected_option_value",
+        field_argvalues,
+        ids=field_ids
+    )
+    def test_options_of_model_fields(
+            self, news, field_name, option_name, expected_option_value
+    ):
+        if option_name == "max_length":
+            actual_option_value = news._meta.get_field(
+                field_name
+            ).max_length
+        elif option_name == "db_index":
+            actual_option_value = news._meta.get_field(
+                field_name
+            ).db_index
+        elif option_name == "unique":
+            actual_option_value = news._meta.get_field(
+                field_name
+            ).unique
+        elif option_name == "null":
+            actual_option_value = news._meta.get_field(field_name).null
+        elif option_name == "blank":
+            actual_option_value = news._meta.get_field(
+                field_name
+            ).blank
+        elif option_name == "auto_now":
+            actual_option_value = news._meta.get_field(
+                field_name
+            ).auto_now
+        else:
+            raise AttributeError(
+                f"String '{option_name}' cannot be an attribute."
+            )
+        assert actual_option_value == expected_option_value
+
+    def test_string_representation_of_record(self, news):
+        news.title = "Forrest Gump"
+        assert str(news) == "Forrest Gump"
+
+    def test_upload_photo_to_news_feed(self, news_factory):
+        news = news_factory()
+        expected_data = f"cinema_news_feed/{news.title}_{news.pk}.jpg"
+        assert upload_photo_to_news_feed(news, "") == expected_data
+
+    def test_upload_photo_to_news_detail(self, news_factory):
+        news = news_factory()
+        expected_data = f"cinema_news_detail/{news.title}_{news.pk}.jpg"
+        assert upload_photo_to_news_detail(news, "") == expected_data
 
 
+@pytest.mark.django_db
+class TestProductModel:
+    label_argvalues = [
+        ("price", "price"),
+        ("in_stock", "in stock"),
+        ("film", "film"),
+        ("created_at", "created at"),
+    ]
+    label_ids = [
+        f"'{arg[0]}' field: is label '{arg[1]}'?"
+        for arg in label_argvalues
+    ]
+    field_argvalues = [
+        ("price", "max_digits", 5),
+        ("price", "decimal_places", 2),
+        ("in_stock", "default", 0),
+        ("created_at", "auto_now", True),
+        ("created_at", "db_index", True),
+    ]
+    field_ids = [
+        f"'{arg[0]}' field: is {arg[1]} {arg[2]}?"
+        for arg in field_argvalues
+    ]
+
+    def test_record_is_instance_of_model(self, product):
+        assert isinstance(product, Product)
+
+    @pytest.mark.parametrize(
+        "field_name, expected_label",
+        label_argvalues,
+        ids=label_ids
+    )
+    def test_label_of_model_field(
+            self, product, field_name, expected_label
+    ):
+        actual_label = product._meta.get_field(field_name).verbose_name
+        assert actual_label == expected_label
+
+    @pytest.mark.parametrize(
+        "field_name, option_name, expected_option_value",
+        field_argvalues,
+        ids=field_ids
+    )
+    def test_options_of_model_fields(
+            self, product, field_name, option_name, expected_option_value
+    ):
+        if option_name == "max_digits":
+            actual_option_value = product._meta.get_field(
+                field_name
+            ).max_digits
+        elif option_name == "decimal_places":
+            actual_option_value = product._meta.get_field(
+                field_name
+            ).decimal_places
+        elif option_name == "default":
+            actual_option_value = product._meta.get_field(
+                field_name
+            ).default
+        elif option_name == "auto_now":
+            actual_option_value = product._meta.get_field(
+                field_name
+            ).auto_now
+        elif option_name == "db_index":
+            actual_option_value = product._meta.get_field(
+                field_name
+            ).db_index
+        else:
+            raise AttributeError(
+                f"String '{option_name}' cannot be an attribute."
+            )
+        assert actual_option_value == expected_option_value
+
+    def test_string_representation_of_record(self, product_factory):
+        product = product_factory(film__title="Forrest Gump")
+        assert str(product) == "Forrest Gump [Blu-ray]"
 
 
+@pytest.mark.django_db
+class TestCommentToPersonModel:
+    label_argvalues = [
+        ("author", "author"),
+        ("content", "content"),
+        ("is_active", "Display on screen?"),
+        ("created_at", "created at"),
+        ("cinema_person", "cinema person"),
+    ]
+    label_ids = [
+        f"'{arg[0]}' field: is label '{arg[1]}'?"
+        for arg in label_argvalues
+    ]
+    field_argvalues = [
+        ("author", "max_length", 32),
+        ("is_active", "default", True),
+        ("is_active", "db_index", True),
+        ("is_active", "verbose_name", "Display on screen?"),
+        ("created_at", "auto_now", True),
+        ("created_at", "db_index", True),
+    ]
+    field_ids = [
+        f"'{arg[0]}' field: is {arg[1]} {arg[2]}?"
+        for arg in field_argvalues
+    ]
+
+    def test_record_is_instance_of_model(self, comment_to_person):
+        assert isinstance(comment_to_person, CommentToPerson)
+
+    @pytest.mark.parametrize(
+        "field_name, expected_label",
+        label_argvalues,
+        ids=label_ids
+    )
+    def test_label_of_model_field(
+            self, comment_to_person, field_name, expected_label
+    ):
+        actual_label = comment_to_person._meta.get_field(field_name).verbose_name
+        assert actual_label == expected_label
+
+    @pytest.mark.parametrize(
+        "field_name, option_name, expected_option_value",
+        field_argvalues,
+        ids=field_ids
+    )
+    def test_options_of_model_fields(
+            self, comment_to_person, field_name, option_name,
+            expected_option_value
+    ):
+        if option_name == "max_length":
+            actual_option_value = comment_to_person._meta.get_field(
+                field_name
+            ).max_length
+        elif option_name == "max_digits":
+            actual_option_value = comment_to_person._meta.get_field(
+                field_name
+            ).max_digits
+        elif option_name == "default":
+            actual_option_value = comment_to_person._meta.get_field(
+                field_name
+            ).default
+        elif option_name == "auto_now":
+            actual_option_value = comment_to_person._meta.get_field(
+                field_name
+            ).auto_now
+        elif option_name == "db_index":
+            actual_option_value = comment_to_person._meta.get_field(
+                field_name
+            ).db_index
+        elif option_name == "verbose_name":
+            actual_option_value = comment_to_person._meta.get_field(
+                field_name
+            ).verbose_name
+        else:
+            raise AttributeError(
+                f"String '{option_name}' cannot be an attribute."
+            )
+        assert actual_option_value == expected_option_value
 
 
+@pytest.mark.django_db
+class TestCommentToFilmModel:
+    label_argvalues = [
+        ("author", "author"),
+        ("content", "content"),
+        ("is_active", "Display on screen?"),
+        ("created_at", "created at"),
+        ("film", "film"),
+    ]
+    label_ids = [
+        f"'{arg[0]}' field: is label '{arg[1]}'?"
+        for arg in label_argvalues
+    ]
+    field_argvalues = [
+        ("author", "max_length", 32),
+        ("is_active", "default", True),
+        ("is_active", "db_index", True),
+        ("is_active", "verbose_name", "Display on screen?"),
+        ("created_at", "auto_now", True),
+        ("created_at", "db_index", True),
+    ]
+    field_ids = [
+        f"'{arg[0]}' field: is {arg[1]} {arg[2]}?"
+        for arg in field_argvalues
+    ]
+
+    def test_record_is_instance_of_model(self, comment_to_film):
+        assert isinstance(comment_to_film, CommentToFilm)
+
+    @pytest.mark.parametrize(
+        "field_name, expected_label",
+        label_argvalues,
+        ids=label_ids
+    )
+    def test_label_of_model_field(
+            self, comment_to_film, field_name, expected_label
+    ):
+        actual_label = comment_to_film._meta.get_field(field_name).verbose_name
+        assert actual_label == expected_label
+
+    @pytest.mark.parametrize(
+        "field_name, option_name, expected_option_value",
+        field_argvalues,
+        ids=field_ids
+    )
+    def test_options_of_model_fields(
+            self, comment_to_film, field_name, option_name,
+            expected_option_value
+    ):
+        if option_name == "max_length":
+            actual_option_value = comment_to_film._meta.get_field(
+                field_name
+            ).max_length
+        elif option_name == "max_digits":
+            actual_option_value = comment_to_film._meta.get_field(
+                field_name
+            ).max_digits
+        elif option_name == "default":
+            actual_option_value = comment_to_film._meta.get_field(
+                field_name
+            ).default
+        elif option_name == "auto_now":
+            actual_option_value = comment_to_film._meta.get_field(
+                field_name
+            ).auto_now
+        elif option_name == "db_index":
+            actual_option_value = comment_to_film._meta.get_field(
+                field_name
+            ).db_index
+        elif option_name == "verbose_name":
+            actual_option_value = comment_to_film._meta.get_field(
+                field_name
+            ).verbose_name
+        else:
+            raise AttributeError(
+                f"String '{option_name}' cannot be an attribute."
+            )
+        assert actual_option_value == expected_option_value
 
 
+@pytest.mark.django_db
+class TestCommentToNewsModel:
+    label_argvalues = [
+        ("author", "author"),
+        ("content", "content"),
+        ("is_active", "Display on screen?"),
+        ("created_at", "created at"),
+        ("news", "news"),
+    ]
+    label_ids = [
+        f"'{arg[0]}' field: is label '{arg[1]}'?"
+        for arg in label_argvalues
+    ]
+    field_argvalues = [
+        ("author", "max_length", 32),
+        ("is_active", "default", True),
+        ("is_active", "db_index", True),
+        ("is_active", "verbose_name", "Display on screen?"),
+        ("created_at", "auto_now", True),
+        ("created_at", "db_index", True),
+    ]
+    field_ids = [
+        f"'{arg[0]}' field: is {arg[1]} {arg[2]}?"
+        for arg in field_argvalues
+    ]
+
+    def test_record_is_instance_of_model(self, comment_to_news):
+        assert isinstance(comment_to_news, CommentToNews)
+
+    @pytest.mark.parametrize(
+        "field_name, expected_label",
+        label_argvalues,
+        ids=label_ids
+    )
+    def test_label_of_model_field(
+            self, comment_to_news, field_name, expected_label
+    ):
+        actual_label = comment_to_news._meta.get_field(field_name).verbose_name
+        assert actual_label == expected_label
+
+    @pytest.mark.parametrize(
+        "field_name, option_name, expected_option_value",
+        field_argvalues,
+        ids=field_ids
+    )
+    def test_options_of_model_fields(
+            self, comment_to_news, field_name, option_name,
+            expected_option_value
+    ):
+        if option_name == "max_length":
+            actual_option_value = comment_to_news._meta.get_field(
+                field_name
+            ).max_length
+        elif option_name == "max_digits":
+            actual_option_value = comment_to_news._meta.get_field(
+                field_name
+            ).max_digits
+        elif option_name == "default":
+            actual_option_value = comment_to_news._meta.get_field(
+                field_name
+            ).default
+        elif option_name == "auto_now":
+            actual_option_value = comment_to_news._meta.get_field(
+                field_name
+            ).auto_now
+        elif option_name == "db_index":
+            actual_option_value = comment_to_news._meta.get_field(
+                field_name
+            ).db_index
+        elif option_name == "verbose_name":
+            actual_option_value = comment_to_news._meta.get_field(
+                field_name
+            ).verbose_name
+        else:
+            raise AttributeError(
+                f"String '{option_name}' cannot be an attribute."
+            )
+        assert actual_option_value == expected_option_value
 
 
+@pytest.mark.django_db
+class TestCommentToProductModel:
+    label_argvalues = [
+        ("author", "author"),
+        ("content", "content"),
+        ("is_active", "Display on screen?"),
+        ("created_at", "created at"),
+        ("product", "product"),
+    ]
+    label_ids = [
+        f"'{arg[0]}' field: is label '{arg[1]}'?"
+        for arg in label_argvalues
+    ]
+    field_argvalues = [
+        ("author", "max_length", 32),
+        ("is_active", "default", True),
+        ("is_active", "db_index", True),
+        ("is_active", "verbose_name", "Display on screen?"),
+        ("created_at", "auto_now", True),
+        ("created_at", "db_index", True),
+    ]
+    field_ids = [
+        f"'{arg[0]}' field: is {arg[1]} {arg[2]}?"
+        for arg in field_argvalues
+    ]
 
-# @pytest.mark.django_db
-# class TestCinemaPersonManager:
-#     def test_get_brief_data(self, cinema_person_factory):
-#         cp_1 = cinema_person_factory()
-#         cp_2 = cinema_person_factory()
-#         expected_data = [
-#             {'pk': cp_2.pk, 'user__first_name': cp_2.user.first_name,
-#              'user__last_name': cp_2.user.last_name},
-#             {'pk': cp_1.pk, 'user__first_name': cp_1.user.first_name,
-#              'user__last_name': cp_1.user.last_name},
-#         ]
-#         result = CinemaPerson.persons.get_brief_data()
-#         assert len(result) == 2
-#         assert expected_data == list(map(lambda x: x._asdict(), result))
+    def test_record_is_instance_of_model(self, comment_to_product):
+        assert isinstance(comment_to_product, CommentToProduct)
+
+    @pytest.mark.parametrize(
+        "field_name, expected_label",
+        label_argvalues,
+        ids=label_ids
+    )
+    def test_label_of_model_field(
+            self, comment_to_product, field_name, expected_label
+    ):
+        actual_label = comment_to_product._meta.get_field(field_name).verbose_name
+        assert actual_label == expected_label
+
+    @pytest.mark.parametrize(
+        "field_name, option_name, expected_option_value",
+        field_argvalues,
+        ids=field_ids
+    )
+    def test_options_of_model_fields(
+            self, comment_to_product, field_name, option_name,
+            expected_option_value
+    ):
+        if option_name == "max_length":
+            actual_option_value = comment_to_product._meta.get_field(
+                field_name
+            ).max_length
+        elif option_name == "max_digits":
+            actual_option_value = comment_to_product._meta.get_field(
+                field_name
+            ).max_digits
+        elif option_name == "default":
+            actual_option_value = comment_to_product._meta.get_field(
+                field_name
+            ).default
+        elif option_name == "auto_now":
+            actual_option_value = comment_to_product._meta.get_field(
+                field_name
+            ).auto_now
+        elif option_name == "db_index":
+            actual_option_value = comment_to_product._meta.get_field(
+                field_name
+            ).db_index
+        elif option_name == "verbose_name":
+            actual_option_value = comment_to_product._meta.get_field(
+                field_name
+            ).verbose_name
+        else:
+            raise AttributeError(
+                f"String '{option_name}' cannot be an attribute."
+            )
+        assert actual_option_value == expected_option_value
