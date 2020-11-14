@@ -1,25 +1,26 @@
 from tempfile import NamedTemporaryFile
+
 import factory
 from faker import Factory as FakerFactory
 
 from accounts.tests.factories import UserFactory
 from cinema.models import (
-    Country,
-    Genre,
-    ImdbRating,
-    MpaaRating,
-    Language,
-    Distributor,
-    CinemaPerson,
-    Film,
-    CinemaProfession,
     CinemaFilmPersonProfession,
-    News,
-    Product,
-    CommentToPerson,
+    CinemaPerson,
+    CinemaProfession,
     CommentToFilm,
     CommentToNews,
+    CommentToPerson,
     CommentToProduct,
+    Country,
+    Distributor,
+    Film,
+    Genre,
+    ImdbRating,
+    Language,
+    MpaaRating,
+    News,
+    Product,
 )
 
 faker = FakerFactory.create()
@@ -28,7 +29,7 @@ faker = FakerFactory.create()
 class CountryFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Country
-        django_get_or_create = ('name',)
+        django_get_or_create = ("name",)
 
     name = "USA"
 
@@ -43,7 +44,7 @@ class GenreFactory(factory.django.DjangoModelFactory):
 class ImdbRatingFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = ImdbRating
-        django_get_or_create = ('value',)
+        django_get_or_create = ("value",)
 
     value = 8.0
 
@@ -74,21 +75,22 @@ class CinemaPersonFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = CinemaPerson
 
-    gender = factory.Faker("random_element", elements=('M', 'F'))
+    gender = factory.Faker("random_element", elements=("M", "F"))
     country = factory.SubFactory(CountryFactory)
     birthday = factory.Faker("date_of_birth")
     user = factory.SubFactory(UserFactory)
     bio = factory.Faker("text")
     oscar_awards = factory.Faker("pyint", max_value=12)
     avatar = NamedTemporaryFile(
-        suffix=".jpg", dir="/usr/src/app/media/"
+        suffix=".jpg",
+        dir="/usr/src/app/media/",
     ).name
 
 
 class CinemaProfessionFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = CinemaProfession
-        django_get_or_create = ('name',)
+        django_get_or_create = ("name",)
 
     name = "Actor"
 
@@ -118,7 +120,9 @@ class FilmFactory(factory.django.DjangoModelFactory):
     budget = factory.Faker("pyint", min_value=10000000, max_value=300000000)
     usa_gross = factory.Faker("pyint", min_value=10000000, max_value=500000000)
     world_gross = factory.Faker(
-        "pyint", min_value=10000000, max_value=1000000000
+        "pyint",
+        min_value=10000000,
+        max_value=1000000000,
     )
     run_time = factory.Faker("time_delta")
     description = factory.Faker("text")
@@ -144,7 +148,8 @@ class FilmFactory(factory.django.DjangoModelFactory):
     mpaa_rating = factory.SubFactory(MpaaRatingFactory)
     oscar_awards = factory.Faker("pyint", max_value=12)
     poster = NamedTemporaryFile(
-        suffix=".jpg", dir="/usr/src/app/media/"
+        suffix=".jpg",
+        dir="/usr/src/app/media/",
     ).name
 
 
@@ -160,7 +165,7 @@ class CinemaFilmPersonProfessionFactory(factory.django.DjangoModelFactory):
 class CinemaPersonWithFilmFactory(CinemaPersonFactory):
     membership = factory.RelatedFactory(
         CinemaFilmPersonProfessionFactory,
-        factory_related_name='cinema_person',
+        factory_related_name="cinema_person",
     )
 
 
@@ -190,10 +195,12 @@ class NewsFactory(factory.django.DjangoModelFactory):
                 self.cinema_person.add(person)
 
     news_feed_photo = NamedTemporaryFile(
-        suffix=".jpg", dir="/usr/src/app/media/"
+        suffix=".jpg",
+        dir="/usr/src/app/media/",
     ).name
     news_detail_photo = NamedTemporaryFile(
-        suffix=".jpg", dir="/usr/src/app/media/"
+        suffix=".jpg",
+        dir="/usr/src/app/media/",
     ).name
     created_at = factory.Faker("date_time")
 
@@ -203,7 +210,10 @@ class ProductFactory(factory.django.DjangoModelFactory):
         model = Product
 
     price = factory.Faker(
-        "pyfloat", right_digits=2, max_value=200, positive=True
+        "pyfloat",
+        right_digits=2,
+        max_value=200,
+        positive=True,
     )
     in_stock = factory.Faker("pyint", max_value=100)
     film = factory.SubFactory(FilmFactory)

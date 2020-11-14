@@ -1,51 +1,30 @@
-from os.path import isdir
-from shutil import rmtree
-from uuid import uuid4
-
 import pytest
-from pytest_factoryboy import register
 from faker import Factory as FakerFactory
+from pytest_factoryboy import register
 
-from .factories import (
-    CountryFactory,
-    GenreFactory,
-    ImdbRatingFactory,
-    MpaaRatingFactory,
-    LanguageFactory,
-    DistributorFactory,
-    CinemaPersonFactory,
-    CinemaProfessionFactory,
-    FilmFactory,
-    CinemaFilmPersonProfessionFactory,
-    CinemaPersonWithFilmFactory,
-    NewsFactory,
-    ProductFactory,
-    CommentToPersonFactory,
-    CommentToFilmFactory,
-    CommentToNewsFactory,
-    CommentToProductFactory,
-)
 from cinema.models import Film
 
-faker = FakerFactory.create()
+from .factories import (
+    CinemaFilmPersonProfessionFactory,
+    CinemaPersonFactory,
+    CinemaPersonWithFilmFactory,
+    CinemaProfessionFactory,
+    CommentToFilmFactory,
+    CommentToNewsFactory,
+    CommentToPersonFactory,
+    CommentToProductFactory,
+    CountryFactory,
+    DistributorFactory,
+    FilmFactory,
+    GenreFactory,
+    ImdbRatingFactory,
+    LanguageFactory,
+    MpaaRatingFactory,
+    NewsFactory,
+    ProductFactory,
+)
 
-country_names = ["USA", "UK", "France", "Italy", "Australia"]
-genre_names = ["Western", "Drama", "Comedy", "Adventure", "Crime"]
-imdb_ratings = [8.0, 8.5, 9.0]
-mpaa_ratings = ["PG-13", "R", "Not Rated"]
-mpaa_descriptions = [
-    "Children under 13", "Children under 17", "The upcoming movie"
-]
-language_names = ["English", "German", "Italian", "French", "Spanish"]
-distributor_names = [
-    "Columbia Pictures", "Paramount Pictures",
-    "Universal Pictures", "Warner Bros.", "Netflix"
-]
-usernames = [
-    "steven.spielberg", "jack.nicholson", "leonardo.dicaprio",
-    "robert.deniro", "al.pacino", "tom.hanks", "quentin.tarantino"
-]
-profession_names = ["Director", "Actor", "Writer"]
+faker = FakerFactory.create()
 
 register(CountryFactory)
 register(GenreFactory)
@@ -66,43 +45,60 @@ register(CommentToNewsFactory)
 register(CommentToProductFactory)
 
 
-@pytest.fixture()
+@pytest.fixture
 def film_fixture(db):
     cinema_persons = []
-    for username in usernames:
-        first_name, _, last_name = username.partition('.')
+    for username in (
+        "steven.spielberg",
+        "jack.nicholson",
+        "leonardo.dicaprio",
+        "robert.deniro",
+        "al.pacino",
+        "tom.hanks",
+        "quentin.tarantino",
+    ):
+        first_name, _, last_name = username.partition(".")
         email = f"{username}@hollywood.com"
         cinema_person = CinemaPersonFactory(
-            user__first_name=first_name, user__last_name=last_name,
+            user__first_name=first_name,
+            user__last_name=last_name,
             user__username=username,
             user__email=email,
-            gender='M',
+            gender="M",
         )
         cinema_persons.append(cinema_person)
 
     countries = []
-    for country_name in country_names:
+    for country_name in ("USA", "UK", "France", "Italy", "Australia"):
         country = CountryFactory(name=country_name)
         countries.append(country)
     genres = []
-    for genre_name in genre_names:
+    for genre_name in ("Western", "Drama", "Comedy", "Adventure", "Crime"):
         genre = GenreFactory(name=genre_name)
         genres.append(genre)
     languages = []
-    for language_name in language_names:
+    for language_name in ("English", "German", "Italian", "French", "Spanish"):
         language = LanguageFactory(name=language_name)
         languages.append(language)
     distributors = []
-    for distributor_name in distributor_names:
+    for distributor_name in (
+        "Columbia Pictures",
+        "Paramount Pictures",
+        "Universal Pictures",
+        "Warner Bros.",
+        "Netflix",
+    ):
         distributor = DistributorFactory(name=distributor_name)
         distributors.append(distributor)
 
     film = FilmFactory(
-        title="The Greatest Movie", country=countries,
-        genre=genres, distributor=distributors,
+        title="The Greatest Movie",
+        country=countries,
+        genre=genres,
+        distributor=distributors,
     )
     professions = []
-    for profession_name in profession_names:
+    for profession_name in ("Director", "Actor", "Writer"):
         profession = CinemaProfessionFactory(name=profession_name)
         professions.append(profession)
 
@@ -110,28 +106,6 @@ def film_fixture(db):
         CinemaFilmPersonProfessionFactory(
             cinema_person=cinema_persons[i],
             film=film,
-            profession=faker.random_element(professions)
+            profession=faker.random_element(professions),
         )
     return Film.objects.get(title="The Greatest Movie")
-
-
-# def get_path_to_keep_test_image():
-#     return f"tests/{uuid4().hex}.jpg"
-
-
-# @pytest.fixture()
-# def cinema_person_factory(mocker):
-#     mocker.patch(
-#         "cinema.models.upload_to_cinema_person",
-#         get_path_to_keep_test_image
-#     )
-#     return CinemaPersonFactory
-
-
-# @pytest.fixture(scope="class")
-# def clean_test_media():
-#     yield
-#
-#     test_media_path = "/usr/src/app/media/tests"
-#     if isdir(test_media_path):
-#         rmtree(test_media_path)
