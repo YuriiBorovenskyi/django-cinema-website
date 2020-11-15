@@ -14,8 +14,8 @@ LOGGER = logging.getLogger(__name__)
 
 @celery_app.task
 def send_activation_notification(user_id):
-    """
-    Function, that is called by 'user_registrated_dispatcher' signal handler.
+    """Function, that is called by 'user_registrated_dispatcher' signal
+    handler.
 
     Send notification message to current user with instruction for
     activation his account.
@@ -32,19 +32,17 @@ def send_activation_notification(user_id):
         port = 80
     else:
         port = 8000
-    host = f'http://{ip}:{port}'
+    host = f"http://{ip}:{port}"
     context = {
-        'username': user.username,
-        'host': host,
-        'sign': signer.sign(user.username)
+        "username": user.username,
+        "host": host,
+        "sign": signer.sign(user.username),
     }
-    subject = render_to_string(
-        'email/activation_letter_subject.txt', context
-    )
-    body_text = render_to_string(
-        'email/activation_letter_body.txt', context
-    )
+    subject = render_to_string("email/activation_letter_subject.txt", context)
+    body_text = render_to_string("email/activation_letter_body.txt", context)
     user.email_user(subject, body_text)
 
-    LOGGER.info(f"Sent message to {user.username}'s e-mail with instruction "
-                f"for activation his account.")
+    LOGGER.info(
+        f"Sent message to {user.username}'s e-mail with instruction "
+        f"for activation his account."
+    )

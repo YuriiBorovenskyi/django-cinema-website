@@ -1,15 +1,14 @@
 exclude: |
   (?x)^(
     ^README\.md$|
-    ^static/|
-    ^media/|
-    ^db_diagram/|
-    ^[a-zA-Z]*/migrations/|
-    ^[a-zA-Z]*/fixtures/|
-    ^[a-zA-Z]*/templates/.*\.(?:html|txt)$|
+    ^static/.*\.(?:css|js)$|
+    ^db_diagram/.*\.svg$|
+    .*/migrations/.*\.py$|
+    .*/fixtures/.*\.json$|
+    .*/templates/.*\.(?:html|txt)$|
     ^manage\.py$|
     ^\.env[.a-zA-Z]*|
-    ^.*Dockerfile[a-zA-Z.]*|
+    .*Dockerfile[a-zA-Z.]*|
   )$
 default_language_version:
   python: python3.8
@@ -51,14 +50,6 @@ repos:
   rev: 3.8.4
   hooks:
   - id: flake8
-- repo: local
-  hooks:
-  - id: pylint
-    name: pylint
-    entry: pylint
-    language: system
-    types: [python]
-    exclude: .*/tests/|.*conftest\.py$|.*factories\.py$
 - repo: https://github.com/asottile/seed-isort-config
   rev: v2.2.0
   hooks:
@@ -67,7 +58,16 @@ repos:
   rev: 20.8b1
   hooks:
   - id: black
+    exclude: .*/migrations/.*\.py$
 - repo: https://github.com/pre-commit/mirrors-isort
   rev: v5.6.4
   hooks:
   - id: isort
+- repo: local
+  hooks:
+  - id: pylint
+    name: pylint
+    entry: pylint
+    language: system
+    types: [python]
+    exclude: .*/tests/|.*conftest\.py$|.*factories\.py$
