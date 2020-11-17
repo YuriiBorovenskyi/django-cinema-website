@@ -76,6 +76,9 @@ class TestCountryModel:
 
         assert actual_option_value == expected_option_value
 
+    def test_model_ordering(self, country):
+        assert country._meta.ordering == ["name"]
+
     def test_string_representation_of_record(self, country_factory):
         country = country_factory(name="UK")
         assert str(country) == "UK"
@@ -130,6 +133,9 @@ class TestGenreModel:
             actual_option_value = genre._meta.get_field(field_name).unique
 
         assert actual_option_value == expected_option_value
+
+    def test_model_ordering(self, genre):
+        assert genre._meta.ordering == ["name"]
 
     def test_string_representation_of_record(self, genre_factory):
         genre = genre_factory(name="Western")
@@ -193,6 +199,9 @@ class TestImdbRatingModel:
 
         assert actual_option_value == expected_option_value
 
+    def test_model_ordering(self, imdb_rating):
+        assert imdb_rating._meta.ordering == ["value"]
+
     def test_string_representation_of_record(self, imdb_rating_factory):
         imdb_rating = imdb_rating_factory(value=9.0)
         assert str(imdb_rating) == "9.0"
@@ -255,6 +264,9 @@ class TestMpaaRatingModel:
 
         assert actual_option_value == expected_option_value
 
+    def test_model_ordering(self, mpaa_rating):
+        assert mpaa_rating._meta.ordering == ["value"]
+
     def test_string_representation_of_record(self, mpaa_rating_factory):
         mpaa_rating = mpaa_rating_factory(
             value="PG-13",
@@ -315,6 +327,9 @@ class TestLanguageModel:
 
         assert actual_option_value == expected_option_value
 
+    def test_model_ordering(self, language):
+        assert language._meta.ordering == ["name"]
+
     def test_string_representation_of_record(self, language_factory):
         language = language_factory(name="English")
         assert str(language) == "English"
@@ -371,6 +386,9 @@ class TestDistributorModel:
             actual_option_value = distributor._meta.get_field(field_name).unique
 
         assert actual_option_value == expected_option_value
+
+    def test_model_ordering(self, distributor):
+        assert distributor._meta.ordering == ["name"]
 
     def test_string_representation_of_record(self, distributor_factory):
         distributor = distributor_factory(name="Columbia Pictures")
@@ -455,6 +473,12 @@ class TestCinemaPersonModel:
             ).blank
 
         assert actual_option_value == expected_option_value
+
+    def test_model_ordering(self, cinema_person):
+        assert cinema_person._meta.ordering == [
+            "user__first_name",
+            "user__last_name",
+        ]
 
     def test_string_representation_of_record(
         self,
@@ -544,6 +568,9 @@ class TestCinemaProfessionModel:
             ).unique
 
         assert actual_option_value == expected_option_value
+
+    def test_model_ordering(self, cinema_profession):
+        assert cinema_profession._meta.ordering == ["pk"]
 
     def test_string_representation_of_record(self, cinema_profession_factory):
         cinema_profession = cinema_profession_factory(name="Actor")
@@ -639,6 +666,9 @@ class TestFilmModel:
 
         assert actual_option_value == expected_option_value
 
+    def test_model_ordering(self, film_fixture):
+        assert film_fixture._meta.ordering == ["title"]
+
     def test_string_representation_of_record(self, film_fixture):
         film_fixture.title = "Forrest Gump"
         assert str(film_fixture) == "Forrest Gump"
@@ -709,6 +739,13 @@ class TestCinemaFilmPersonProfessionModel:
             field_name,
         ).default
         assert actual_option_value == expected_option_value
+
+    def test_model_ordering(self, cinema_film_person_profession):
+        assert cinema_film_person_profession._meta.ordering == [
+            "film__title",
+            "profession",
+            "cinema_person__user__first_name",
+        ]
 
     def test_string_representation_of_record(
         self,
@@ -815,6 +852,9 @@ class TestNewsModel:
 
         assert actual_option_value == expected_option_value
 
+    def test_model_ordering(self, news):
+        assert news._meta.ordering == ["-created_at"]
+
     def test_string_representation_of_record(self, news):
         news.title = "Forrest Gump"
         assert str(news) == "Forrest Gump"
@@ -904,6 +944,9 @@ class TestProductModel:
 
         assert actual_option_value == expected_option_value
 
+    def test_model_ordering(self, product):
+        assert product._meta.ordering == ["film__title"]
+
     def test_string_representation_of_record(self, product_factory):
         product = product_factory(film__title="Forrest Gump")
         assert str(product) == "Forrest Gump [Blu-ray]"
@@ -991,6 +1034,9 @@ class TestCommentToPersonModel:
 
         assert actual_option_value == expected_option_value
 
+    def test_model_ordering(self, comment_to_person):
+        assert comment_to_person._meta.ordering == ["-created_at"]
+
 
 @pytest.mark.django_db
 class TestCommentToFilmModel:
@@ -1072,6 +1118,9 @@ class TestCommentToFilmModel:
 
         assert actual_option_value == expected_option_value
 
+    def test_model_ordering(self, comment_to_film):
+        assert comment_to_film._meta.ordering == ["-created_at"]
+
 
 @pytest.mark.django_db
 class TestCommentToNewsModel:
@@ -1152,6 +1201,9 @@ class TestCommentToNewsModel:
             ).verbose_name
 
         assert actual_option_value == expected_option_value
+
+    def test_model_ordering(self, comment_to_news):
+        assert comment_to_news._meta.ordering == ["-created_at"]
 
 
 @pytest.mark.django_db
@@ -1235,3 +1287,6 @@ class TestCommentToProductModel:
             ).verbose_name
 
         assert actual_option_value == expected_option_value
+
+    def test_model_ordering(self, comment_to_product):
+        assert comment_to_product._meta.ordering == ["-created_at"]

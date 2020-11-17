@@ -17,3 +17,9 @@ class TestUserModel:
 
     def test_email_field_options_of_model(self, user):
         assert user._meta.get_field("email").unique
+
+    def test_model_ordering(self, user):
+        assert user._meta.ordering == ["first_name", "last_name"]
+
+    def test_name_of_db_table_for_model(self, user):
+        assert user._meta.db_table == "auth_user"
