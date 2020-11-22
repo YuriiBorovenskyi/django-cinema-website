@@ -24,7 +24,7 @@ force_grid_wrap = 2
 use_parentheses = true
 ensure_newline_before_comments = true
 default_section = "THIRDPARTY"
-known_third_party = ["captcha", "celery", "django", "factory", "faker", "pytest", "pytest_factoryboy", "rest_framework", "storages"]
+known_third_party = ["captcha", "celery", "django", "factory", "faker", "pytest", "pytest_django", "pytest_factoryboy", "rest_framework", "storages"]
 known_first_party = ["cinema", "accounts", "api"]
 
 [tool.pylint.MESSAGE_CONTROL]

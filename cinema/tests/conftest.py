@@ -46,7 +46,7 @@ register(CommentToProductFactory)
 
 
 @pytest.fixture
-def film_fixture(db):
+def test_film(db):
     cinema_persons = []
     for username in (
         "steven.spielberg",
@@ -57,7 +57,7 @@ def film_fixture(db):
         "tom.hanks",
         "quentin.tarantino",
     ):
-        first_name, _, last_name = username.partition(".")
+        first_name, _, last_name = username.title().partition(".")
         email = f"{username}@hollywood.com"
         cinema_person = CinemaPersonFactory(
             user__first_name=first_name,
@@ -92,9 +92,10 @@ def film_fixture(db):
         distributors.append(distributor)
 
     film = FilmFactory(
-        title="The Greatest Movie",
+        title="The Greatest Show On The World",
         country=countries,
         genre=genres,
+        language=languages,
         distributor=distributors,
     )
     professions = []
@@ -108,4 +109,69 @@ def film_fixture(db):
             film=film,
             profession=faker.random_element(professions),
         )
-    return Film.objects.get(title="The Greatest Movie")
+    return Film.objects.first()
+
+
+@pytest.fixture
+def test_product(db, test_film):
+    return ProductFactory(film=test_film)
+
+
+@pytest.fixture
+def test_person(db, test_film):
+    return test_film.staff.first()
+
+
+@pytest.fixture
+def test_news(db, test_film):
+    return NewsFactory(film=(test_film,))
+
+
+@pytest.fixture
+def create_12_films(db):
+    country_1 = CountryFactory(name="USA")
+    country_2 = CountryFactory(name="France")
+    genre_1 = GenreFactory(name="Drama")
+    genre_2 = GenreFactory(name="Comedian")
+    language_1 = LanguageFactory(name="English")
+    language_2 = LanguageFactory(name="German")
+    distributor_1 = DistributorFactory(name="Columbia Pictures")
+    distributor_2 = DistributorFactory(name="Paramount Pictures")
+
+    for _ in range(6):
+        CinemaFilmPersonProfessionFactory.create(
+            film=FilmFactory(
+                country=(country_1,),
+                genre=(genre_1,),
+                language=(language_1,),
+                distributor=(distributor_1,),
+            ),
+        )
+    for _ in range(6):
+        CinemaFilmPersonProfessionFactory.create(
+            film=FilmFactory(
+                country=(country_2,),
+                genre=(genre_2,),
+                language=(language_2,),
+                distributor=(distributor_2,),
+            ),
+        )
+
+
+@pytest.fixture
+def create_12_products(db, create_12_films):
+    for film in Film.objects.all():
+        ProductFactory.create(film=film)
+
+
+@pytest.fixture
+def create_12_news(db, create_12_films):
+    for film in Film.objects.all():
+        NewsFactory.create(film=(film,))
+
+
+@pytest.fixture
+def create_12_films_products_news(db, create_12_films):
+    for film in Film.objects.all():
+        ProductFactory.create(film=film)
+        NewsFactory.create(film=(film,))

@@ -85,6 +85,7 @@ class NewReleasesProductListView(ProductListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["page_title"] = "New Releases Movies on Blu-ray"
+        print(self.extra_context)
         return context
 
 
@@ -127,8 +128,8 @@ def product_detail(request, pk):
     product = get_object_or_404(product_list, pk=pk)
     context = {
         "product": product,
-        "film_info": get_films_info()[pk],
-        "film_cast_and_crew": get_cast_and_crew()[pk],
+        "film_info": get_films_info()[product.film.pk],
+        "film_cast_and_crew": get_cast_and_crew()[product.film.pk],
     }
     initial = {"product": product.pk}
     if request.user.is_authenticated:

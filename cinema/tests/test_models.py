@@ -616,8 +616,8 @@ class TestFilmModel:
         f"'{arg[0]}' field: is {arg[1]} {arg[2]}?" for arg in field_arg_values
     )
 
-    def test_record_is_instance_of_model_class(self, film_fixture):
-        assert isinstance(film_fixture, Film)
+    def test_record_is_instance_of_model_class(self, test_film):
+        assert isinstance(test_film, Film)
 
     @pytest.mark.parametrize(
         "field_name, expected_label",
@@ -626,11 +626,11 @@ class TestFilmModel:
     )
     def test_labels_of_model_fields(
         self,
-        film_fixture,
+        test_film,
         field_name,
         expected_label,
     ):
-        actual_label = film_fixture._meta.get_field(field_name).verbose_name
+        actual_label = test_film._meta.get_field(field_name).verbose_name
         assert actual_label == expected_label
 
     @pytest.mark.parametrize(
@@ -640,42 +640,42 @@ class TestFilmModel:
     )
     def test_options_of_model_fields(
         self,
-        film_fixture,
+        test_film,
         field_name,
         option_name,
         expected_option_value,
     ):
         if option_name == "max_length":
-            actual_option_value = film_fixture._meta.get_field(
+            actual_option_value = test_film._meta.get_field(
                 field_name,
             ).max_length
         elif option_name == "db_index":
-            actual_option_value = film_fixture._meta.get_field(
+            actual_option_value = test_film._meta.get_field(
                 field_name,
             ).db_index
         elif option_name == "default":
-            actual_option_value = film_fixture._meta.get_field(
+            actual_option_value = test_film._meta.get_field(
                 field_name,
             ).default
         elif option_name == "null":
-            actual_option_value = film_fixture._meta.get_field(field_name).null
+            actual_option_value = test_film._meta.get_field(field_name).null
         else:
-            actual_option_value = film_fixture._meta.get_field(
+            actual_option_value = test_film._meta.get_field(
                 field_name,
             ).blank
 
         assert actual_option_value == expected_option_value
 
-    def test_model_ordering(self, film_fixture):
-        assert film_fixture._meta.ordering == ["title"]
+    def test_model_ordering(self, test_film):
+        assert test_film._meta.ordering == ["title"]
 
-    def test_string_representation_of_record(self, film_fixture):
-        film_fixture.title = "Forrest Gump"
-        assert str(film_fixture) == "Forrest Gump"
+    def test_string_representation_of_record(self, test_film):
+        test_film.title = "Forrest Gump"
+        assert str(test_film) == "Forrest Gump"
 
-    def test_year_of_film(self, film_fixture):
-        film_fixture.release_data = date(year=2002, month=7, day=9)
-        assert film_fixture.year == 2002
+    def test_year_of_film(self, test_film):
+        test_film.release_data = date(year=2002, month=7, day=9)
+        assert test_film.year == 2002
 
     def test_upload_to_film(self, film_factory):
         film = film_factory()

@@ -53,7 +53,7 @@ class MpaaRatingFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = MpaaRating
 
-    value = factory.Sequence(lambda n: f"Rating_{n}")
+    value = factory.Sequence(lambda n: f"R_{n}")
     description = factory.Faker("text")
 
 
@@ -226,7 +226,7 @@ class CommentToPersonFactory(factory.django.DjangoModelFactory):
 
     author = factory.Faker("name")
     content = factory.Faker("text")
-    is_active = factory.Faker("pybool")
+    is_active = True
     cinema_person = factory.SubFactory(CinemaPersonFactory)
     created_at = factory.Faker("date_time")
 
@@ -237,7 +237,7 @@ class CommentToFilmFactory(factory.django.DjangoModelFactory):
 
     author = factory.Faker("name")
     content = factory.Faker("text")
-    is_active = factory.Faker("pybool")
+    is_active = True
     film = factory.SubFactory(FilmFactory)
     created_at = factory.Faker("date_time")
 
@@ -248,7 +248,7 @@ class CommentToNewsFactory(factory.django.DjangoModelFactory):
 
     author = factory.Faker("name")
     content = factory.Faker("text")
-    is_active = factory.Faker("pybool")
+    is_active = True
     news = factory.SubFactory(NewsFactory)
     created_at = factory.Faker("date_time")
 
@@ -259,6 +259,6 @@ class CommentToProductFactory(factory.django.DjangoModelFactory):
 
     author = factory.Faker("name")
     content = factory.Faker("text")
-    is_active = factory.Faker("pybool")
+    is_active = True
     product = factory.SubFactory(ProductFactory)
     created_at = factory.Faker("date_time")
