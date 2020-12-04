@@ -13,6 +13,10 @@ exclude: |
 default_language_version:
   python: python3.8
 repos:
+- repo: https://github.com/peterdemin/pip-compile-multi
+  rev: v2.1.0
+  hooks:
+  - id: pip-compile-multi-verify
 - repo: https://github.com/asottile/pyupgrade
   rev: v2.7.4
   hooks:
@@ -25,7 +29,6 @@ repos:
   - id: name-tests-test
     args: [--django]
     exclude: .*conftest\.py$|.*factories\.py$
-  - id: requirements-txt-fixer
   - id: file-contents-sorter
     files: .gitignore, .dockerignore
   - id: check-yaml

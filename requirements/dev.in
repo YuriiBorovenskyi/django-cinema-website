@@ -1,0 +1,8 @@
+-r base.in
+django-debug-toolbar
+ipython
+pydot
+pyparsing
+pre-commit>=2.8.2,<3
+pylint>=2.6.0,<3
+pip-compile-multi
