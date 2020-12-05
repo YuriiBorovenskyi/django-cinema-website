@@ -1,10 +1,7 @@
-[![Travis][build-badge]][build]
+[![Travis](https://img.shields.io/travis/YuriiBorovenskyi/django-cinema/master.png?style=flat-square)](https://travis-ci.org/YuriiBorovenskyi/django-cinema)
 [![codecov](https://codecov.io/gh/YuriiBorovenskyi/django-cinema/branch/master/graph/badge.svg?token=EGUTWR1YTR)](https://codecov.io/gh/YuriiBorovenskyi/django-cinema)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-
-[build-badge]: https://img.shields.io/travis/YuriiBorovenskyi/django-cinema/master.png?style=flat-square
-[build]: https://travis-ci.org/YuriiBorovenskyi/django-cinema
 # DjangoCinema: source code
 Website of Cinema Library written in Django.
 ***
