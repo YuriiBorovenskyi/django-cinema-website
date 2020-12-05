@@ -1,0 +1,3 @@
+-r base.in
+boto3>=1.15.17,<2
+gunicorn>=20.0.4,<21

@@ -1,11 +1,11 @@
 import os
 
-log_file_path = 'logs/celery.log'
-dir_name = os.path.dirname(log_file_path)
+LOG_FILE_PATH = "logs/celery.log"
+dir_name = os.path.dirname(LOG_FILE_PATH)
 
 if not os.path.isdir(dir_name):
     os.mkdir(dir_name)
 
-if not os.path.exists(log_file_path):
-    with open(log_file_path, 'w') as f:
+if not os.path.exists(LOG_FILE_PATH):
+    with open(LOG_FILE_PATH, "w") as f:
         pass

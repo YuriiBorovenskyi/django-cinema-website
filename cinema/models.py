@@ -1,11 +1,18 @@
-from datetime import date, timedelta
+from datetime import (
+    date,
+    timedelta,
+)
 
-from django.core.validators import MinValueValidator, RegexValidator
+from django.core.validators import (
+    MinValueValidator,
+    RegexValidator,
+)
 from django.db import models
-from django.db.models import Prefetch, Q
+from django.db.models import Q
 from django.db.models.signals import post_save
 
 from accounts.models import User
+
 from .tasks import send_new_product_notification
 
 GENDER_CHOICES = (
@@ -15,43 +22,34 @@ GENDER_CHOICES = (
 
 
 def upload_to_film(instance, filename):
-    """
-    Get path in format string to media file for field 'poster' of
-    'Film' model.
-    """
+    """Get path in format string to media file for field 'poster' of 'Film'
+    model."""
     return "films/{}_{}.jpg".format(instance.title, instance.pk)
 
 
 def upload_to_cinema_person(instance, filename):
-    """
-    Get path in format string to media file for field 'avatar' of
-    'CinemaPerson' model.
-    """
+    """Get path in format string to media file for field 'avatar' of
+    'CinemaPerson' model."""
     return "cinema_persons/{}_{}_{}.jpg".format(
         instance.user.first_name, instance.user.last_name, instance.pk
     )
 
 
 def upload_photo_to_news_feed(instance, filename):
-    """
-    Get path in format string to media file for field 'news_feed_photo'
-    of 'News' model.
-    """
+    """Get path in format string to media file for field 'news_feed_photo' of
+    'News' model."""
     return "cinema_news_feed/{}_{}.jpg".format(instance.title, instance.pk)
 
 
 def upload_photo_to_news_detail(instance, filename):
-    """
-    Get path in format string to media file for field 'news_detail_photo'
-    of 'News' model.
-    """
+    """Get path in format string to media file for field 'news_detail_photo' of
+    'News' model."""
     return "cinema_news_detail/{}_{}.jpg".format(instance.title, instance.pk)
 
 
 class ExtendedProfileMixin(models.Model):
-    """
-    Mixin model, what extends 'CinemaPerson' model.
-    """
+    """Mixin model, what extends 'CinemaPerson' model."""
+
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default="M")
     country = models.ForeignKey("Country", on_delete=models.PROTECT, default=1)
     birthday = models.DateField(null=True, blank=True)
@@ -61,9 +59,8 @@ class ExtendedProfileMixin(models.Model):
 
 
 class DateMixin(models.Model):
-    """
-    Mixin model, what extends other models: Product, News, Comment...
-    """
+    """Mixin model, what extends other models: Product, News, Comment..."""
+
     created_at = models.DateTimeField(auto_now=True, db_index=True)
 
     class Meta:
@@ -71,9 +68,8 @@ class DateMixin(models.Model):
 
 
 class Country(models.Model):
-    """
-    Save country data needed for 'Film' and 'CinemaPerson' models.
-    """
+    """Save country data needed for 'Film' and 'CinemaPerson' models."""
+
     name = models.CharField(max_length=64, unique=True)
 
     def __str__(self):
@@ -85,17 +81,18 @@ class Country(models.Model):
 
 
 class Genre(models.Model):
-    """
-    Save genre data needed for 'Film' model.
-    """
+    """Save genre data needed for 'Film' model."""
+
     name = models.CharField(
-        max_length=16, unique=True, validators=[
+        max_length=16,
+        unique=True,
+        validators=[
             RegexValidator(
                 regex="^[A-Z][a-z]+[-]?[a-z]+$",
                 message="Invalid genre name format.",
-                code="invalid"
+                code="invalid",
             )
-        ]
+        ],
     )
 
     def __str__(self):
@@ -106,9 +103,8 @@ class Genre(models.Model):
 
 
 class ImdbRating(models.Model):
-    """
-    Save imdb rating data needed for 'Film' model.
-    """
+    """Save imdb rating data needed for 'Film' model."""
+
     value = models.DecimalField(max_digits=2, decimal_places=1, unique=True)
 
     def __str__(self):
@@ -119,9 +115,8 @@ class ImdbRating(models.Model):
 
 
 class MpaaRating(models.Model):
-    """
-    Save mpaa rating data needed for 'Film' model.
-    """
+    """Save mpaa rating data needed for 'Film' model."""
+
     value = models.CharField(max_length=10, unique=True)
     description = models.CharField(max_length=512, unique=True)
 
@@ -133,17 +128,18 @@ class MpaaRating(models.Model):
 
 
 class Language(models.Model):
-    """
-    Save language data needed for 'Film' model.
-    """
+    """Save language data needed for 'Film' model."""
+
     name = models.CharField(
-        max_length=16, unique=True, validators=[
+        max_length=16,
+        unique=True,
+        validators=[
             RegexValidator(
                 regex="^[A-Z][a-z]+$",
                 message="Invalid language name format.",
-                code="invalid"
+                code="invalid",
             )
-        ]
+        ],
     )
 
     def __str__(self):
@@ -154,9 +150,8 @@ class Language(models.Model):
 
 
 class Distributor(models.Model):
-    """
-    Save distributor data needed for 'Film' model.
-    """
+    """Save distributor data needed for 'Film' model."""
+
     name = models.CharField(max_length=32, unique=True)
 
     def __str__(self):
@@ -167,53 +162,55 @@ class Distributor(models.Model):
 
 
 class CinemaPersonManager(models.Manager):
-    """
-    Custom Manager, adding extra manager methods.
+    """Custom Manager, adding extra manager methods.
 
-    Custom Manager used in 'CinemaPerson' model by extending base Manager class
-    and instantiating custom Manager in 'CinemaPerson' model.
+    Custom Manager used in 'CinemaPerson' model by extending base
+    Manager class and instantiating custom Manager in 'CinemaPerson'
+    model.
     """
+
     def all(self):
-        """
-        Return QuerySet object with cached data of some related models.
-        """
+        """Return QuerySet object with cached data of some related models."""
         return super().get_queryset().select_related("user", "country")
 
     def get_brief_data(self):
-        """
-        Return QuerySet object with data of specified fields of
-        'CinemaPerson' and 'User' models.
-        """
-        return super().get_queryset().select_related("user").values_list(
-            "pk", "user__first_name",  "user__last_name", named=True
+        """Return QuerySet object with data of specified fields of
+        'CinemaPerson' and 'User' models."""
+        return (
+            super()
+            .get_queryset()
+            .select_related("user")
+            .values_list(
+                "pk", "user__first_name", "user__last_name", named=True
+            )
         )
 
     def filter_by_search_word(self, search_words):
-        """
-        Return QuerySet object, value of selected field corresponds to
-        search word entered by visitor.
-        """
+        """Return QuerySet object, value of selected field corresponds to
+        search word entered by visitor."""
         separate_search_words = search_words.split()
-        q = (Q(user__first_name__istartswith=separate_search_words[0]) &
-             Q(user__last_name__iendswith=separate_search_words[-1])) | Q(
-            user__first_name__icontains=search_words) | Q(
-            user__last_name__icontains=search_words
+        q = (
+            (
+                Q(user__first_name__istartswith=separate_search_words[0])
+                & Q(user__last_name__iendswith=separate_search_words[-1])
+            )
+            | Q(user__first_name__icontains=search_words)
+            | Q(user__last_name__icontains=search_words)
         )
         return self.all().filter(q)
 
     def get_related_data(self, fields_names):
-        """
-        Return QuerySet object with data of specified fields of
-        'CinemaPerson' model and some related models.
-        """
-        return self.all().values_list(
-            "pk", *fields_names, "news__title", named=True
-        ).order_by("-news__created_at")
+        """Return QuerySet object with data of specified fields of
+        'CinemaPerson' model and some related models."""
+        return (
+            self.all()
+            .values_list("pk", *fields_names, "news__title", named=True)
+            .order_by("-news__created_at")
+        )
 
 
 class CinemaPerson(ExtendedProfileMixin):
-    """
-    Save data about actors, directors, writers needed for 'Film' model.
+    """Save data about actors, directors, writers needed for 'Film' model.
 
     Model related with next models:
     - User (one-to-one relationship);
@@ -222,6 +219,7 @@ class CinemaPerson(ExtendedProfileMixin):
 
     Class of this model inherits from 'ExtendedProfileMixin' class.
     """
+
     user = models.OneToOneField(User, on_delete=models.PROTECT)
     bio = models.TextField()
     oscar_awards = models.PositiveSmallIntegerField(default=0)
@@ -233,18 +231,14 @@ class CinemaPerson(ExtendedProfileMixin):
 
     @property
     def age(self):
-        """
-        Get information about age of actors, directors, writers.
-        """
+        """Get information about age of actors, directors, writers."""
         if self.birthday:
             return (date.today() - self.birthday) // timedelta(days=365.2425)
         return None
 
     @property
     def fullname(self):
-        """
-        Get fullname of actors, directors, writers.
-        """
+        """Get fullname of actors, directors, writers."""
         return f"{self.user.get_full_name()}"
 
     def __str__(self):
@@ -255,100 +249,96 @@ class CinemaPerson(ExtendedProfileMixin):
 
 
 class FilmManager(models.Manager):
-    """
-    Custom Manager, adding extra manager methods.
+    """Custom Manager, adding extra manager methods.
 
     Custom Manager used in 'Film' model by extending base Manager class
     and instantiating custom Manager in 'Film' model.
     """
+
     def all(self):
-        """
-        Return QuerySet object with cached data of some related models.
-        """
-        return super().get_queryset().select_related(
-            "imdb_rating", "mpaa_rating", "product"
+        """Return QuerySet object with cached data of some related models."""
+        return (
+            super()
+            .get_queryset()
+            .select_related("imdb_rating", "mpaa_rating", "product")
         )
 
     def get_brief_data(self):
-        """
-        Return QuerySet object with data of specified fields of 'Film' model.
-        """
+        """Return QuerySet object with data of specified fields of 'Film'
+        model."""
         return super().get_queryset().values_list("pk", "title", named=True)
 
     def filter_by_selected_year(self, selected_year):
-        """
-        Return QuerySet object filtered by selected year and order by
-        imdb rating of movies.
-        """
-        return self.all().filter(
-            release_data__year=selected_year
-        ).order_by("-imdb_rating__value")
+        """Return QuerySet object filtered by selected year and order by imdb
+        rating of movies."""
+        return (
+            self.all()
+            .filter(release_data__year=selected_year)
+            .order_by("-imdb_rating__value")
+        )
 
     def filter_by_selected_genre(self, selected_genre):
-        """
-        Return QuerySet object filtered by selected genre and order by
-        imdb rating of movies.
-        """
-        return self.all().filter(
-            genre__name=selected_genre
-        ).order_by("-imdb_rating__value")
+        """Return QuerySet object filtered by selected genre and order by imdb
+        rating of movies."""
+        return (
+            self.all()
+            .filter(genre__name=selected_genre)
+            .order_by("-imdb_rating__value")
+        )
 
     def filter_by_selected_country(self, selected_country):
-        """
-        Return QuerySet object filtered by selected country and order by
-        imdb rating of movies.
-        """
-        return self.all().filter(
-            country__name=selected_country
-        ).order_by("-imdb_rating__value")
+        """Return QuerySet object filtered by selected country and order by
+        imdb rating of movies."""
+        return (
+            self.all()
+            .filter(country__name=selected_country)
+            .order_by("-imdb_rating__value")
+        )
 
     def filter_by_selected_language(self, selected_language):
-        """
-        Return QuerySet object filtered by selected language and order by
-        imdb rating of movies.
-        """
-        return self.all().filter(
-            language__name=selected_language
-        ).order_by("-imdb_rating__value")
+        """Return QuerySet object filtered by selected language and order by
+        imdb rating of movies."""
+        return (
+            self.all()
+            .filter(language__name=selected_language)
+            .order_by("-imdb_rating__value")
+        )
 
     def filter_by_selected_distributor(self, selected_distributor):
-        """
-        Return QuerySet object filtered by selected distributor and order by
-        imdb rating of movies.
-        """
-        return self.all().filter(
-            distributor__name=selected_distributor
-        ).order_by("-imdb_rating__value")
+        """Return QuerySet object filtered by selected distributor and order by
+        imdb rating of movies."""
+        return (
+            self.all()
+            .filter(distributor__name=selected_distributor)
+            .order_by("-imdb_rating__value")
+        )
 
     def filter_by_selected_mpaa_rating(self, selected_mpaa_rating):
-        """
-        Return QuerySet object filtered by selected MPAA rating and order by
-        imdb rating of movies.
-        """
-        return self.all().filter(
-            mpaa_rating__pk=selected_mpaa_rating
-        ).order_by("-imdb_rating__value")
+        """Return QuerySet object filtered by selected MPAA rating and order by
+        imdb rating of movies."""
+        return (
+            self.all()
+            .filter(mpaa_rating__pk=selected_mpaa_rating)
+            .order_by("-imdb_rating__value")
+        )
 
     def filter_by_search_word(self, search_word):
-        """
-        Return QuerySet object, value of selected field corresponds to
-        search word entered by visitor.
-        """
+        """Return QuerySet object, value of selected field corresponds to
+        search word entered by visitor."""
         return self.all().filter(title__icontains=search_word)
 
     def get_related_data(self, fields_names):
-        """
-        Return QuerySet object with data of specified fields of 'Film'
-        model and some related models.
-        """
-        return self.all().values_list(
-            "pk", *fields_names, "news__title", named=True
-        ).order_by("-news__created_at")
+        """Return QuerySet object with data of specified fields of 'Film' model
+        and some related models."""
+        return (
+            self.all()
+            .values_list("pk", *fields_names, "news__title", named=True)
+            .order_by("-news__created_at")
+        )
 
 
 class Film(models.Model):
-    """
-    The most main model storing film data.
+    """The most main model storing film data.
 
     Model related with next models:
     - Product (one-to-one relationship);
@@ -356,6 +346,7 @@ class Film(models.Model):
     (many-to-many relationship);
     - ImdbRating, MpaaRating, CommentToFilm (many-to-one relationship).
     """
+
     title = models.CharField(max_length=64, db_index=True)
     country = models.ManyToManyField(Country)
     genre = models.ManyToManyField(Genre)
@@ -385,9 +376,7 @@ class Film(models.Model):
 
     @property
     def year(self):
-        """
-        Get information about year when film was released.
-        """
+        """Get information about year when film was released."""
         return self.release_data.year
 
     class Meta:
@@ -395,9 +384,8 @@ class Film(models.Model):
 
 
 class CinemaProfession(models.Model):
-    """
-    Save profession name for cinema persons who took part in film.
-    """
+    """Save profession name for cinema persons who took part in film."""
+
     name = models.CharField(max_length=16, unique=True)
 
     def __str__(self):
@@ -408,36 +396,39 @@ class CinemaProfession(models.Model):
 
 
 class CinemaFilmPersonProfessionManager(models.Manager):
-    """
-    Custom Manager, adding extra manager methods.
+    """Custom Manager, adding extra manager methods.
 
-    Custom Manager used in 'CinemaFilmPersonProfession' model by extending
-    base Manager class and instantiating custom Manager in
+    Custom Manager used in 'CinemaFilmPersonProfession' model by
+    extending base Manager class and instantiating custom Manager in
     'CinemaFilmPersonProfession' model.
     """
+
     def get_full_cast(self):
-        """
-        Return QuerySet object with cached data of some related models.
-        """
-        return super().get_queryset().select_related(
-            'film', 'cinema_person__user', 'profession'
-        ).values_list(
-            'film__pk',
-            'profession__name',
-            'cinema_person__pk',
-            'cinema_person__user__first_name',
-            'cinema_person__user__last_name',
-            named=True
-        ).order_by("cinema_person__pk")
+        """Return QuerySet object with cached data of some related models."""
+        return (
+            super()
+            .get_queryset()
+            .select_related("film", "cinema_person__user", "profession")
+            .values_list(
+                "film__pk",
+                "profession__name",
+                "cinema_person__pk",
+                "cinema_person__user__first_name",
+                "cinema_person__user__last_name",
+                named=True,
+            )
+            .order_by("cinema_person__pk")
+        )
 
 
 class CinemaFilmPersonProfession(models.Model):
-    """
-    Intermediate relation model.
+    """Intermediate relation model.
 
-    Related 'Film' and 'CinemaPerson' models by many-to-many relationship.
-    Has additional field which keeps profession of cinema persons.
+    Related 'Film' and 'CinemaPerson' models by many-to-many
+    relationship. Has additional field which keeps profession of cinema
+    persons.
     """
+
     cinema_person = models.ForeignKey(CinemaPerson, on_delete=models.PROTECT)
     film = models.ForeignKey(Film, on_delete=models.PROTECT)
     profession = models.ForeignKey(
@@ -455,40 +446,37 @@ class CinemaFilmPersonProfession(models.Model):
     class Meta:
         verbose_name = "Cinema film person profession"
         verbose_name_plural = "Cinema films persons professions"
-        ordering = ["film__title", "profession",
-                    "cinema_person__user__first_name"]
+        ordering = [
+            "film__title",
+            "profession",
+            "cinema_person__user__first_name",
+        ]
 
 
 class NewsManager(models.Manager):
-    """
-    Custom Manager, adding extra manager methods.
+    """Custom Manager, adding extra manager methods.
 
     Custom Manager used in 'News' model by extending base Manager class
     and instantiating custom Manager in 'News' model.
     """
+
     def get_brief_data(self):
-        """
-        Return QuerySet object with data of specified fields of 'News' model.
-        """
+        """Return QuerySet object with data of specified fields of 'News'
+        model."""
         return super().get_queryset().values_list("pk", "title", named=True)
 
     def get_news_about_celebrities(self, celebrity_news_id):
-        """
-        Return QuerySet object with news data about celebrities.
-        """
+        """Return QuerySet object with news data about celebrities."""
         return super().get_queryset().filter(pk__in=celebrity_news_id)
 
     def filter_by_search_word(self, search_word):
-        """
-        Return QuerySet object, value of selected field corresponds to
-        search word entered by visitor.
-        """
+        """Return QuerySet object, value of selected field corresponds to
+        search word entered by visitor."""
         return super().get_queryset().filter(title__icontains=search_word)
 
 
 class News(DateMixin):
-    """
-    Save news data about world cinema.
+    """Save news data about world cinema.
 
     Model related with next models:
     - Film, CinemaPerson (many-to-many relationship);
@@ -496,6 +484,7 @@ class News(DateMixin):
 
     Class of this model inherits from 'DateMixin' class.
     """
+
     title = models.CharField(max_length=128, unique=True)
     description = models.TextField()
     news_source = models.CharField(max_length=32)
@@ -520,56 +509,51 @@ class News(DateMixin):
 
 
 class ProductManager(models.Manager):
-    """
-    Custom Manager, adding extra manager methods.
+    """Custom Manager, adding extra manager methods.
 
-    Custom Manager used in 'Product' model by extending base Manager class
-    and instantiating custom Manager in 'Product' model.
+    Custom Manager used in 'Product' model by extending base Manager
+    class and instantiating custom Manager in 'Product' model.
     """
+
     def all(self):
-        """
-        Return QuerySet object with cached data of related models.
-        """
-        return super().get_queryset().select_related(
-            "film", "film__imdb_rating", "film__mpaa_rating"
+        """Return QuerySet object with cached data of related models."""
+        return (
+            super()
+            .get_queryset()
+            .select_related("film", "film__imdb_rating", "film__mpaa_rating")
         )
 
     def order_by_name(self):
-        """
-        Return QuerySet object containing only 'Product' model data and
-        order by name of blu-ray movies.
-        """
+        """Return QuerySet object containing only 'Product' model data and
+        order by name of blu-ray movies."""
         return self.all().only("pk", "price", "film", "in_stock")
 
     def order_by_imdb_rating(self):
-        """
-        Return QuerySet object containing only 'Product' model data and
-        order by imdb rating of blu-ray movies.
-        """
-        return self.all().only(
-            "pk", "price", "film", "in_stock"
-        ).order_by("-film__imdb_rating__value")
+        """Return QuerySet object containing only 'Product' model data and
+        order by imdb rating of blu-ray movies."""
+        return (
+            self.all()
+            .only("pk", "price", "film", "in_stock")
+            .order_by("-film__imdb_rating__value")
+        )
 
     def order_by_release_data(self):
-        """
-        Return QuerySet object containing only 'Product' model data and
-        order by release date of blu-ray movies.
-        """
-        return self.all().only(
-            "pk", "price", "film", "in_stock"
-        ).order_by("-film__release_data")
+        """Return QuerySet object containing only 'Product' model data and
+        order by release date of blu-ray movies."""
+        return (
+            self.all()
+            .only("pk", "price", "film", "in_stock")
+            .order_by("-film__release_data")
+        )
 
     def filter_by_search_word(self, search_word):
-        """
-        Return QuerySet object, value of selected field corresponds to
-        search word entered by visitor.
-        """
+        """Return QuerySet object, value of selected field corresponds to
+        search word entered by visitor."""
         return self.all().filter(film__title__icontains=search_word)
 
 
 class Product(DateMixin):
-    """
-    Save information about movies on blu-ray.
+    """Save information about movies on blu-ray.
 
     Model related with next models:
     - Film (one-to-one relationship);
@@ -577,11 +561,12 @@ class Product(DateMixin):
 
     Class of this model inherits from 'DateMixin' class.
     """
+
     price = models.DecimalField(
-        max_digits=5, decimal_places=2,
-        validators=[MinValueValidator(0.99)], error_messages={
-            "min_value": "Product price cannot be less than 0.99."
-        }
+        max_digits=5,
+        decimal_places=2,
+        validators=[MinValueValidator(0.99)],
+        error_messages={"min_value": "Product price cannot be less than 0.99."},
     )
     in_stock = models.PositiveSmallIntegerField(default=0)
     film = models.OneToOneField(Film, on_delete=models.CASCADE)
@@ -593,77 +578,82 @@ class Product(DateMixin):
         return f"{self.film.title} [Blu-ray]"
 
     class Meta:
-        ordering = ["film__title", ]
+        ordering = [
+            "film__title",
+        ]
 
 
 class CommentMixin(models.Model):
-    """
-    Mixin model, what extends Comments models.
-    """
+    """Mixin model, what extends Comments models."""
+
     author = models.CharField(max_length=32)
     content = models.TextField()
-    is_active = models.BooleanField(default=True, db_index=True,
-                                    verbose_name='Display on screen?')
+    is_active = models.BooleanField(
+        default=True, db_index=True, verbose_name="Display on screen?"
+    )
 
     class Meta:
         abstract = True
 
 
 class CommentToPerson(CommentMixin, DateMixin):
-    """
-    Save comments to actors, directors, writers.
+    """Save comments to actors, directors, writers.
 
-    Class of this model inherits from 'CommentMixin' and 'DateMixin' classes.
+    Class of this model inherits from 'CommentMixin' and 'DateMixin'
+    classes.
     """
+
     cinema_person = models.ForeignKey(CinemaPerson, on_delete=models.CASCADE)
 
     class Meta:
-        verbose_name_plural = 'Comments to persons'
+        verbose_name_plural = "Comments to persons"
         ordering = ["-created_at"]
 
 
 class CommentToFilm(CommentMixin, DateMixin):
-    """
-    Save comments to movies.
+    """Save comments to movies.
 
-    Class of this model inherits from 'CommentMixin' and 'DateMixin' classes.
+    Class of this model inherits from 'CommentMixin' and 'DateMixin'
+    classes.
     """
+
     film = models.ForeignKey(Film, on_delete=models.CASCADE)
 
     class Meta:
-        verbose_name_plural = 'Comments to films'
+        verbose_name_plural = "Comments to films"
         ordering = ["-created_at"]
 
 
 class CommentToNews(CommentMixin, DateMixin):
-    """
-    Save comments to cinema news.
+    """Save comments to cinema news.
 
-    Class of this model inherits from 'CommentMixin' and 'DateMixin' classes.
+    Class of this model inherits from 'CommentMixin' and 'DateMixin'
+    classes.
     """
+
     news = models.ForeignKey(News, on_delete=models.CASCADE)
 
     class Meta:
-        verbose_name_plural = 'Comments to news'
+        verbose_name_plural = "Comments to news"
         ordering = ["-created_at"]
 
 
 class CommentToProduct(CommentMixin, DateMixin):
-    """
-    Save comments to movies on blu-ray.
+    """Save comments to movies on blu-ray.
 
-    Class of this model inherits from 'CommentMixin' and 'DateMixin' classes.
+    Class of this model inherits from 'CommentMixin' and 'DateMixin'
+    classes.
     """
+
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     class Meta:
-        verbose_name_plural = 'Comments to products'
+        verbose_name_plural = "Comments to products"
         ordering = ["-created_at"]
 
 
 def post_save_dispatcher(sender, instance, created, **kwargs):
-    """
-    Signal handler function.
+    """Signal handler function.
 
     After saving record of 'Product' model in database, 'post_save' signal
     will be send, which calls this signal handler.

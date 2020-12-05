@@ -6,25 +6,24 @@ from .tasks import send_activation_notification
 
 
 class User(AbstractUser):
-    """
-    Custom 'User' Model.
+    """Custom 'User' Model.
 
-    It uses user authentication system of Django.
-    Class of this model inherits from standard 'AbstractUser' class.
+    It uses user authentication system of Django. Class of this model
+    inherits from standard 'AbstractUser' class.
     """
-    email = models.EmailField(unique=True, verbose_name='Email address')
+
+    email = models.EmailField(unique=True, verbose_name="Email address")
 
     class Meta:
-        db_table = 'auth_user'
+        db_table = "auth_user"
         ordering = ["first_name", "last_name"]
 
 
-user_registrated = Signal(providing_args=['instance'])
+user_registrated = Signal(providing_args=["instance"])
 
 
 def user_registrated_dispatcher(sender, instance, **kwargs):
-    """
-    Signal handler function.
+    """Signal handler function.
 
     After saving record of 'User' model in database, 'user_registrated' signal
     will be send, which calls this signal handler.
