@@ -1,8 +1,6 @@
 *.coverage
-*.db
 *.log
 *.pyc
-.env.*
 __pycache__/
 htmlcov/
 venv/
