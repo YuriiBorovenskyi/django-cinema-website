@@ -11,6 +11,8 @@ before_install:
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
+install:
+  - pip install coveralls
 before_script:
   - docker-compose up -d --build
   - docker exec -it django_web pip install -r requirements/test.txt
@@ -31,9 +33,7 @@ after_script:
 #    branch: master
 #after_deploy:
 #  - sudo bash after_deploy.sh
-after_success:
-  - cat ./coverage/lcov.info | ./node_modules/codecov.io/bin/codecov.io.js
-  - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+after_success: coveralls
 cache:
   directories:
   - $HOME/.cache/pre-commit
