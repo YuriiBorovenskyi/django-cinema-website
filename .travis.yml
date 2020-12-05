@@ -12,7 +12,7 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
 install:
-  - pip install coveralls
+  - pip install --user codecov
 before_script:
   - docker-compose up -d --build
   - docker exec -it django_web pip install -r requirements/test.txt
@@ -33,7 +33,8 @@ after_script:
 #    branch: master
 #after_deploy:
 #  - sudo bash after_deploy.sh
-after_success: coveralls
+after_success:
+  - codecov --file coverage/lcov.info --disable search
 cache:
   directories:
   - $HOME/.cache/pre-commit
