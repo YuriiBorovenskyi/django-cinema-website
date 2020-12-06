@@ -11,13 +11,11 @@ before_install:
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
-#install:
-#  - pip install --user codecov
 before_script:
   - docker-compose up -d --build
   - docker exec -it django_web pip install -r requirements/test.txt
 script:
-  - docker exec -it django_web pytest --cov=./
+  - docker exec -it django_web pytest --cov
   - docker exec -it django_web pre-commit run --all-files
 after_script:
   - docker-compose down
@@ -34,7 +32,6 @@ after_script:
 #after_deploy:
 #  - sudo bash after_deploy.sh
 after_success:
-#  - codecov --file coverage/lcov.info --disable search
   - bash <(curl -s https://codecov.io/bash)
 cache:
   directories:
