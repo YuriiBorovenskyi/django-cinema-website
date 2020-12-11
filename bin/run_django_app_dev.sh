@@ -9,17 +9,13 @@ then
     echo "PostgreSQL started"
 fi
 
-#python manage.py flush --no-input
-#python manage.py migrate
-
-# at first perform dump working DB on local host
-# python manage.py dumpdata > django_cinema/fixtures/db.json
-
-#python manage.py shell --command="from django.contrib.contenttypes.models import ContentType; ContentType.objects.all().delete(); exit()"
-#python manage.py loaddata django_cinema/fixtures/db.json
-#python manage.py captcha_clean
-#python manage.py thumbnail_cleanup
-#python manage.py clearsessions
+# TODO: After website development finishing, you need to make following steps:
+# TODO: 1. Delete unnecessary and unimportant data from database.
+# - run 'python manage.py captcha_clean'
+# - run 'python manage.py thumbnail_cleanup'
+# - run 'python manage.py clearsessions'
+# TODO: 2. Make backup (export) of entire database.
+# - run 'python manage.py dumpdata > django_cinema/fixtures/db.json'
 
 python manage.py runserver 0.0.0.0:8000 --nostatic
 

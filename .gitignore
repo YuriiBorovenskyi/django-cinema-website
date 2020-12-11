@@ -4,3 +4,5 @@
 __pycache__/
 htmlcov/
 venv/
+.env.dev*
+.env.prod*

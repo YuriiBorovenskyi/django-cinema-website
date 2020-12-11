@@ -1,5 +1,4 @@
-[![Travis](https://img.shields.io/travis/YuriiBorovenskyi/django-cinema/master.png?style=flat-square)](https://travis-ci.org/YuriiBorovenskyi/django-cinema)
-[![codecov](https://codecov.io/gh/YuriiBorovenskyi/django-cinema/branch/master/graph/badge.svg?token=EGUTWR1YTR)](https://codecov.io/gh/YuriiBorovenskyi/django-cinema)
+[![Build Status](https://travis-ci.com/YuriiBorovenskyi/django-cinema.svg?branch=master)](https://travis-ci.com/github/YuriiBorovenskyi/django-cinema)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 # DjangoCinema: source code
@@ -17,6 +16,8 @@ Website of Cinema Library written in Django.
 - Nginx
 - Docker
 - Pytest
+- Pre-Commit
+- Travis CI
 ***
 #### Database diagrams:
 
@@ -39,6 +40,10 @@ Website of Cinema Library written in Django.
 8. Run `docker exec -it django_web python manage.py shell --command="from django.contrib.contenttypes.models import ContentType; ContentType.objects.all().delete(); exit()"`.
 9. Run `docker exec -it django_web python manage.py loaddata django_cinema/fixtures/db.json`.
 10. Open browser at <http://localhost:8000/> to visit website.
+11. Execute tests with docker:
+    - run `docker exec -it django_web pytest --cov`
+12. Execute code quality checks with docker:
+    - run `docker exec -it django_web pre-commit run --all-files`
 
 ***
 ### II. Production

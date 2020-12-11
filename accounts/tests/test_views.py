@@ -159,7 +159,7 @@ class TestRegisterUserView:
 @pytest.mark.django_db
 class TestUserActivate:
     url_pattern = "/accounts/register/activate/"
-    sign = "test.username:TBLopGEfRWmkfuxOwIYvKenRWjytSxczNaQOlCAJspc"
+    sign = "test.username:X23J5EBDjDGDDwVphQDKHFP_i5S7eL-kg7Np6M5yOhA"
 
     def test_view_url_exists_at_desired_location(
         self, client, create_non_activated_user

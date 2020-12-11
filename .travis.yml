@@ -12,27 +12,12 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
 before_script:
-  - docker-compose up -d --build
-  - docker exec -it django_web pip install -r requirements/test.txt
+  - docker-compose -f docker-compose.test.yml up -d --build
 script:
   - docker exec -it django_web pytest --cov
   - docker exec -it django_web pre-commit run --all-files
 after_script:
-  - docker-compose down
-#deploy:
-#  provider: elasticbeanstalk
-#  access_key_id: $ACCESSKEYID
-#  secret_access_key: $SECRETACCESSKEY
-#  region: "us-east-1"
-#  app: "django-tutorial"
-#  env: "django-env"
-#  bucket_name: "elasticbeanstalk-us-east-1-017801987097"
-#  on:
-#    branch: master
-#after_deploy:
-#  - sudo bash after_deploy.sh
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - docker-compose -f docker-compose.test.yml down -v
 cache:
   directories:
   - $HOME/.cache/pre-commit
