@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.com/YuriiBorovenskyi/django-cinema.svg?branch=master)](https://travis-ci.com/github/YuriiBorovenskyi/django-cinema)
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/YuriiBorovenskyi/django-cinema/master.svg)](https://results.pre-commit.ci/latest/github/YuriiBorovenskyi/django-cinema/master)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 # DjangoCinema: source code
 Website of Cinema Library written in Django.
